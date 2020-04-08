@@ -1,5 +1,9 @@
 package drc.utils;
 
+import drc.backend.native.NativeTexture;
+import sys.FileSystem;
+import stb.Image.StbImageData;
+import drc.data.Texture;
 import drc.display.Profile;
 import opengl.WebGL;
 import sdl.SDL;
@@ -85,6 +89,26 @@ class Resources
 		return bytes.toString();
 	}
 	
+	public static function loadTexture(path:String):Texture {
+		
+		var _texture:Texture;
+
+		var _data:StbImageData;
+
+		if (FileSystem.exists(SDL.getBasePath() + path)) {
+
+			_data = stb.Image.load(SDL.getBasePath() + path, 0);
+		}
+		else {
+
+			_data = stb.Image.load(SDL.getBasePath() + 'res/graphics/grid_mt.png', 0);
+		}
+
+		_texture = new NativeTexture(_data);
+
+		return _texture;
+	}
+
 	//public static function loadProfile(path:String):Profile
 	//{
 		//var profileData:Json = new Json(loadText(path));
