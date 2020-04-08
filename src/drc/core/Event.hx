@@ -1,0 +1,6 @@
+package;
+
+typedef Event =
+{
+	
+}
