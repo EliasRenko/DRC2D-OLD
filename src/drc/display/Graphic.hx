@@ -3,6 +3,7 @@ package drc.display;
 import drc.display.Drawable;
 import drc.display.Indices;
 import drc.display.Profile;
+import drc.data.Texture;
 
 class Graphic extends Drawable
 {
@@ -17,6 +18,8 @@ class Graphic extends Drawable
 	 * The profile of the graphic.
 	 */
 	public var profile:Profile;
+
+	public var textures:Array<Texture>;
 	
 	//** Privates.
 	

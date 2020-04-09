@@ -8,8 +8,6 @@ class Image extends Graphic
 {
 	/** Publics. **/
 
-	public var textures:Array<Texture>;
-
 	public function new(profile:Profile) 
 	{
 		super(profile);

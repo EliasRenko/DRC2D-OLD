@@ -1,23 +1,34 @@
 package drc.core;
 
+import drc.data.Texture;
 import drc.display.Uniform;
 import opengl.WebGL;
 import drc.buffers.Float32Array;
 import drc.buffers.Int32Array;
+import drc.buffers.Uint8Array;
+import haxe.io.Bytes;
 
 class Context 
 {
 	//** Privates.
 	
-	/** @private **/  private var __glIndexBuffer:GLBuffer;
+	/** @private **/ private var __glFrameBuffer:GLBuffer;
+
+	/** @private **/ private var __glIndexBuffer:GLBuffer;
 	
-	/** @private **/  private var __glVertexBuffer:GLBuffer;
-	
+	/** @private **/ private var __glTextures:Array<GLTexture> = new Array<GLTexture>();
+
+	/** @private **/ private var __glVertexBuffer:GLBuffer;
+
 	public function new() 
 	{
+		//__glFrameBuffer = WebGL.createFramebuffer();
+
 		__glIndexBuffer = WebGL.createBuffer();
 		
 		__glVertexBuffer = WebGL.createBuffer();
+
+		__glTextures[0] = WebGL.createTexture();
 	}
 	
 	public function clear():Void
@@ -45,6 +56,15 @@ class Context
 	{
 		WebGL.bindBuffer(WebGL.ELEMENT_ARRAY_BUFFER, __glIndexBuffer);
 	}
+
+	public function generateTexture():GLTexture
+	{
+		var _glTexture:GLTexture = WebGL.createTexture();
+
+		WebGL.bindTexture(WebGL.TEXTURE_2D, _glTexture);
+
+		return _glTexture;
+	}
 	
 	public function generateVertexBuffer():Void
 	{
@@ -56,6 +76,13 @@ class Context
 		WebGL.bufferData(WebGL.ELEMENT_ARRAY_BUFFER, Int32Array.fromArray(data), WebGL.STATIC_DRAW);
 		
 		WebGL.bindBuffer(WebGL.ELEMENT_ARRAY_BUFFER, null);
+	}
+
+	public function loadTexture(width:Int, height:Int, data:Uint8Array):Void {
+		
+		//WebGL.uniform1i(location, 0);
+
+		WebGL.texImage2D(WebGL.TEXTURE_2D, 0, WebGL.RGBA, width, height, 0, WebGL.RGBA, WebGL.UNSIGNED_BYTE, data);
 	}
 	
 	public function loadVertexBuffer(data:Array<Float>):Void

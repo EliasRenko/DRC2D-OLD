@@ -1,5 +1,6 @@
 package drc.data;
 
+import opengl.WebGL.GLTexture;
 import haxe.io.BytesData;
 
 interface Texture {
@@ -7,6 +8,8 @@ interface Texture {
     /** Publics. **/
 
     public var bytes(get, null):BytesData;
+
+    public var glTexture:GLTexture;
 
     public var height(get, null):Int;
 
