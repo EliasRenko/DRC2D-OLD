@@ -12,7 +12,7 @@ class Context
 {
 	//** Privates.
 	
-	/** @private **/ private var __glFrameBuffer:GLBuffer;
+	/** @private **/ private var __glFrameBuffer:GLFramebuffer;
 
 	/** @private **/ private var __glIndexBuffer:GLBuffer;
 	
@@ -22,7 +22,7 @@ class Context
 
 	public function new() 
 	{
-		//__glFrameBuffer = WebGL.createFramebuffer();
+		__glFrameBuffer = WebGL.createFramebuffer();
 
 		__glIndexBuffer = WebGL.createBuffer();
 		
@@ -31,13 +31,15 @@ class Context
 		__glTextures[0] = WebGL.createTexture();
 	}
 	
-	public function clear():Void
+	public function clear(r:Float, g:Float, b:Float, a:Float):Void
 	{
 		WebGL.clearDepth(1.0);
 		
 		WebGL.clearStencil(0);
 		
-		WebGL.clearColor(0, 0.2, 0.2, 1);
+		//WebGL.clearColor(0, 0.2, 0.2, 1);
+
+		WebGL.clearColor(r, g, b, a);
 		
 		WebGL.clear(WebGL.COLOR_BUFFER_BIT | WebGL.DEPTH_BUFFER_BIT | WebGL.STENCIL_BUFFER_BIT);
 	}
@@ -50,6 +52,35 @@ class Context
 	public function drawElements(offset:Int, count:Int):Void
 	{
 		WebGL.drawElements(WebGL.TRIANGLES, count, WebGL.UNSIGNED_INT, offset);
+	}
+
+	public function bindFrameBuffer():Void {
+		
+		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
+	}
+
+	public function setRenderToTexture(texture:Texture):Void {
+		
+		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
+
+		var attachmentPoint = WebGL.COLOR_ATTACHMENT0;
+
+		WebGL.framebufferTexture2D(WebGL.FRAMEBUFFER, attachmentPoint, WebGL.TEXTURE_2D, texture.glTexture, 0);
+
+		if (WebGL.checkFramebufferStatus(WebGL.FRAMEBUFFER) != WebGL.FRAMEBUFFER_COMPLETE) {
+			
+			trace('Framebuffer problem!');
+		  }
+	}
+
+	public function setRenderToBackbuffer():Void {
+
+		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, null);
+	}
+
+	public function generateFrameBuffer():Void {
+
+		WebGL.createFramebuffer();
 	}
 	
 	public function generateIndexBuffer():Void

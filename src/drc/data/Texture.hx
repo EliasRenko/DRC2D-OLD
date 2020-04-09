@@ -2,6 +2,7 @@ package drc.data;
 
 import opengl.WebGL.GLTexture;
 import haxe.io.BytesData;
+import stb.Image;
 
 interface Texture {
 
@@ -14,6 +15,10 @@ interface Texture {
     public var height(get, null):Int;
 
     public var width(get, null):Int;
+
+    public function create(width:Int, height:Int):Void;
+
+    public function upload(data:StbImageData):Void;
 
     /** Getters and setters. **/
 
