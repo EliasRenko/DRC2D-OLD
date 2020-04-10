@@ -5,14 +5,14 @@ import drc.core.Runtime;
 import drc.objects.State;
 import drc.part.ObjectList;
 import drc.utils.Common;
-import drc.graphics.Canvas;
+import drc.graphics.Stage;
 import drc.utils.Resources;
 
 class App 
 {
 	//** Publics.
 
-	public var canvas:Canvas;
+	public var stage:Stage;
 	
 	public var runtime:Runtime;
 	
@@ -36,9 +36,9 @@ class App
 
 		Common.context = __context;
 
-		canvas = new Canvas(Resources.getProfile("res/profiles/texture.json"));
+		stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
 
-		Common.canvas = canvas;
+		Common.stage = stage;
 	}
 	
 	public function init():Void
@@ -46,22 +46,16 @@ class App
 		while (runtime.active) 
 		{
 			runtime.pollEvents();
-			
-			//render();
-			
-			//update();
 
-			canvas.setToDraw();
+			stage.setToDraw();
 
-			canvas.draw();
+			render();
 
 			__context.setRenderToBackbuffer();
 
 			__context.clear(1, 0, 0, 1);
 
-			//canvas.draw();
-
-			canvas.present();
+			stage.present();
 
 			runtime.present();
 

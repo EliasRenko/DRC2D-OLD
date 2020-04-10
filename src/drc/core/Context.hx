@@ -70,7 +70,7 @@ class Context
 		if (WebGL.checkFramebufferStatus(WebGL.FRAMEBUFFER) != WebGL.FRAMEBUFFER_COMPLETE) {
 			
 			trace('Framebuffer problem!');
-		  }
+		}
 	}
 
 	public function setRenderToBackbuffer():Void {

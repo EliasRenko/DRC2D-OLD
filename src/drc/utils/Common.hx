@@ -2,11 +2,11 @@ package drc.utils;
 
 import drc.core.Context;
 import drc.system.Input;
-import drc.graphics.Canvas;
+import drc.graphics.Stage;
 
 class Common 
 {
-	public static var canvas:Canvas;
+	public static var stage:Stage;
 
 	public static var context:Context;
 	
