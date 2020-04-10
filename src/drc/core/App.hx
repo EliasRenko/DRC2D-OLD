@@ -47,6 +47,8 @@ class App
 		{
 			runtime.pollEvents();
 
+			update();
+
 			stage.setToDraw();
 
 			render();

@@ -9,7 +9,7 @@ import drc.utils.Common;
 import drc.buffers.Uint8Array;
 import opengl.WebGL;
 
-class NativeTexture implements drc.data.Texture {
+class NativeTexture implements drc.data.BitmapData {
 
     /** Publics. **/
 

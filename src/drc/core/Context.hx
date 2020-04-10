@@ -1,6 +1,6 @@
 package drc.core;
 
-import drc.data.Texture;
+import drc.data.BitmapData;
 import drc.display.Uniform;
 import opengl.WebGL;
 import drc.buffers.Float32Array;
@@ -15,8 +15,6 @@ class Context
 	/** @private **/ private var __glFrameBuffer:GLFramebuffer;
 
 	/** @private **/ private var __glIndexBuffer:GLBuffer;
-	
-	/** @private **/ private var __glTextures:Array<GLTexture> = new Array<GLTexture>();
 
 	/** @private **/ private var __glVertexBuffer:GLBuffer;
 
@@ -27,8 +25,6 @@ class Context
 		__glIndexBuffer = WebGL.createBuffer();
 		
 		__glVertexBuffer = WebGL.createBuffer();
-
-		__glTextures[0] = WebGL.createTexture();
 	}
 	
 	public function clear(r:Float, g:Float, b:Float, a:Float):Void
@@ -59,13 +55,13 @@ class Context
 		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
 	}
 
-	public function setRenderToTexture(texture:Texture):Void {
+	public function setRenderToTexture(bitmapData:BitmapData):Void {
 		
 		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
 
 		var attachmentPoint = WebGL.COLOR_ATTACHMENT0;
 
-		WebGL.framebufferTexture2D(WebGL.FRAMEBUFFER, attachmentPoint, WebGL.TEXTURE_2D, texture.glTexture, 0);
+		WebGL.framebufferTexture2D(WebGL.FRAMEBUFFER, attachmentPoint, WebGL.TEXTURE_2D, bitmapData.glTexture, 0);
 
 		if (WebGL.checkFramebufferStatus(WebGL.FRAMEBUFFER) != WebGL.FRAMEBUFFER_COMPLETE) {
 			

@@ -3,7 +3,7 @@ package drc.utils;
 import drc.backend.native.NativeTexture;
 import sys.FileSystem;
 import stb.Image.StbImageData;
-import drc.data.Texture;
+import drc.data.BitmapData;
 import drc.display.Profile;
 import opengl.WebGL;
 import sdl.SDL;
@@ -89,9 +89,9 @@ class Resources
 		return bytes.toString();
 	}
 	
-	public static function loadTexture(path:String):Texture {
+	public static function loadTexture(path:String):BitmapData {
 		
-		var _texture:Texture;
+		var _texture:BitmapData;
 
 		var _data:StbImageData;
 
@@ -238,6 +238,18 @@ class Resources
 				vertexShaderUniforms += "uniform " + format + " " + name + ";\n";
 			}
 		}
+
+		var textures:Array<String> = new Array<String>();
+
+		if (Reflect.hasField(data, "textures")) {
+
+			var textureData:Dynamic = Reflect.field(data, "textures");
+
+			for (textureCount in 0...textureData.length) {
+
+				textures.push(textureData[textureCount].name);
+			}
+		}
 		
 		vertexShader = vertexShaderInTypes + vertexShaderOutTypes + vertexShaderUniforms;
 		
@@ -245,7 +257,7 @@ class Resources
 		
 		vertexShader += vertexShaderBodyPart;
 		
-		vertexShader += "gl_Position = uMatrix * vec4(location.xyz, 1);\n}";
+		vertexShader += "gl_Position = matrix * vec4(location.xyz, 1);\n}";
 		
 		if (Reflect.hasField(data, "fragmentShader"))
 		{	
@@ -274,8 +286,6 @@ class Resources
 		WebGL.shaderSource(fShader, fragmentShader);
 		WebGL.compileShader(fShader);
 		
-		//trace(fragmentShader);
-		
 		var glProgram = WebGL.createProgram();
 		
 		var program:Program = new Program(glProgram);
@@ -293,17 +303,6 @@ class Resources
 		
 		profile.dataPerVertex = location;
 		
-		for (uniformCount in 0...profile.uniforms.length) 
-		{
-			var location:Int = WebGL.getUniformLocation(glProgram, profile.uniforms[uniformCount].name);
-			
-			profile.uniforms[uniformCount].assignLocation(location);
-			
-			#if debug // ------
-			
-			#end // ------
-		}
-		
 		WebGL.attachShader(program.innerData, vShader);
 		
 		WebGL.attachShader(program.innerData, fShader);
@@ -314,6 +313,24 @@ class Resources
 			
             throw "Unable to link the shader program: " + WebGL.getProgramInfoLog(glProgram);
         }
+
+		for (uniformCount in 0...profile.uniforms.length) 
+		{
+			var location:Int = WebGL.getUniformLocation(glProgram, profile.uniforms[uniformCount].name);
+
+			profile.uniforms[uniformCount].assignLocation(location);
+			
+			#if debug // ------
+			
+			#end // ------
+		}
+
+		for (textureCount in 0...textures.length) {
+
+			var location:Int = WebGL.getUniformLocation(glProgram, textures[textureCount]);
+
+			trace('Tex loc: ' + location);
+		}
 
 		profile.program = program;
 		

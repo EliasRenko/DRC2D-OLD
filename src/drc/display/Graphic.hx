@@ -3,7 +3,7 @@ package drc.display;
 import drc.display.Drawable;
 import drc.display.Indices;
 import drc.display.Profile;
-import drc.data.Texture;
+import drc.data.BitmapData;
 import drc.math.Matrix;
 
 class Graphic extends Drawable
@@ -20,7 +20,7 @@ class Graphic extends Drawable
 	 */
 	public var profile:Profile;
 
-	public var textures:Array<Texture>;
+	public var textures:Array<BitmapData>;
 
 	public var matrix:Matrix = new Matrix();
 	

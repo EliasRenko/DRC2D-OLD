@@ -2,7 +2,7 @@ package drc.graphics;
 
 import drc.display.Graphic;
 import drc.display.Profile;
-import drc.data.Texture;
+import drc.data.BitmapData;
 
 class Image extends Graphic
 {
@@ -12,7 +12,7 @@ class Image extends Graphic
 	{
 		super(profile);
 		
-		textures = new Array<Texture>();
+		textures = new Array<BitmapData>();
 
 		vertices.upload(
 		[
