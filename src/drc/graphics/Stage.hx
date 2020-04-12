@@ -14,13 +14,13 @@ class Stage extends Graphic
 {
 	/** Publics. **/
 
-	public var drawCalls:UInt = 0;
+	public var drawCalls(get, null):UInt = 0;
 
 	/** Privates. **/
 
-	private var __context:Context;
+	/** @private **/ private var __drawCalls:UInt = 0;
 
-	var img:Image;
+	/** @private **/private var __context:Context;
 
 	public function new(profile:Profile) 
 	{
@@ -47,10 +47,6 @@ class Stage extends Graphic
 		__verticesToRender = 4;
 		
 		__indicesToRender = 6;
-
-		img = new Image(Resources.getProfile("res/profiles/texture.json"));
-
-		img.textures[0] = Resources.loadTexture('res/graphics/grid.png');
 	}
 
 	public function setToDraw():Void {
@@ -58,8 +54,6 @@ class Stage extends Graphic
 		__context.setRenderToTexture(textures[0]);
 
 		renderToTexture = true;
-
-		//__context.setViewport(0, 0, textures[0].width, textures[0].height);
 
 		__context.clear(0.2, 0, 0.2, 1);
 	}
@@ -70,14 +64,12 @@ class Stage extends Graphic
 
 		__context.setViewport(0, 0, 640, 480);
 
-		//projection = matrix.createOrthoMatrix(0, 0, 0, 0, 1000, -1000 );
-
 		__drawTriangles(this);
 	}
 
 	public function draw(image:Image):Void {
 		
-		
+		__drawCalls ++;
 
 		__drawTriangles(image);
 	}
@@ -126,15 +118,11 @@ class Stage extends Graphic
 			WebGL.bindTexture(WebGL.TEXTURE_2D, img.textures[i].glTexture);
 		}
 
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_S, WebGL.CLAMP_TO_EDGE);
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_T, WebGL.CLAMP_TO_EDGE);
-
-		WebGL.blendFunc(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA);
-		WebGL.enable(WebGL.BLEND);
-
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MAG_FILTER, WebGL.LINEAR);
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MIN_FILTER, WebGL.LINEAR);
 		
+		__context.setSamplerState();
+
+		__context.setBlendFactors();
+
 		__context.generateIndexBuffer();
 		
 		if (renderToTexture) {
@@ -181,5 +169,12 @@ class Stage extends Graphic
 
         return i;
 
-    } //create2DMatrix
+	} //create2DMatrix
+	
+	//** Getters and setters. **/
+
+	private function get_drawCalls():UInt {
+		
+		return __drawCalls;
+	}
 }

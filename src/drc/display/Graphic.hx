@@ -5,6 +5,7 @@ import drc.display.Indices;
 import drc.display.Profile;
 import drc.data.BitmapData;
 import drc.math.Matrix;
+import drc.display.Shading;
 
 class Graphic extends Drawable
 {
@@ -23,6 +24,8 @@ class Graphic extends Drawable
 	public var textures:Array<BitmapData>;
 
 	public var matrix:Matrix = new Matrix();
+
+	public var shadings:Map<String, Shading>;
 	
 	//** Privates.
 	
@@ -30,10 +33,15 @@ class Graphic extends Drawable
 	
 	/** @private **/ public var __indicesToRender:UInt = 0;
 	
-	public function new(profile:Profile) 
-	{
+	public function new(profile:Profile) {
+
 		super(0, 0);
 		
 		this.profile = profile;
+
+		for (i in 0...profile.attributes.length) {
+
+			trace(profile.attributes[i].name);
+		}
 	}
 }

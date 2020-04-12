@@ -69,6 +69,21 @@ class Context
 		}
 	}
 
+	public function setBlendFactors():Void {
+		
+		WebGL.blendFunc(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA);
+		WebGL.enable(WebGL.BLEND);
+	}
+
+	public function setSamplerState():Void {
+
+		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_S, WebGL.CLAMP_TO_EDGE);
+		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_T, WebGL.CLAMP_TO_EDGE);
+
+		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MAG_FILTER, WebGL.LINEAR);
+		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MIN_FILTER, WebGL.LINEAR);
+	}
+
 	public function setRenderToBackbuffer():Void {
 
 		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, null);

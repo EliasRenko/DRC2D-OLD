@@ -1,0 +1,58 @@
+{
+    "version": "2.0.0",
+
+    "tasks": [
+        {
+            "label": "Build",
+
+            "type": "shell",
+
+            "command": "haxelib run entry build windows",
+
+            "problemMatcher": [],
+
+            "group": {
+
+                "kind": "build",
+                
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean",
+
+            "type": "shell",
+
+            "command": "haxelib run entry clean windows",
+
+            "problemMatcher": []
+        },
+        {
+            "label": "Setup",
+
+            "type": "shell",
+
+            "command": "haxelib run entry setup default",
+
+            "problemMatcher": []
+        },
+        {
+            "type": "haxe",
+
+            "args": "active configuration",
+
+            "problemMatcher": [
+
+                "$haxe-absolute",
+
+                "$haxe",
+
+                "$haxe-error",
+
+                "$haxe-trace"
+            ],
+            
+            "group": "build"
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+{
+    "version": "0.2.0",
+
+    "configurations": [
+
+        {
+            "name": "Run debug",
+
+            "type": "hxcpp",
+
+            "request": "launch",
+            
+            "program": "${workspaceFolder}/bin/windows.debug/Main-debug.exe"
+        },
+        {
+            "name": "Run",
+
+            "type": "hxcpp",
+
+            "request": "launch",
+            
+            "program": "${workspaceFolder}/bin/windows/Main.exe"
+        }
+    ]
+}
