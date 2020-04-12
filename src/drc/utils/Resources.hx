@@ -17,6 +17,7 @@ import drc.display.AttributeFormat;
 import drc.display.Attribute;
 import drc.display.Uniform;
 import drc.display.UniformFormat;
+import drc.display.Pointer;
 
 typedef FileHandle = sdl.RWops;
 
@@ -152,9 +153,9 @@ class Resources
 		
 		var dataPerVertex:UInt = 0;
 		
+		var structPos:Int = 0;
+
 		//** If data has a filed called "atttribues"...
-		
-		//trace('Here');
 		
 		if (Reflect.hasField(data, "attributes"))
 		{
@@ -162,8 +163,6 @@ class Resources
 			
 			for (count in 0...attributeData.length)
 			{
-				trace(attributeData.length);
-				
 				var f:AttributeFormat;
 				
 				switch (attributeData[count].format) 
@@ -184,8 +183,28 @@ class Resources
 						
 						f = null;
 				}
+
+				var struct:Array<Pointer> = new Array<Pointer>();
 				
-				var attribute:Attribute = new Attribute(attributeData[count].name, f, offset);
+				var structData:Dynamic = Reflect.field(attributeData[count], "struct");
+
+				for (i in 0...structData.length) {
+
+					var s:drc.display.Pointer = 
+					{
+						name: structData[i].name,
+
+						position: structPos
+					}
+
+					struct.push(s);
+
+					structPos ++;
+				}
+
+				profile.dataPerVertex = structPos;
+
+				var attribute:Attribute = new Attribute(attributeData[count].name, f, offset, struct);
 				
 				profile.addAttribute(attribute);
 				
@@ -300,8 +319,6 @@ class Resources
 			
 			location ++;
 		}
-		
-		profile.dataPerVertex = location;
 		
 		WebGL.attachShader(program.innerData, vShader);
 		

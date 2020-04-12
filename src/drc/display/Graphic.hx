@@ -25,7 +25,7 @@ class Graphic extends Drawable
 
 	public var matrix:Matrix = new Matrix();
 
-	public var shadings:Map<String, Shading>;
+	public var shadings:Map<String, Shading> = new Map<String, Shading>();
 	
 	//** Privates.
 	
@@ -41,7 +41,12 @@ class Graphic extends Drawable
 
 		for (i in 0...profile.attributes.length) {
 
-			trace(profile.attributes[i].name);
+			for (j in 0...profile.attributes[i].__pointers.length) {
+
+				trace(profile.attributes[i].__pointers[j].name + ' ' + profile.attributes[i].__pointers[j].position);
+			}
+
+			//trace(profile.attributes[i].name);
 		}
 	}
 }

@@ -39,7 +39,7 @@ class TestCanvas extends State {
 
         if (Common.input.getGamepad(0).check(Controls.DPAD_UP)) {
 
-            image.vertices.innerData[1] -= 1;
+            image.setAttribute('u', 1);
 		}
 
 		if (Common.input.getGamepad(0).check(Controls.DPAD_DOWN)) {

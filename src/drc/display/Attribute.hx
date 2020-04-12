@@ -1,6 +1,7 @@
 package drc.display;
 
 import drc.display.AttributeFormat;
+import drc.display.Pointer;
 
 class Attribute 
 {
@@ -30,14 +31,18 @@ class Attribute
 	/** @private */ private var __offset:Int;
 	
 	/** @private */ private var __location:Int;
+
+	/** @private */ public var __pointers:Array<Pointer>;
 	
-	public function new(name:String, format:AttributeFormat, offset:Int) 
+	public function new(name:String, format:AttributeFormat, offset:Int, pointers:Array<Pointer>) 
 	{
 		__name = name;
 		
 		__format = format;
 		
 		__offset = offset;
+
+		__pointers = pointers;
 	}
 	
 	public function assignLocation(location:Int):Void

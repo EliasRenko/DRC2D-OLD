@@ -1,5 +1,6 @@
 package drc.graphics;
 
+import drc.display.Shading;
 import drc.display.Graphic;
 import drc.display.Profile;
 import drc.data.BitmapData;
@@ -12,6 +13,34 @@ class Image extends Graphic
 	{
 		super(profile);
 		
+		for (i in 0...profile.attributes.length) {
+
+			for (j in 0...profile.attributes[i].__pointers.length) {
+
+				var _name:String = profile.attributes[i].__pointers[j].name;
+
+				var _pos:Int = profile.attributes[i].__pointers[j].position;
+
+				var _positions:Array<Int> = new Array<Int>();
+
+				var sum:Int = _pos;
+
+				for (i in 0...4) {
+
+					_positions.push(sum);
+
+					sum += profile.dataPerVertex;
+				}
+
+				var shading:Shading =
+				{
+					positions: _positions
+				}
+
+				shadings.set(_name, shading);
+			}
+		}
+
 		textures = new Array<BitmapData>();
 
 		vertices.upload(
@@ -27,5 +56,22 @@ class Image extends Graphic
 		__verticesToRender = 4;
 		
 		__indicesToRender = 6;
+	}
+
+	override function setAttribute(name:String, value:Float) {
+
+		#if debug // ------
+		
+		if (!shadings.exists(name))
+		{
+			throw "Attribute: " + name + " does not exist.";
+		}
+		
+		#end // ------
+		
+		for (i in 0...4) 
+		{
+			vertices.innerData[shadings[name].positions[i]] = value;
+		}
 	}
 }

@@ -174,7 +174,7 @@ class Stage extends Graphic
 	//** Getters and setters. **/
 
 	private function get_drawCalls():UInt {
-		
+
 		return __drawCalls;
 	}
 }
