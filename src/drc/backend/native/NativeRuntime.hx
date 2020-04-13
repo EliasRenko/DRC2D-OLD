@@ -372,6 +372,8 @@ class NativeRuntime implements drc.core.Runtime
                 case SDL_WINDOWEVENT_CLOSE:
                     
 					type = WindowEventType.CLOSE;
+
+					release();
 					
                 case SDL_WINDOWEVENT_RESIZED:
                   

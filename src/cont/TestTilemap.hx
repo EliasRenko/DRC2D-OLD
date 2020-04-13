@@ -6,14 +6,24 @@ import drc.display.Profile;
 import drc.utils.Common;
 import drc.utils.Resources;
 import drc.input.Controls;
+import drc.graphics.Tilemap;
+import drc.graphics.Tile;
 
-class TestCanvas extends State {
+class TestTilemap extends State {
 
     //** Publics. **/
 
-    public var image:Image;
+    public var tiles:Array<Tile> = new Array<Tile>();
+
+    public var tilemap:Tilemap;
 
     public var profile:Profile;
+
+    public var tile:Tile;
+
+    //** Privates. **/
+
+    private var __activeVertices:Int;
 
     public function new() {
         
@@ -21,14 +31,18 @@ class TestCanvas extends State {
 
         profile = Resources.getProfile("res/profiles/texture.json");
 
-        image = new Image(profile, Resources.loadTexture('res/graphics/grid.png'));
+        tilemap = new Tilemap(profile, Resources.loadTexture('res/graphics/grid.png'));
+
+        tile = new Tile(tilemap);
+
+        tilemap.addTile(tile);
     }
 
     override function render():Void {
 
-        Common.stage.draw(image);
+        tilemap.render();
 
-        super.render();
+        Common.stage.draw(tilemap);
     }
 
     override function update():Void {
@@ -37,22 +51,22 @@ class TestCanvas extends State {
 
         if (Common.input.getGamepad(0).check(Controls.DPAD_UP)) {
 
-            image.vertices.innerData[1] -= 1;
+            tile.y -= 2;
 		}
 
 		if (Common.input.getGamepad(0).check(Controls.DPAD_DOWN)) {
 
-            image.vertices.innerData[1] += 1;
+            tile.y += 2;
 		}
 
 		if (Common.input.getGamepad(0).check(Controls.DPAD_LEFT)) {
 
-			image.vertices.innerData[0] -= 1;
+			tile.x -= 2;
 		}
 
 		if (Common.input.getGamepad(0).check(Controls.DPAD_RIGHT)) {
 
-            image.vertices.innerData[0] += 1;
+            tile.x += 2;
 		}
     }
 }

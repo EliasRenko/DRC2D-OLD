@@ -67,7 +67,7 @@ class Stage extends Graphic
 		__drawTriangles(this);
 	}
 
-	public function draw(image:Image):Void {
+	public function draw(image:Graphic):Void {
 		
 		__drawCalls ++;
 

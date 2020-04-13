@@ -65,6 +65,8 @@ class App
 			
 			//Sys.sleep(0.5);
 		}
+
+		Sys.exit(0);
 	}
 	
 	public function release():Void

@@ -216,7 +216,7 @@ class Resources
 				
 				vertexShaderInTypes += "attribute " + format + " " + name + ";\n";
 				
-				trace('varying: ' + varying);
+				//trace('varying: ' + varying);
 
 				if (varying) {
 					
@@ -292,8 +292,8 @@ class Resources
 		
 		#end // ------
 		
-		trace(vertexShader);
-		trace(fragmentShader);
+		//trace(vertexShader);
+		//trace(fragmentShader);
 		
 		var vShader = WebGL.createShader(WebGL.VERTEX_SHADER);
 		

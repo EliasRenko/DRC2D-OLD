@@ -5,14 +5,18 @@ import drc.display.Graphic;
 import drc.display.Profile;
 import drc.data.BitmapData;
 
-class Image extends Graphic
-{
+class Image extends Graphic {
+	
 	/** Publics. **/
 
-	public function new(profile:Profile) 
-	{
+	public function new(profile:Profile, bitmapData:BitmapData) {
+
 		super(profile);
 		
+		textures = new Array<BitmapData>();
+
+		textures[0] = bitmapData;
+
 		for (i in 0...profile.attributes.length) {
 
 			for (j in 0...profile.attributes[i].__pointers.length) {
@@ -40,8 +44,6 @@ class Image extends Graphic
 				shadings.set(_name, shading);
 			}
 		}
-
-		textures = new Array<BitmapData>();
 
 		vertices.upload(
 		[

@@ -1,6 +1,7 @@
 package;
 
 import cont.TestCanvas;
+import cont.TestTilemap;
 import drc.core.App;
 
 class Main 
@@ -9,7 +10,7 @@ class Main
 	{
 		var app:App = new App();
 		
-		app.addState(new TestCanvas());
+		app.addState(new TestTilemap());
 		
 		app.init();
 	}
