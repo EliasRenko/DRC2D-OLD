@@ -22,9 +22,13 @@ class Tile extends Drawable {
             256, 64, 0, 1, 0
         ]);
 
-        __width = 256;
+        __width = 32;
 
-        __height = 256;
+        __height = 32;
+
+        __originX = __width / 2;
+
+        __originY = __height / 2;
     }
 
     override function render() {

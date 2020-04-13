@@ -416,6 +416,8 @@ class NativeRuntime implements drc.core.Runtime
 		
 		__window.innerData = SDL.createWindow('Director2D', 64, 64, 640, 480, flags);
 		
+		Common.window = __window;
+
 		if (__window == null)
 		{
 			throw 'SDL failed to create a window: `${SDL.getError()}`';

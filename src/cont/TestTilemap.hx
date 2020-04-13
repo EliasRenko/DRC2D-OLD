@@ -36,6 +36,26 @@ class TestTilemap extends State {
         tile = new Tile(tilemap);
 
         tilemap.addTile(tile);
+
+        var x:Int = 0;
+
+        var y:Int = 0;
+
+        for (i in 0...16) {
+
+            for (j in 0...16) {
+                
+                var _tile = new Tile(tilemap, x, y);
+
+                tilemap.addTile(_tile);
+
+                x += 40;
+            }
+
+            x = 0;
+
+            y += 40;
+        }
     }
 
     override function render():Void {
@@ -48,6 +68,14 @@ class TestTilemap extends State {
     override function update():Void {
 
         super.update();
+
+        if (Common.input.getGamepad(0).check(Controls.A)) {
+
+            for (tile in tilemap.tiles) {
+
+                tile.angle += 1;
+            }
+		}
 
         if (Common.input.getGamepad(0).check(Controls.DPAD_UP)) {
 

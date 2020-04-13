@@ -1,51 +1,73 @@
 package drc.core;
 
-import drc.backend.native.NativeRuntime;
 import drc.core.Runtime;
+import drc.graphics.Stage;
 import drc.objects.State;
 import drc.part.ObjectList;
 import drc.utils.Common;
-import drc.graphics.Stage;
 import drc.utils.Resources;
 
-class App 
-{
-	//** Publics.
+#if cpp
 
-	public var stage:Stage;
-	
-	public var runtime:Runtime;
-	
+import drc.backend.native.NativeRuntime;
+
+#end
+
+class App {
+
+	// Publics
+
+	/**
+		The backend runtime of the application. Cannot be set.
+	**/
+	public var runtime(get, null):Runtime;
+
+	/**
+		The stage of the application. Cannot be set.
+	**/
+	public var stage(get, null):Stage;
+
+	/**
+		The states of the application.
+	**/
 	public var states:ObjectList<State> = new ObjectList<State>();
-	
-	//** Privates.
-	
+
+	// Privates
+
 	/** @private **/ private var __context:Context;
-	
-	public function new() 
-	{
+
+	/** @private **/ private var __runtime:Runtime;
+
+	/** @private **/ private var __stage:Stage;
+
+	public function new() {
+
 		#if cpp
-		
-		runtime = new drc.backend.native.NativeRuntime();
-		
+
+		__runtime = new drc.backend.native.NativeRuntime();
+
+		#else
+
+		throw 'No backend has been found.';
+
 		#end
-		
-		runtime.init();
-		
+
+		__runtime.init();
+
 		__context = new Context();
 
 		Common.context = __context;
 
-		stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
+		__stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
 
 		Common.stage = stage;
 	}
-	
-	public function init():Void
-	{	
-		while (runtime.active) 
-		{
-			runtime.pollEvents();
+
+	public function init():Void {
+
+		while (runtime.active) {
+
+			__runtime.pollEvents();
 
 			update();
 
@@ -59,44 +81,51 @@ class App
 
 			stage.present();
 
-			runtime.present();
+			__runtime.present();
 
-			runtime.input.postUpdate();
-			
-			//Sys.sleep(0.5);
+			__runtime.input.postUpdate();
 		}
 
 		Sys.exit(0);
 	}
-	
-	public function release():Void
-	{
-		
-	}
-	
-	public function addState(state:State):State
-	{
+
+	public function release():Void {}
+
+	public function addState(state:State):State {
+
 		return states.add(state);
 	}
-	
-	public function removeState(state:State):Void
-	{
+
+	public function removeState(state:State):Void {
+
 		states.remove(state);
 	}
-	
-	public function render():Void
-	{
-		for (i in 0...states.count) 
-		{
+
+	public function render():Void {
+
+		for (i in 0...states.count) {
+
 			states.members[i].render();
 		}
 	}
-	
-	public function update():Void
-	{
-		for (i in 0...states.count) 
-		{
+
+	public function update():Void {
+
+		for (i in 0...states.count) {
+
 			states.members[i].update();
 		}
+	}
+
+	// Getters and setters.
+
+	private function get_runtime():Runtime {
+		
+		return __runtime;
+	}
+
+	private function get_stage():Stage {
+		
+		return __stage;
 	}
 }

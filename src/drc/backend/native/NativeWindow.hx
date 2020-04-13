@@ -7,9 +7,9 @@ import drc.debug.Log;
 
 #if cpp
 
-class NativeWindow 
+class NativeWindow implements drc.system.Window
 {
-	//** Publics.
+	/** Publics. **/
 	
 	public var innerData:sdl.Window;
 	
@@ -19,15 +19,21 @@ class NativeWindow
 	
 	public var width(get, null):Int;
 	
-	//** Privates.
+	/** Privates. **/
 	
-	public function new() 
-	{
+	/**  **/
+
+	public function new() {
 		
 	}
 	
-	public function onEvent(event:WindowEvent):Void
-	{
+	public function showDialog(title:String, message:String):Void {
+		
+		SDL.showSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title, message, innerData);
+	}
+
+	public function onEvent(event:WindowEvent):Void {
+
 		if (onEventHandler == null)
 		{
 			return;
@@ -38,8 +44,8 @@ class NativeWindow
 	
 	//** Getters and setters.
 	
-	public function get_height():Int
-	{
+	public function get_height():Int {
+
 		var size:SDLSize = {w:0, h:0};
 		
 		SDL.getWindowSize(innerData, size);
@@ -47,8 +53,8 @@ class NativeWindow
 		return size.h;
 	}
 	
-	public function get_width():Int
-	{
+	public function get_width():Int {
+
 		var size:SDLSize = {w:0, h:0};
 		
 		SDL.getWindowSize(innerData, size);
