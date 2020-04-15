@@ -70,7 +70,6 @@ class NativeTexture implements drc.data.BitmapData {
     public function uploadFont(w:Int, h:Int, data:BytesData):Void {
         
         
-
         __width = w;
 
         __height = h;
@@ -79,7 +78,7 @@ class NativeTexture implements drc.data.BitmapData {
 
         WebGL.bindTexture(WebGL.TEXTURE_2D, glTexture);
 
-        WebGL.texImage2D(WebGL.TEXTURE_2D, 0, WebGL.RED, __width, __height, 0, WebGL.RED, WebGL.UNSIGNED_BYTE, Uint8Array.fromBytes(Bytes.ofData(data)));
+        WebGL.texImage2D(WebGL.TEXTURE_2D, 0, WebGL.LUMINANCE, __width, __height, 0, WebGL.LUMINANCE, WebGL.UNSIGNED_BYTE, Uint8Array.fromBytes(Bytes.ofData(data)));
 
         WebGL.bindTexture(WebGL.TEXTURE_2D, null);
     }

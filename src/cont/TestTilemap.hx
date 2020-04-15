@@ -1,5 +1,6 @@
 package cont;
 
+import drc.graphics.Tileset;
 import drc.graphics.Image;
 import drc.objects.State;
 import drc.display.Profile;
@@ -12,7 +13,7 @@ import drc.utils.Resources;
 
 class TestTilemap extends State {
 
-    //** Publics. **/
+    // ** Publics.
 
     public var tiles:Array<Tile> = new Array<Tile>();
 
@@ -22,7 +23,9 @@ class TestTilemap extends State {
 
     public var tile:Tile;
 
-    //** Privates. **/
+    public var tileset:Tileset;
+
+    // ** Privates.
 
     private var __activeVertices:Int;
 
@@ -32,9 +35,16 @@ class TestTilemap extends State {
 
         profile = Resources.getProfile("res/profiles/font.json");
 
-        tilemap = new Tilemap(profile, Resources.loadFont('res/fonts/nokiafc22.png'));
+        tileset = new Tileset();
 
-        tile = new Tile(tilemap);
+        tileset.addRegion({ values: [0, 0, 18, 18] });
+        tileset.addRegion({ values: [18, 0, 18, 18] });
+        tileset.addRegion({ values: [36, 0, 18, 18] });
+        tileset.addRegion({ values: [54, 0, 18, 18] });
+
+        tilemap = new Tilemap(profile, Resources.loadFont('res/fonts/nokiafc22.png'), tileset);
+
+        tile = new Tile(tilemap, 0, 0, 0);
 
         tilemap.addTile(tile);
     }
@@ -50,13 +60,21 @@ class TestTilemap extends State {
 
         super.update();
 
-        return;
+        //return;
 
         if (Common.input.getGamepad(0).check(Controls.A)) {
 
             for (tile in tilemap.tiles) {
 
                 tile.angle += 1;
+            }
+        }
+        
+        if (Common.input.getGamepad(0).pressed(Controls.B)) {
+
+            for (tile in tilemap.tiles) {
+
+                tile.id += 1;
             }
 		}
 

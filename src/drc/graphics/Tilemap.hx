@@ -7,21 +7,21 @@ import drc.display.Graphic;
 
 class Tilemap extends Graphic {
 
-	/** Publics. **/
+	// ** Publics.
 
 	public var tiles:Array<Tile> = new Array<Tile>();
 
-	/** Privates. **/
+	public var tileset:Tileset;
 
-	private var __activeVertices:Int;
+	// ** Privates.
 
-    public function new(profile:Profile, bitmapData:BitmapData) {
+	/** @private **/ private var __activeVertices:Int;
+
+	// **
+
+    public function new(profile:Profile, bitmapData:BitmapData, ?tileset:Tileset) {
 
         super(profile);
-
-        textures = new Array<BitmapData>();
-
-        textures[0] = bitmapData;
 
 		for (i in 0...profile.attributes.length) {
 
@@ -50,6 +50,19 @@ class Tilemap extends Graphic {
 				shadings.set(_name, shading);
 			}
 		}
+
+		textures = new Array<BitmapData>();
+
+		textures[0] = bitmapData;
+		
+		if (tileset == null) {
+
+			this.tileset = new Tileset();
+		}
+		else
+		{
+			this.tileset = tileset;
+		}
 	}
 	
 	public function addTile(tile:Tile):Tile {
@@ -58,7 +71,7 @@ class Tilemap extends Graphic {
 		
 		__updateIndices();
 		
-		//** Return.
+		// ** Return.
 		
 		return tile;
 	}
@@ -79,7 +92,7 @@ class Tilemap extends Graphic {
 				{
 					__activeVertices ++;
 					
-					//** Push the vertex data in the tilemap.
+					// ** Push the vertex data in the tilemap.
 					
 					vertices.innerData[__activeVertices] = tiles[i].vertices.innerData[vertexData];
 				}
