@@ -63,7 +63,7 @@ class App {
 		Common.stage = stage;
 	}
 
-	public function init():Void {
+	public function run():Void {
 
 		while (runtime.active) {
 
@@ -88,8 +88,6 @@ class App {
 
 		Sys.exit(0);
 	}
-
-	public function release():Void {}
 
 	public function addState(state:State):State {
 

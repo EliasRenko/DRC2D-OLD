@@ -8,6 +8,7 @@ import drc.utils.Resources;
 import drc.input.Controls;
 import drc.graphics.Tilemap;
 import drc.graphics.Tile;
+import drc.utils.Resources;
 
 class TestTilemap extends State {
 
@@ -29,33 +30,13 @@ class TestTilemap extends State {
         
         super();
 
-        profile = Resources.getProfile("res/profiles/texture.json");
+        profile = Resources.getProfile("res/profiles/font.json");
 
-        tilemap = new Tilemap(profile, Resources.loadTexture('res/graphics/grid.png'));
+        tilemap = new Tilemap(profile, Resources.loadFont('res/fonts/nokiafc22.png'));
 
         tile = new Tile(tilemap);
 
         tilemap.addTile(tile);
-
-        var x:Int = 0;
-
-        var y:Int = 0;
-
-        for (i in 0...16) {
-
-            for (j in 0...16) {
-                
-                var _tile = new Tile(tilemap, x, y);
-
-                tilemap.addTile(_tile);
-
-                x += 40;
-            }
-
-            x = 0;
-
-            y += 40;
-        }
     }
 
     override function render():Void {
@@ -68,6 +49,8 @@ class TestTilemap extends State {
     override function update():Void {
 
         super.update();
+
+        return;
 
         if (Common.input.getGamepad(0).check(Controls.A)) {
 

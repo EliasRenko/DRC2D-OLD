@@ -35,6 +35,8 @@ class NativeTexture implements drc.data.BitmapData {
         }
 
         upload(data);
+
+        WebGL.pixelStorei(WebGL.UNPACK_ALIGNMENT, 1);
     }
 
     public function create(width:Int, height:Int) {
@@ -63,6 +65,23 @@ class NativeTexture implements drc.data.BitmapData {
         glTexture = Common.context.generateTexture();
 
         Common.context.loadTexture(__width, __height, Uint8Array.fromBytes(Bytes.ofData(data.bytes)));
+    }
+
+    public function uploadFont(w:Int, h:Int, data:BytesData):Void {
+        
+        
+
+        __width = w;
+
+        __height = h;
+
+        glTexture = Common.context.generateTexture();
+
+        WebGL.bindTexture(WebGL.TEXTURE_2D, glTexture);
+
+        WebGL.texImage2D(WebGL.TEXTURE_2D, 0, WebGL.RED, __width, __height, 0, WebGL.RED, WebGL.UNSIGNED_BYTE, Uint8Array.fromBytes(Bytes.ofData(data)));
+
+        WebGL.bindTexture(WebGL.TEXTURE_2D, null);
     }
 
     /** Getters and setters. **/

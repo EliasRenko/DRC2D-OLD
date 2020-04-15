@@ -12,6 +12,6 @@ class Main
 		
 		app.addState(new TestTilemap());
 		
-		app.init();
+		app.run();
 	}
 }

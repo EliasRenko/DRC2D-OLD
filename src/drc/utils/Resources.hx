@@ -1,5 +1,6 @@
 package drc.utils;
 
+import stb.TrueType.StbBakedFont;
 import drc.backend.native.NativeTexture;
 import sys.FileSystem;
 import stb.Image.StbImageData;
@@ -88,6 +89,28 @@ class Resources
 		var bytes:Bytes = loadBytes(path);
 		
 		return bytes.toString();
+	}
+
+	public static function loadFont(path:String):BitmapData {
+		
+		var _texture:NativeTexture;
+
+		var _data:StbImageData;
+
+		if (FileSystem.exists(SDL.getBasePath() + path)) {
+
+			_data = stb.Image.load(SDL.getBasePath() + path, 0);
+		}
+		else {
+
+			_data = stb.Image.load(SDL.getBasePath() + 'res/graphics/grid_mt.png', 0);
+		}
+
+		_texture = new NativeTexture(null);
+
+		_texture.uploadFont(_data.w, _data.h, _data.bytes);
+
+		return _texture;
 	}
 	
 	public static function loadTexture(path:String):BitmapData {

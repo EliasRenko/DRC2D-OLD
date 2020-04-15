@@ -55,7 +55,7 @@ class Stage extends Graphic
 
 		renderToTexture = true;
 
-		__context.clear(0.2, 0, 0.2, 1);
+		__context.clear(0.2, 0, 0.3, 1);
 	}
 
 	public function present():Void {

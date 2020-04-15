@@ -20,54 +20,87 @@ import drc.utils.Common;
 
 class NativeRuntime implements drc.core.Runtime
 {
-	//** Publics.
+	// ** Publics.
 	
 	public var active(get, null):Bool;
 	
 	public var input(get, null):Input;
 	
-	public var name(get, null):String = 'Native';
+	public var name(get, null):String;
 	
-	//** Privates.
+	// ** Privates.
 	
 	/** @private **/ private var __active:Bool;
 	
 	/** @private **/ private var __input:NativeInput;
 	
-	/** @private **/ private var __name:String;
+	/** @private **/ private var __name:String = 'Native';
 	
 	/** @private **/ private var __window:NativeWindow;
 	
-	public function new() 
-	{
+	public function new() {
+
 		Log.print(name);
 	}
 	
-	public function init():Void
-	{
-		//SDL.setHint(SDL_HINT_XINPUT_ENABLED, '0');
+	public function init():Void {
+
+		var _result:Int = 0;
+
+		SDL.setHint(SDL_HINT_XINPUT_ENABLED, '0');
 		
-		if (SDL.init(SDL_INIT_TIMER) != 0)
-		{
-            throw 'SDL failed to init timer: `${SDL.getError()}`';
-        }
-		
-        if (SDL.initSubSystem(SDL_INIT_VIDEO) != 0)
-		{
-            throw 'SDL failed to init video: `${SDL.getError()}`';
-        }
-		
-		if (SDL.initSubSystem(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK) != 0)
-		{
-			throw 'SDL failed to init game controllers: `${SDL.getError()}`';
+		// ** Init SDL timer.
+
+		_result = (SDL.init(SDL_INIT_TIMER));
+
+		#if debug
+
+		if (_result == 0) {
+
+			Log.print(name + 'timer initiated.');
 		}
-		
-		if (SDL.initSubSystem(SDL_INIT_HAPTIC) != 0)
-		{
-            throw 'SDL failed to init haptic: `${SDL.getError()}`';
-        }
+		else {
+
+			throw 'SDL failed to initiate timer: `${SDL.getError()}`';
+		}
+
+		#end
+
+		// ** Init SDL video.
+
+        _result = SDL.initSubSystem(SDL_INIT_VIDEO);
+
+		#if debug
+
+		if (_result == 0) {
+
+			Log.print(name + 'video initiated.');
+		}
+		else {
+
+			throw 'SDL failed to initiate video: `${SDL.getError()}`';
+		}
+
+		#end
 		
 		__initVideo();
+		
+		// ** Init SDL controllers.
+
+		_result = SDL.initSubSystem(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK);
+
+		#if debug
+
+		if (_result == 0) {
+
+			Log.print(name + 'controllers initiated.');
+		}
+		else {
+
+			throw 'SDL failed to initiate controllers: `${SDL.getError()}`';
+		}
+
+		#end
 		
 		__input = new NativeInput();
 		
@@ -107,7 +140,7 @@ class NativeRuntime implements drc.core.Runtime
 	
 	private function __handleInputEvent(event:Event):Void
 	{
-		var type:GamepadEventType = GamepadEventType.UNKNOWN;
+		var _eventType:GamepadEventType = GamepadEventType.UNKNOWN;
 		
 		switch (event.type) 
 		{
@@ -150,7 +183,7 @@ class NativeRuntime implements drc.core.Runtime
 				
 			case SDL_JOYBUTTONDOWN:
 				
-				type = GamepadEventType.PRESSED;
+				_eventType = GamepadEventType.PRESSED;
 				
 				//trace(event.jbutton.which + " - " + event.jbutton.button);
 				
@@ -158,7 +191,7 @@ class NativeRuntime implements drc.core.Runtime
 				
 			case SDL_JOYBUTTONUP:
 				
-				type = GamepadEventType.RELEASED;
+				_eventType = GamepadEventType.RELEASED;
 				
 				//__input.onGamepadButtonUp(event.jbutton.which, event.jbutton.button);
 				
@@ -252,7 +285,7 @@ class NativeRuntime implements drc.core.Runtime
 				
 			case SDL_CONTROLLERDEVICEREMAPPED:
 				
-				type = GamepadEventType.REMAPPED;
+				_eventType = GamepadEventType.REMAPPED;
 				
 			case SDL_KEYDOWN:
 				
@@ -291,26 +324,6 @@ class NativeRuntime implements drc.core.Runtime
 			default:
 				
 		}
-		
-		if (type == GamepadEventType.UNKNOWN)
-		{
-			return;
-		}
-		
-		var gamepadEvent:GamepadEvent = 
-		{
-			type: type,
-			
-			timestamp: event.window.timestamp,
-			
-			index: event.cdevice.which,
-			
-			data1: 0,
-			
-			data2: 0
-		}
-		
-		__input.onGamepadEvent(gamepadEvent);
 	}
 	
 	private function __handleWindowEvent(event:Event):Void
@@ -410,11 +423,11 @@ class NativeRuntime implements drc.core.Runtime
 	
 	private function __initVideo():Void
 	{
-		var flags:SDLWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
+		var _flags:SDLWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
 		
 		__window = new NativeWindow();
 		
-		__window.innerData = SDL.createWindow('Director2D', 64, 64, 640, 480, flags);
+		__window.innerData = SDL.createWindow('Director2D', 64, 64, 640, 480, _flags);
 		
 		Common.window = __window;
 
@@ -422,6 +435,8 @@ class NativeRuntime implements drc.core.Runtime
 		{
 			throw 'SDL failed to create a window: `${SDL.getError()}`';
 		}
+
+		SDL.GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 		
 		SDL.GL_SetAttribute(SDL_GL_RED_SIZE, 8);
         SDL.GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
@@ -432,7 +447,7 @@ class NativeRuntime implements drc.core.Runtime
         SDL.GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
         SDL.GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		
-		//SDL.GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+		
 		
 		SDL.GL_SetSwapInterval(false);
 		
