@@ -6,13 +6,13 @@ import drc.buffers.Uint8Array;
 import drc.buffers.Float32Array;
 import drc.core.Context;
 import drc.core.EventDispacher;
-import drc.display.Profile;
-import drc.graphics.Image;
+import drc.data.Profile;
+import drc.display.Image;
 import drc.objects.State;
 import drc.types.DataEvent;
 import drc.utils.Common;
 import drc.utils.Resources;
-import drc.backend.native.NativeTexture;
+import drc.backend.native.data.Texture;
 import opengl.WebGL;
 
 class TestImage extends State
@@ -87,7 +87,7 @@ class TestImage extends State
 		
 		img = new Image(profile);
 
-		img.textures[0] = Resources.loadTexture('res/graphics/grid.png');
+		img.bitmaps[0] = Resources.loadTexture('res/graphics/grid.png');
 
 		//img.textures[0] = new NativeTexture(stb.Image.load("res/graphics/grid.png", 0));
 		
@@ -144,7 +144,7 @@ class TestImage extends State
 		
 		for (i in 0...profile.attributes.length) 
 		{
-			__context.setAttributePointer(profile.attributes[i].location, profile.attributes[i].format, false, 5 * Float32Array.BYTES_PER_ELEMENT, offset * Float32Array.BYTES_PER_ELEMENT);
+			__context.setAttributePointer(profile.attributes[i].offset, profile.attributes[i].format, false, 5 * Float32Array.BYTES_PER_ELEMENT, offset * Float32Array.BYTES_PER_ELEMENT);
 			
 			offset += profile.attributes[i].format;
 		}

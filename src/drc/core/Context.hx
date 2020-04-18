@@ -1,6 +1,6 @@
 package drc.core;
 
-import drc.data.BitmapData;
+import drc.data.Texture;
 import drc.display.Uniform;
 import opengl.WebGL;
 import drc.buffers.Float32Array;
@@ -55,7 +55,7 @@ class Context
 		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
 	}
 
-	public function setRenderToTexture(bitmapData:BitmapData):Void {
+	public function setRenderToTexture(bitmapData:Texture):Void {
 		
 		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
 

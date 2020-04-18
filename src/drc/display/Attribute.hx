@@ -1,7 +1,7 @@
 package drc.display;
 
 import drc.display.AttributeFormat;
-import drc.display.Pointer;
+import drc.display.Vertex;
 
 class Attribute 
 {
@@ -20,7 +20,7 @@ class Attribute
 	/**
 	 * The location of the attribute variable. Cannot be set.
 	 */
-	public var location(get, null):Int;
+	public var offset(get, null):Int;
 	
 	//** Privates.
 	
@@ -32,16 +32,16 @@ class Attribute
 	
 	/** @private */ private var __location:Int;
 
-	/** @private */ public var __pointers:Array<Pointer>;
+	/** @private */ public var __pointers:Array<Vertex>;
 	
-	public function new(name:String, format:AttributeFormat, offset:Int, pointers:Array<Pointer>) 
+	public function new(name:String, format:AttributeFormat, offset:Int, pointers:Array<Vertex>) 
 	{
 		__name = name;
 		
 		__format = format;
 		
 		__offset = offset;
-
+		
 		__pointers = pointers;
 	}
 	
@@ -62,7 +62,7 @@ class Attribute
 		return __format;
 	}
 	
-	private function get_location():Int
+	private function get_offset():Int
 	{
 		return __location;
 	}

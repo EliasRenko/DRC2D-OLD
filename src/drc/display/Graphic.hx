@@ -1,52 +1,271 @@
 package drc.display;
 
-import drc.display.Drawable;
-import drc.display.Indices;
-import drc.display.Profile;
-import drc.data.BitmapData;
-import drc.math.Matrix;
-import drc.display.Shading;
+import drc.data.VertexData;
+import drc.part.Object;
 
-class Graphic extends Drawable
-{
-	//** Publics.
-	
+class Graphic extends Object {
 	/**
-	 * The indices of the graphic.
+	 * The rotation of the graphic.
 	 */
-	public var indices:Indices = new Indices();
-	
+	public var angle(get, set):Float; //** Define metadata isVar.
+
 	/**
-	 * The profile of the graphic.
+	 * The x scale of the graphic.
 	 */
-	public var profile:Profile;
+	public var scaleX(get, set):Float; //** Define metadata isVar.
 
-	public var textures:Array<BitmapData>;
+	/**
+	 * The y scale of the graphic.
+	 */
+	public var scaleY(get, set):Float; //** Define metadata isVar.
 
-	public var matrix:Matrix = new Matrix();
+	/**
+	 * The x offset of the graphic.
+	 */
+	public var offsetX:Float = 0;
 
-	public var shadings:Map<String, Shading> = new Map<String, Shading>();
-	
+	/**
+	 * The y offset of the graphic.
+	 */
+	public var offsetY:Float = 0;
+
+	/**
+	 * The x origin of the graphic.
+	 */
+	@:isVar
+	public var originX(get, set):Float = 0; //** Define metadata isVar.
+
+	/**
+	 * The y origin of the graphic.
+	 */
+	@:isVar
+	public var originY(get, set):Float = 0; //** Define metadata isVar.
+
+	/**
+	 * The width of the graphic.
+	 */
+	public var width(get, set):Float; //** Define metadata isVar.
+
+	/**
+	 * The height of the graphic.
+	 */
+	public var height(get, set):Float; //** Define metadata isVar.
+
+	/**
+	 * The vertices of the graphic.
+	 */
+	public var vertices:VertexData = new VertexData();
+
+	/**
+	 * If the graphic should render.
+	 */
+	public var visible(get, set):Bool;
+
+	/**
+	 * The x position of the graphic in space.
+	 */
+	public var x(get, set):Float; // ** Define metadata: isVar.
+
+	/**
+	 * The y position of the graphic in space.
+	 */
+	public var y(get, set):Float; // ** Define metadata: isVar.
+
+	/**
+	 * The z position of the graphic in space.
+	 */
+	public var z(get, set):Float; // ** Define metadata: isVar.
+
 	//** Privates.
-	
-	//** Methods.
-	
-	/** @private **/ public var __indicesToRender:UInt = 0;
-	
-	public function new(profile:Profile) {
 
-		super(0, 0);
+	/** @private **/ private var __angle:Float = 0;
+
+	/** @private **/ private var __height:Float = 0;
+
+	/** @private **/ private var __offsetX:Float = 0;
+
+	/** @private **/ private var __offsetY:Float = 0;
+
+	/** @private **/ private var __originX:Float = 0;
+
+	/** @private **/ private var __originY:Float = 0;
+
+	/** @private **/ private var __scaleX:Float = 1;
+
+	/** @private **/ private var __scaleY:Float = 1;
+
+	/** @private **/ public var __verticesToRender:Int = 0;
+
+	/** @private **/ private var __width:Float = 0;
+
+	/** @private **/ private var __visible:Bool = true;
+
+	/** @private **/ private var __x:Float = 0;
+
+	/** @private **/ private var __y:Float = 0;
+
+	/** @private **/ private var __z:Float = 0;
+
+	/** @private **/ public var __isTile:Bool = false;
+
+	public function new(x:Float = 0, y:Float = 0) {
+
+		//** Set x position of the display object.
+
+		__x = x;
+
+		//** Set y position of the display object.
+
+		__y = y;
+	}
+
+	public function setAttribute(name:String, value:Float):Void {}
+
+	public function render():Void {}
+
+	private function __add():Void {}
+
+	private function __remove():Void {}
+
+	//** Getters and setters.
+
+	public function get_angle():Float {
+
+		return __angle;
+	}
+
+	private function set_angle(value:Float):Float {
+
+		__angle = value;
+
+		return __angle;
+	}
+
+	private function get_height():Float {
+
+		return __height;
+	}
+
+	private function set_height(value:Float):Float {
+
+		return __height = value;
+	}
+
+	private function get_scaleX():Float {
+
+		return __scaleX;
+	}
+
+	private function set_scaleX(value:Float):Float {
+
+		return __scaleX = value;
+	}
+
+	private function get_scaleY():Float {
+
+		return __scaleY;
+	}
+
+	private function set_scaleY(value:Float):Float {
+
+		return __scaleY = value;
+	}
+
+	private function get_offsetX():Float {
+
+		return __offsetX;
+	}
+
+	private function set_offsetX(value:Float):Float {
+
+		return __offsetX = value;
+	}
+
+	private function get_offsetY():Float {
+
+		return __offsetY;
+	}
+
+	private function set_offsetY(value:Float):Float {
+
+		return __offsetY = value;
+	}
+
+	private function get_originX():Float {
+
+		return __originX;
+	}
+
+	private function set_originX(value:Float):Float {
+
+		return __originX = value;
+	}
+
+	private function get_originY():Float {
+
+		return __originY;
+	}
+
+	private function set_originY(value:Float):Float {
+
+		return __originY = value;
+	}
+
+	public function get_width():Float {
+
+		return __width;
+	}
+
+	private function set_width(value:Float):Float {
+
+		return __width = value;
+	}
+
+	private function get_visible():Bool {
+
+		return __visible;
+	}
+
+	private function set_visible(value:Bool):Bool {
+
+		__visible = value;
+
+		return __visible;
+	}
+
+	private function get_x():Float {
+
+		return __x;
+	}
+
+	private function set_x(value:Float):Float {
+
+		__x = value;
+
+		return __x;
+	}
+
+	private function get_y():Float {
+
+		return __y;
+	}
+
+	private function set_y(value:Float):Float {
+
+		__y = value;
+
+		return __y;
+	}
+
+	private function get_z():Float {
+
+		return __z;
+	}
+
+	private function set_z(value:Float):Float {
 		
-		this.profile = profile;
+		__z = value;
 
-		for (i in 0...profile.attributes.length) {
-
-			for (j in 0...profile.attributes[i].__pointers.length) {
-
-				trace(profile.attributes[i].__pointers[j].name + ' ' + profile.attributes[i].__pointers[j].position);
-			}
-
-			//trace(profile.attributes[i].name);
-		}
+		return __z;
 	}
 }

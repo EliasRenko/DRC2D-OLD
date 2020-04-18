@@ -1,14 +1,14 @@
 package cont;
 
-import drc.graphics.Tileset;
-import drc.graphics.Image;
+import drc.display.Tileset;
+import drc.display.Image;
 import drc.objects.State;
-import drc.display.Profile;
+import drc.data.Profile;
 import drc.utils.Common;
 import drc.utils.Resources;
-import drc.input.Controls;
-import drc.graphics.Tilemap;
-import drc.graphics.Tile;
+import drc.input.Control;
+import drc.display.Tilemap;
+import drc.display.Tile;
 import drc.utils.Resources;
 
 class TestTilemap extends State {
@@ -47,13 +47,17 @@ class TestTilemap extends State {
         tile = new Tile(tilemap, 0, 0, 0);
 
         tilemap.addTile(tile);
+
+        addGraphic(tilemap);
     }
 
     override function render():Void {
 
-        tilemap.render();
+        super.render();
 
-        Common.stage.draw(tilemap);
+        //tilemap.render();
+
+        //Common.stage.draw(tilemap);
     }
 
     override function update():Void {
@@ -62,38 +66,52 @@ class TestTilemap extends State {
 
         //return;
 
-        if (Common.input.getGamepad(0).check(Controls.A)) {
+        //if (Common.input.getGamepad(0).check(Control.A)) {
+//
+            //for (tile in tilemap.tiles) {
+//
+                //tile.angle += 1;
+            //}
+        //}
+        //
+        //if (Common.input.getGamepad(0).pressed(Control.B)) {
+//
+            //for (tile in tilemap.tiles) {
+//
+                //tile.id += 1;
+            //}
+		//}
+		
+		if (Common.input.getGamepad(0).check(Control.A)) {
 
-            for (tile in tilemap.tiles) {
-
-                tile.angle += 1;
-            }
-        }
-        
-        if (Common.input.getGamepad(0).pressed(Controls.B)) {
-
-            for (tile in tilemap.tiles) {
-
-                tile.id += 1;
-            }
+            Common.stage.width -= 1;
+			
+            Common.stage.height -= 1;
 		}
 
-        if (Common.input.getGamepad(0).check(Controls.DPAD_UP)) {
+		if (Common.input.getGamepad(0).check(Control.X)) {
+
+            Common.stage.width += 1;
+			
+            Common.stage.height += 1;
+		}
+
+        if (Common.input.getGamepad(0).check(Control.DPAD_UP)) {
 
             tile.y -= 2;
 		}
 
-		if (Common.input.getGamepad(0).check(Controls.DPAD_DOWN)) {
+		if (Common.input.getGamepad(0).check(Control.DPAD_DOWN)) {
 
             tile.y += 2;
 		}
 
-		if (Common.input.getGamepad(0).check(Controls.DPAD_LEFT)) {
+		if (Common.input.getGamepad(0).check(Control.DPAD_LEFT)) {
 
 			tile.x -= 2;
 		}
 
-		if (Common.input.getGamepad(0).check(Controls.DPAD_RIGHT)) {
+		if (Common.input.getGamepad(0).check(Control.DPAD_RIGHT)) {
 
             tile.x += 2;
 		}

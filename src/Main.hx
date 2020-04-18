@@ -1,6 +1,5 @@
 package;
 
-import cont.TestCanvas;
 import cont.TestTilemap;
 import drc.core.App;
 

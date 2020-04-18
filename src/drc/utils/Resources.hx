@@ -1,11 +1,10 @@
 package drc.utils;
 
 import stb.TrueType.StbBakedFont;
-import drc.backend.native.NativeTexture;
+import drc.backend.native.data.Texture;
 import sys.FileSystem;
 import stb.Image.StbImageData;
-import drc.data.BitmapData;
-import drc.display.Profile;
+import drc.data.Profile;
 import opengl.WebGL;
 import sdl.SDL;
 import drc.debug.Log;
@@ -18,7 +17,7 @@ import drc.display.AttributeFormat;
 import drc.display.Attribute;
 import drc.display.Uniform;
 import drc.display.UniformFormat;
-import drc.display.Pointer;
+import drc.display.Vertex;
 
 typedef FileHandle = sdl.RWops;
 
@@ -91,9 +90,9 @@ class Resources
 		return bytes.toString();
 	}
 
-	public static function loadFont(path:String):BitmapData {
+	public static function loadFont(path:String):Texture {
 		
-		var _texture:NativeTexture;
+		var _texture:Texture;
 
 		var _data:StbImageData;
 
@@ -106,16 +105,16 @@ class Resources
 			_data = stb.Image.load(SDL.getBasePath() + 'res/graphics/grid_mt.png', 0);
 		}
 
-		_texture = new NativeTexture(null);
+		_texture = new Texture(null);
 
 		_texture.uploadFont(_data.w, _data.h, _data.bytes);
 
 		return _texture;
 	}
 	
-	public static function loadTexture(path:String):BitmapData {
+	public static function loadTexture(path:String):Texture {
 		
-		var _texture:BitmapData;
+		var _texture:Texture;
 
 		var _data:StbImageData;
 
@@ -128,7 +127,7 @@ class Resources
 			_data = stb.Image.load(SDL.getBasePath() + 'res/graphics/grid_mt.png', 0);
 		}
 
-		_texture = new NativeTexture(_data);
+		_texture = new Texture(_data);
 
 		return _texture;
 	}
@@ -207,13 +206,13 @@ class Resources
 						f = null;
 				}
 
-				var struct:Array<Pointer> = new Array<Pointer>();
+				var struct:Array<Vertex> = new Array<Vertex>();
 				
 				var structData:Dynamic = Reflect.field(attributeData[count], "struct");
 
 				for (i in 0...structData.length) {
 
-					var s:drc.display.Pointer = 
+					var s:drc.display.Vertex = 
 					{
 						name: structData[i].name,
 

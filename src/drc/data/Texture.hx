@@ -16,6 +16,8 @@ interface Texture {
 
     public var width(get, null):Int;
 
+    /** Methods. **/
+
     public function create(width:Int, height:Int):Void;
 
     public function upload(data:StbImageData):Void;

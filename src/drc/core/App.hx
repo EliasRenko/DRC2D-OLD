@@ -1,7 +1,7 @@
 package drc.core;
 
 import drc.core.Runtime;
-import drc.graphics.Stage;
+import drc.display.Stage;
 import drc.objects.State;
 import drc.part.ObjectList;
 import drc.utils.Common;
@@ -9,27 +9,28 @@ import drc.utils.Resources;
 
 #if cpp
 
-import drc.backend.native.NativeRuntime;
+	import drc.backend.native.core.Runtime;
 
 #end
 
-class App {
+class App
+{
 
 	// Publics
 
 	/**
-		The backend runtime of the application. Cannot be set.
-	**/
+	 * The backend runtime of the application. Cannot be set.
+	 */
 	public var runtime(get, null):Runtime;
 
 	/**
-		The stage of the application. Cannot be set.
-	**/
+	 * The stage of the application. Cannot be set.
+	 */
 	public var stage(get, null):Stage;
 
 	/**
-		The states of the application.
-	**/
+	 * The states of the application.
+	 */
 	public var states:ObjectList<State> = new ObjectList<State>();
 
 	// Privates
@@ -40,11 +41,12 @@ class App {
 
 	/** @private **/ private var __stage:Stage;
 
-	public function new() {
+	public function new()
+	{
 
 		#if cpp
 
-		__runtime = new drc.backend.native.NativeRuntime();
+		__runtime = new drc.backend.native.core.Runtime();
 
 		#else
 
@@ -63,9 +65,11 @@ class App {
 		Common.stage = stage;
 	}
 
-	public function run():Void {
+	public function run():Void
+	{
 
-		while (runtime.active) {
+		while (runtime.active)
+		{
 
 			__runtime.pollEvents();
 
@@ -89,27 +93,33 @@ class App {
 		Sys.exit(0);
 	}
 
-	public function addState(state:State):State {
+	public function addState(state:State):State
+	{
 
 		return states.add(state);
 	}
 
-	public function removeState(state:State):Void {
+	public function removeState(state:State):Void
+	{
 
 		states.remove(state);
 	}
 
-	public function render():Void {
+	public function render():Void
+	{
 
-		for (i in 0...states.count) {
+		for (i in 0...states.count)
+		{
 
 			states.members[i].render();
 		}
 	}
 
-	public function update():Void {
+	public function update():Void
+	{
 
-		for (i in 0...states.count) {
+		for (i in 0...states.count)
+		{
 
 			states.members[i].update();
 		}
@@ -117,13 +127,15 @@ class App {
 
 	// Getters and setters.
 
-	private function get_runtime():Runtime {
-		
+	private function get_runtime():Runtime
+	{
+
 		return __runtime;
 	}
 
-	private function get_stage():Stage {
-		
+	private function get_stage():Stage
+	{
+
 		return __stage;
 	}
 }
