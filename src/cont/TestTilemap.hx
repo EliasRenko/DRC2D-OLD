@@ -60,10 +60,18 @@ class TestTilemap extends State {
         //Common.stage.draw(tilemap);
     }
 
-    override function update():Void {
-
+    override function update():Void
+	{
         super.update();
-
+		
+		if (Common.input.mouse.pressed(1))
+		{
+			if (Common.input.mouse.doubleClick)
+			{
+				tile.id += 1;
+			}
+		}
+		
         //return;
 
         //if (Common.input.getGamepad(0).check(Control.A)) {

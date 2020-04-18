@@ -2,27 +2,35 @@ package drc.backend.native.system;
 
 import drc.backend.native.input.Gamepad;
 import drc.core.EventDispacher;
-
+import drc.input.Mouse;
 import drc.system.Input;
 import drc.types.GamepadEvent;
-import sdl.GameController;
 import haxe.ds.Vector;
 import sdl.Joystick;
-import sdl.SDL;
 
 #if cpp
 
 class Input implements drc.system.Input
 {
-	//** Publics.
+	// ** Publics.
 	
+	/**
+	 * 
+	 */
 	public var gamepadEvent:EventDispacher<GamepadEvent> = new EventDispacher<GamepadEvent>();
 	
-	//** Privates.
+	/**
+	 * 
+	 */
+	public var mouse(get, null):Mouse;
+	
+	// ** Privates.
 	
 	/** @private **/ private var __gamepadIndexes:Map<Int, Int>;
-	
+
 	/** @private **/ private var __gamepads:Vector<Gamepad>;
+
+	/** @private **/ private var __mouse:drc.backend.native.input.Mouse;
 	
 	public function new() 
 	{
@@ -34,6 +42,8 @@ class Input implements drc.system.Input
 		{
 			__gamepads[i] = new Gamepad(i);
 		}
+		
+		__mouse = new drc.backend.native.input.Mouse();
 	}
 	
 	public function getGamepad(index:UInt):Gamepad
@@ -70,6 +80,31 @@ class Input implements drc.system.Input
 		__gamepads[__gamepadIndexes.get(id)].onButtonRelease(button);
 	}
 	
+	public function onMouseEvent():Void
+	{
+		
+	}
+	
+	public function onMouseMotion():Void 
+	{
+		__mouse.onMove();
+	}
+
+	public function onMouseButtonDown(button:Int, clicks:Int):Void
+	{
+		__mouse.onButtonPress(button, clicks);
+	}
+
+	public function onMouseButtonUp(button:Int):Void
+	{
+		__mouse.onButtonRelease(button);
+	}
+
+	public function onMouseWheel():Void
+	{
+		
+	}
+
 	public function postUpdate():Void
 	{
 		for (i in 0...__gamepads.length) 
@@ -79,6 +114,15 @@ class Input implements drc.system.Input
 				__gamepads[i].postUpdate();
 			}
 		}
+		
+		__mouse.postUpdate();
+	}
+
+	// ** Getters and setters.
+
+	private function get_mouse():Mouse
+	{
+		return __mouse;
 	}
 }
 

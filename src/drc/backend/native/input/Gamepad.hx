@@ -80,7 +80,7 @@ class Gamepad extends Device implements drc.input.Gamepad
 		SDL.joystickClose(__sdlJoystick);
 	}
 	
-	//** Getters and setters.
+	// ** Getters and setters.
 	
 	private function get_active():Bool
 	{

@@ -20,87 +20,87 @@ import drc.utils.Common;
 class Runtime implements drc.core.Runtime
 {
 	// ** Publics.
-	
-	public var active(get, null):Bool;
-	
-	public var input(get, null):Input;
-	
-	public var name(get, null):String;
-	
-	// ** Privates.
-	
-	/** @private **/ private var __active:Bool;
-	
-	/** @private **/ private var __input:Input;
-	
-	/** @private **/ private var __name:String = 'Native';
-	
-	/** @private **/ private var __window:Window;
-	
-	public function new() {
 
+	public var active(get, null):Bool;
+
+	public var input(get, null):Input;
+
+	public var name(get, null):String;
+
+	// ** Privates.
+
+	/** @private **/ private var __active:Bool;
+
+	/** @private **/ private var __input:Input;
+
+	/** @private **/ private var __name:String = 'Native';
+
+	/** @private **/ private var __window:Window;
+
+	public function new()
+	{
 		Log.print(name);
 	}
-	
-	public function init():Void {
 
+	public function init():Void
+	{
 		var _result:Int = 0;
-
+		
 		// ** Set SDL hints.
-
+		
 		SDL.setHint(SDL_HINT_XINPUT_ENABLED, '0');
 		
 		// ** Init SDL timer.
-
+		
 		_result = (SDL.init(SDL_INIT_TIMER));
-
+		
 		#if debug
-
-		if (_result == 0) {
-
+		
+		if (_result == 0)
+		{
 			Log.print(name + 'timer initiated.');
 		}
-		else {
-
+		else
+		{
 			throw 'SDL failed to initiate timer: `${SDL.getError()}`';
 		}
-
+		
 		#end
-
+		
 		// ** Init SDL video.
-
-        _result = SDL.initSubSystem(SDL_INIT_VIDEO);
-
+		
+		_result = SDL.initSubSystem(SDL_INIT_VIDEO);
+		
 		#if debug
-
-		if (_result == 0) {
-
+		
+		if (_result == 0)
+		{
 			Log.print(name + 'video initiated.');
 		}
-		else {
-
+		else
+		{
 			throw 'SDL failed to initiate video: `${SDL.getError()}`';
 		}
-
+		
 		#end
 		
 		__initVideo();
 		
 		// ** Init SDL controllers.
-
+		
 		_result = SDL.initSubSystem(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK);
-
+		
 		#if debug
-
-		if (_result == 0) {
-
+		
+		if (_result == 0)
+		{
 			Log.print(name + 'controllers initiated.');
 		}
-		else {
-
+		else
+		{
 			throw 'SDL failed to initiate controllers: `${SDL.getError()}`';
 		}
-
+		
 		#end
 		
 		__input = new Input();
@@ -109,14 +109,14 @@ class Runtime implements drc.core.Runtime
 		
 		__active = true;
 	}
-	
+
 	public function release():Void
 	{
 		__active = false;
 		
 		SDL.quit();
 	}
-	
+
 	public function pollEvents():Void
 	{
 		while (SDL.hasAnEvent())
@@ -130,26 +130,26 @@ class Runtime implements drc.core.Runtime
 			if (event.type == SDL_QUIT)
 			{
 				release();
-            }
+			}
 		}
 	}
-	
+
 	public function present():Void
 	{
 		SDL.GL_SwapWindow(__window.innerData);
 	}
-	
+
 	private function __handleInputEvent(event:Event):Void
 	{
 		var _eventType:GamepadEventType = GamepadEventType.UNKNOWN;
 		
-		switch (event.type) 
+		switch (event.type)
 		{
 			case SDL_JOYDEVICEADDED:
 				
 				if (!SDL.isGameController(event.jdevice.which))
 				{
-					var gamepadEvent:GamepadEvent = 
+					var gamepadEvent:GamepadEvent =
 					{
 						type: GamepadEventType.ADDED,
 						
@@ -169,7 +169,7 @@ class Runtime implements drc.core.Runtime
 				
 			case SDL_JOYDEVICEREMOVED:
 				
-				var gamepadEvent:GamepadEvent = 
+				var gamepadEvent:GamepadEvent =
 				{
 					type: GamepadEventType.ADDED,
 					
@@ -187,7 +187,6 @@ class Runtime implements drc.core.Runtime
 				_eventType = GamepadEventType.PRESSED;
 				
 				//trace(event.jbutton.which + " - " + event.jbutton.button);
-				
 				//__input.onGamepadButtonDown(event.jbutton.which, event.jbutton.button);
 				
 			case SDL_JOYBUTTONUP:
@@ -198,7 +197,7 @@ class Runtime implements drc.core.Runtime
 				
 			case SDL_CONTROLLERDEVICEADDED:
 				
-				var gamepadEvent:GamepadEvent = 
+				var gamepadEvent:GamepadEvent =
 				{
 					type: GamepadEventType.ADDED,
 					
@@ -219,7 +218,7 @@ class Runtime implements drc.core.Runtime
 				
 			case SDL_CONTROLLERDEVICEREMOVED:
 				
-				var gamepadEvent:GamepadEvent = 
+				var gamepadEvent:GamepadEvent =
 				{
 					type: GamepadEventType.REMOVED,
 					
@@ -240,13 +239,13 @@ class Runtime implements drc.core.Runtime
 				
 				var _val:Float = (event.caxis.value+32768) / (32767 + 32768);
 				
-                var _normalized_val = (-0.5 + _val) * 2.0;
+				var _normalized_val = ( -0.5 + _val) * 2.0;
 				
 				trace(event.caxis.which + ' - Axis: ' + event.caxis.axis + ' - Value:' + _normalized_val);
 				
 			case SDL_CONTROLLERBUTTONDOWN:
 				
-				var gamepadEvent:GamepadEvent = 
+				var gamepadEvent:GamepadEvent =
 				{
 					type: GamepadEventType.PRESSED,
 					
@@ -267,7 +266,7 @@ class Runtime implements drc.core.Runtime
 				
 			case SDL_CONTROLLERBUTTONUP:
 				
-				var gamepadEvent:GamepadEvent = 
+				var gamepadEvent:GamepadEvent =
 				{
 					type: GamepadEventType.RELEASED,
 					
@@ -288,45 +287,30 @@ class Runtime implements drc.core.Runtime
 				
 				_eventType = GamepadEventType.REMAPPED;
 				
+			case SDL_MOUSEMOTION:
+				
+				__input.onMouseMotion();
+				
+			case SDL_MOUSEBUTTONDOWN:
+				
+				__input.onMouseButtonDown(event.button.button, event.button.clicks);
+				
+			case SDL_MOUSEBUTTONUP:
+				
+				__input.onMouseButtonUp(event.button.button);
+				
+			case SDL_MOUSEWHEEL:
+				
+				__input.onMouseWheel();
+				
 			case SDL_KEYDOWN:
 				
-				//var keyEvent:KeyEvent = 
-				//{
-					//sym : event.key.keysym.sym,
-					//
-					//scancode : event.key.keysym.scancode,
-					//
-					//repeat : event.key.repeat,
-					//
-					//timestamp : event.key.timestamp
-				//};
-				//
-				//__input.onKeyboardDown(keyEvent);
-				//
-				//__app.onKeyboardEvent(keyEvent);
-				
 			case SDL_KEYUP:
-				
-				//var keyEvent:KeyEvent = 
-				//{
-					//sym : event.key.keysym.sym,
-					//
-					//scancode : event.key.keysym.scancode,
-					//
-					//repeat : event.key.repeat,
-					//
-					//timestamp : event.key.timestamp
-				//};
-				//
-				//__input.onKeyboardUp(keyEvent);
-				//
-				//__app.onKeyboardEvent(keyEvent);
-				
+			
 			default:
-				
 		}
 	}
-	
+
 	private function __handleWindowEvent(event:Event):Void
 	{
 		var data1:Int = event.window.data1;
@@ -337,7 +321,7 @@ class Runtime implements drc.core.Runtime
 		{
 			var type:WindowEventType = WindowEventType.UNKNOWN;
 			
-			switch(event.window.event)
+			switch (event.window.event)
 			{
 				case SDL_WINDOWEVENT_SHOWN:
 					
@@ -346,59 +330,59 @@ class Runtime implements drc.core.Runtime
 				case SDL_WINDOWEVENT_HIDDEN:
 					
 					type = WindowEventType.HIDDEN;
-                    
-                case SDL_WINDOWEVENT_EXPOSED:
+					
+				case SDL_WINDOWEVENT_EXPOSED:
 					
 					type = WindowEventType.EXPOSED;
-                    
-                case SDL_WINDOWEVENT_MOVED:
+					
+				case SDL_WINDOWEVENT_MOVED:
 					
 					type = WindowEventType.MOVED;
-                    
-                case SDL_WINDOWEVENT_MINIMIZED:
+					
+				case SDL_WINDOWEVENT_MINIMIZED:
 					
 					type = WindowEventType.MINIMIZED;
-                   
-                case SDL_WINDOWEVENT_MAXIMIZED:
+					
+				case SDL_WINDOWEVENT_MAXIMIZED:
 					
 					type = WindowEventType.MAXIMIZED;
-                    
-                case SDL_WINDOWEVENT_RESTORED:
-                    
+					
+				case SDL_WINDOWEVENT_RESTORED:
+					
 					type = WindowEventType.RESTORED;
 					
-                case SDL_WINDOWEVENT_ENTER:
-                    
+				case SDL_WINDOWEVENT_ENTER:
+					
 					type = WindowEventType.ENTER;
 					
-                case SDL_WINDOWEVENT_LEAVE:
-                    
+				case SDL_WINDOWEVENT_LEAVE:
+					
 					type = WindowEventType.LEAVE;
 					
-                case SDL_WINDOWEVENT_FOCUS_GAINED:
-                    
+				case SDL_WINDOWEVENT_FOCUS_GAINED:
+					
 					type = WindowEventType.FOCUS_GAINED;
 					
-                case SDL_WINDOWEVENT_FOCUS_LOST:
-                    
+				case SDL_WINDOWEVENT_FOCUS_LOST:
+					
 					type = WindowEventType.FOCUS_LOST;
 					
-                case SDL_WINDOWEVENT_CLOSE:
-                    
+				case SDL_WINDOWEVENT_CLOSE:
+					
 					type = WindowEventType.CLOSE;
-
+					
 					release();
 					
-                case SDL_WINDOWEVENT_RESIZED:
-                  
+				case SDL_WINDOWEVENT_RESIZED:
+					
 					type = WindowEventType.RESIZED;
 					
-                case SDL_WINDOWEVENT_SIZE_CHANGED:
-                   
+				case SDL_WINDOWEVENT_SIZE_CHANGED:
+					
 					type = WindowEventType.SIZE_CHANGED;
 					
-                case SDL_WINDOWEVENT_NONE:
-				
+				case SDL_WINDOWEVENT_NONE:
+					
 				default:
 			}
 			
@@ -407,7 +391,7 @@ class Runtime implements drc.core.Runtime
 				return;
 			}
 			
-			var windowEvent:drc.types.WindowEvent = 
+			var windowEvent:drc.types.WindowEvent =
 			{
 				type : type,
 				
@@ -421,7 +405,7 @@ class Runtime implements drc.core.Runtime
 			__window.onEvent(windowEvent);
 		}
 	}
-	
+
 	private function __initVideo():Void
 	{
 		var _flags:SDLWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
@@ -431,24 +415,22 @@ class Runtime implements drc.core.Runtime
 		__window.innerData = SDL.createWindow('Director2D', 64, 64, 640, 480, _flags);
 		
 		Common.window = __window;
-
+		
 		if (__window == null)
 		{
 			throw 'SDL failed to create a window: `${SDL.getError()}`';
 		}
-
+		
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
 		
 		SDL.GL_SetAttribute(SDL_GL_RED_SIZE, 8);
-        SDL.GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
-        SDL.GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
-        SDL.GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-        SDL.GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-        //SDL.GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-        SDL.GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-        SDL.GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-		
-		
+		SDL.GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+		SDL.GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+		SDL.GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+		SDL.GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+		//SDL.GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		
 		SDL.GL_SetSwapInterval(false);
 		
@@ -465,28 +447,28 @@ class Runtime implements drc.core.Runtime
 		
 		var _result = GLEW.init();
 		
-		if (_result != GLEW.OK) {
-			
+		if (_result != GLEW.OK)
+		{
 			trace('runtime / sdl / failed to setup created render context, unable to recover / `${GLEW.error(_result)}`');
-			
-		} else {
-			
+		}
+		else
+		{
 			trace('sdl / GLEW init / ok');
 		}
 	}
-	
+
 	//** Getters and setters.
-	
+
 	private function get_active():Bool
 	{
 		return __active;
 	}
-	
+
 	private function get_input():Input
 	{
 		return __input;
 	}
-	
+
 	private function get_name():String
 	{
 		return __name;

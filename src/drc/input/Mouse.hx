@@ -1,14 +1,20 @@
 package drc.input;
 
-interface Gamepad 
+interface Mouse 
 {
 	//** Publics.
 	
 	public var active(get, null):Bool;
 	
+	public var doubleClick(get, null):Bool;
+	
+	public var hasMoved(get, null):Bool;
+
 	//** Privates.
 	
 	/** @private **/ private var __active:Bool;
+
+	/** @private **/ private var __hasMoved:Bool;
 	
 	public function check(control:Int):Bool;
 	
@@ -20,9 +26,8 @@ interface Gamepad
 	
 	private function get_active():Bool;
 	
-	private function get_id():UInt;
-	
-	private function get_index():UInt;
-	
-	private function get_name():String;
+	private function get_doubleClick():Bool;
+
+	private function get_hasMoved():Bool;
 }
+

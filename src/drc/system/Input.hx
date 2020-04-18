@@ -2,6 +2,7 @@ package drc.system;
 
 import drc.core.EventDispacher;
 import drc.input.Gamepad;
+import drc.input.Mouse;
 import drc.types.GamepadEvent;
 
 interface Input 
@@ -12,6 +13,8 @@ interface Input
 	
 	//public var keyboard(get, null):Keyboard;
 	
+	public var mouse(get, null):Mouse;
+	
 	//** Methods.
 	
 	public function getGamepad(index:UInt):Gamepad;
@@ -21,4 +24,6 @@ interface Input
 	//** Getters and setters.
 	
 	//private function get_keyboard():Keyboard;
+	
+	private function get_mouse():Mouse;
 }

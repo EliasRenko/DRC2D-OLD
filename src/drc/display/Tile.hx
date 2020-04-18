@@ -95,6 +95,11 @@ class Tile extends Graphic {
 
         var rect:Region = __parentTilemap.tileset.regions[value];
 
+        if (rect == null)
+        {
+            rect = __parentTilemap.tileset.regions[64];
+        }
+
         vertices.innerData[__parentTilemap.shadings["u"].positions[0]] = rect.values[0] / __parentTilemap.bitmaps[0].width;
 		vertices.innerData[__parentTilemap.shadings["v"].positions[0]] = rect.values[1] / __parentTilemap.bitmaps[0].height; //y
 		
