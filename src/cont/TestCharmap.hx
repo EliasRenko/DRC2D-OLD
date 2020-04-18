@@ -1,5 +1,6 @@
 package cont;
 
+import drc.types.TextEvent;
 import drc.input.Control;
 import drc.utils.Common;
 import drc.display.Charmap;
@@ -21,8 +22,8 @@ class TestCharmap extends State
 		
 		charmap = new Charmap(profile, Resources.loadText("res/fonts/nokiafc22.json"));
 		
-		var _s:String = 
-		"Welcome to the H.E.V. mark IV protective system, for use in hazardous environment conditions. High impact reactive armour activated. Atmospheric contaminant sensors activated. Have a very safe day!";
+		var _s:String = "";
+		//"Welcome to the H.E.V. mark IV protective system, for use in hazardous environment conditions. High impact reactive armour activated. Atmospheric contaminant sensors activated. Have a very safe day!";
 
 		text = new Text(charmap, '', 64, 64);
 
@@ -33,8 +34,19 @@ class TestCharmap extends State
 		text.text = _s;
 		
 		addGraphic(charmap);
+
+		Common.input.beginTextInput();
+
+		//Common.input.endTextInput();
+		
+		Common.input.textEvent.add(onTextAdd);
 	}
 	
+	public function onTextAdd(event:TextEvent):Void
+	{
+		text.text += event.data;
+	}
+
 	override public function update():Void 
 	{
 		super.update();

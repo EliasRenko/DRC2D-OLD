@@ -5,12 +5,15 @@ import drc.data.Texture;
 import drc.data.Profile;
 import drc.display.Drawable;
 import drc.display.Tile;
+import drc.part.DrcRecycleList;
 
 class Tilemap extends Drawable {
 
 	// ** Publics.
 
-	public var tiles:Array<Tile> = new Array<Tile>();
+	//public var tiles:Array<Tile> = new Array<Tile>();
+
+	public var tiles:DrcRecycleList<Tile> = new DrcRecycleList<Tile>();
 
 	public var tileset:Tileset;
 
@@ -68,7 +71,7 @@ class Tilemap extends Drawable {
 	
 	public function addTile(tile:Tile):Tile {
 
-		tiles.push(tile);
+		tiles.add(tile);
 		
 		__updateIndices();
 		
@@ -77,37 +80,101 @@ class Tilemap extends Drawable {
 		return tile;
 	}
 
+	public function getTile(index:Int):Tile
+		{
+			return tiles.getMember(index);
+		}
+		
+		public function insert(tile:Tile):Tile
+		{
+			return tiles.insert(tile);
+		}
+		
+		public function restore(tile:Tile):Bool
+		{
+			if (tiles.restore(tile))
+			{
+				__updateIndices();
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		public function restoreAt(index:Int):Bool
+		{
+			if (tiles.restoreAt(index))
+			{
+				__updateIndices();
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		public function recycle(tile:Tile):Bool
+		{
+			if (tiles.recycle(tile))
+			{
+				indices.pop(6);
+				
+				return true;
+			}
+			
+			return false;
+		}
+		
+		public function removeTile(tile:Tile):Void
+		{
+			//trace(tile.index);
+			
+			tiles.remove(tile);
+			
+			indices.pop(6);
+		}
+		
+		public function removeTileAt(index:Int):Void
+		{
+			tiles.removeAt(index);
+			
+			indices.pop(6);
+		}
+
 	override public function render():Void {
 		
 		__activeVertices = -1;
 
 		__indicesToRender = 0;
 
-		for (i in 0...tiles.length) {
-			
-			if (tiles[i].visible) {
+		tiles.forEachActive(__renderTile);
+	}
 
-				tiles[i].render();
+	private function __renderTile(tile:Tile):Void {
 
-				for (vertexData in 0...tiles[i].vertices.innerData.length)
-				{
-					__activeVertices ++;
-					
-					// ** Push the vertex data in the tilemap.
-					
-					vertices.innerData[__activeVertices] = tiles[i].vertices.innerData[vertexData];
-				}
+		if (tile.visible) {
+
+			tile.render();
+
+			for (vertexData in 0...tile.vertices.innerData.length)
+			{
+				__activeVertices ++;
 				
-				__verticesToRender += 4;
+				// ** Push the vertex data in the tilemap.
 				
-				__indicesToRender += 6;
+				vertices.innerData[__activeVertices] = tile.vertices.innerData[vertexData];
 			}
+			
+			__verticesToRender += 4;
+			
+			__indicesToRender += 6;
 		}
 	}
 
 	private function __updateIndices():Void {
 
-		var position:Int = 4 * (tiles.length - 1);
+		var position:Int = 4 * (tiles.activeCount - 1);
 		
 		indices.add(position);
 		

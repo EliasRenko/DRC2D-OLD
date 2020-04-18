@@ -1,7 +1,7 @@
 package;
 
-import cont.TestTilemap;
 import cont.TestCharmap;
+import cont.TestForm;
 import drc.core.App;
 
 class Main 
@@ -10,7 +10,7 @@ class Main
 	{
 		var app:App = new App();
 		
-		app.addState(new TestCharmap());
+		app.addState(new TestForm());
 		
 		app.run();
 	}

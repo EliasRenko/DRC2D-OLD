@@ -117,9 +117,9 @@ class Stage extends Drawable
 		
 		for (i in 0...img.profile.attributes.length) {
 
-			__context.setAttributePointer(profile.attributes[i].offset, profile.attributes[i].format, false, 5 * Float32Array.BYTES_PER_ELEMENT, offset * Float32Array.BYTES_PER_ELEMENT);
+			__context.setAttributePointer(img.profile.attributes[i].offset, img.profile.attributes[i].format, false, 5 * Float32Array.BYTES_PER_ELEMENT, offset * Float32Array.BYTES_PER_ELEMENT);
 			
-			offset += profile.attributes[i].format;
+			offset += img.profile.attributes[i].format;
 		}
 
 		offset = 1;

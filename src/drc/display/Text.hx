@@ -2,7 +2,7 @@ package drc.display;
 
 import drc.display.Tile;
 
-class Text 
+class Text extends Graphic
 {
 	//** Publics.
 	
@@ -14,12 +14,6 @@ class Text
 	 * The 
 	 */
 	public var fieldWidth(get, set):Float; //** Define metadata isVar.
-	
-	/**
-	 * The height of the text.
-	 */
-	@:isVar
-	public var height(get, null):Int; //** Define metadata isVar.
 	
 	/**
 	 * The space between lines.
@@ -48,21 +42,6 @@ class Text
 	 */
 	public var tracking:Int = 1;
 	
-	@:isVar
-	public var visible(get, set):Bool;
-	
-	/**
-	 * The width of the text.
-	 */
-	@:isVar
-	public var width(get, null):Int; //** Define metadata isVar.
-	
-	public var x(get, set):Float;
-	
-	public var y(get, set):Float;
-	
-	public var z(get, set):Float;
-	
 	/**
 	 * The y position of the text in space.
 	 */
@@ -75,8 +54,6 @@ class Text
 	
 	/** @private */ private var __fieldWidth:Float = 300;
 	
-	/** @private */ private var __height:Int = 0;
-	
 	/** @private */ private var __lines:Int = 0;
 	
 	/** @private */ public var __characters:Array<Tile> = new Array<Tile>();
@@ -84,16 +61,6 @@ class Text
 	/** @private */ private var __text:String = "";
 	
 	/** @private */ private var __parent:Charmap;
-	
-	/** @private */ private var __width:Int = 0;
-	
-	/** @private */ private var __visible:Bool = true;
-	
-	/** @private */ private var __x:Float;
-	
-	/** @private */ private var __y:Float;
-	
-	/** @private */ private var __z:Float;
 	
 	/** @private */ private var __lineBreak:Array<UInt> = new Array<UInt>();
 	
@@ -103,11 +70,9 @@ class Text
 	
 	public function new(parent:Charmap, value:String, x:Float = 0, y:Float = 0) 
 	{
+		super(x, y);
+
 		__parent = parent;
-		
-		__x = x;
-		
-		__y = y;
 		
 		text = value;
 		
@@ -157,19 +122,9 @@ class Text
 		return value;
 	}
 	
-	private function get_height():Int
-	{
-		return __height;
-	}
-	
 	private function get_lines():Int
 	{
 		return __lines;
-	}
-	
-	private function get_width():Int
-	{
-		return __width;
 	}
 	
 	private function get_text():String
@@ -177,13 +132,33 @@ class Text
 		return __text;
 	}
 	
-	public function setAttribute(name:String, value:Float):Void
+	override function setAttribute(name:String, value:Float):Void
 	{
 		for (i in 0...__characters.length)
 		{
 			__characters[i].setAttribute(name, value);
 			
 			//trace("AT");
+		}
+	}
+
+	public function addToParent():Void 
+	{
+		__active = true;
+		
+		for (i in 0...__characters.length)
+		{
+			__parent.addTile(__characters[i]);
+		}
+	}
+
+	public function dispose():Void {
+		
+		for (i in 0...__characters.length)
+		{
+			parent.removeTile(__characters[__characters.length - 1]);
+			
+			__characters.pop();
 		}
 	}
 	
@@ -509,12 +484,7 @@ class Text
 		return __parent;
 	}
 	
-	private function get_visible():Bool
-	{
-		return __visible;
-	}
-	
-	private function set_visible(value:Bool):Bool
+	override private function set_visible(value:Bool):Bool
 	{
 		for (i in 0...__characters.length)
 		{
@@ -524,12 +494,7 @@ class Text
 		return __visible = value;
 	}
 	
-	private function get_x():Float
-	{
-		return __x;
-	}
-	
-	private function set_x(value:Float):Float
+	override private function set_x(value:Float):Float
 	{
 		for (i in 0...__characters.length) 
 		{
@@ -539,12 +504,7 @@ class Text
 		return __x = value;
 	}
 	
-	private function get_y():Float
-	{
-		return __y;
-	}
-	
-	private function set_y(value:Float):Float
+	override private function set_y(value:Float):Float
 	{
 		for (i in 0...__characters.length) 
 		{
@@ -554,12 +514,7 @@ class Text
 		return __y = value;
 	}
 	
-	private function get_z():Float
-	{
-		return __z;
-	}
-	
-	private function set_z(value:Float):Float
+	override private function set_z(value:Float):Float
 	{
 		for (i in 0...__characters.length) 
 		{

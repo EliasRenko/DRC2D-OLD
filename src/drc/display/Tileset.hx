@@ -24,4 +24,9 @@ class Tileset {
 
         regions.push(region);
     }
+
+    public function upload(regions:Array<Region>):Void
+    {
+        this.regions = regions;
+    }
 }

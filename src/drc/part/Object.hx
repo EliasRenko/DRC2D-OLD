@@ -17,6 +17,8 @@ class Object
 	/** @private **/ private var __active:Bool = false;
 	
 	/** @private **/ private var __index:Int = -1;
+
+	/** @private **/ private var __passiveIndex:Int = -1;
 	
 	/** @private **/ private var __status:ObjectStatus = ObjectStatus.NULL;
 	

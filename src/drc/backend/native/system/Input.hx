@@ -7,6 +7,8 @@ import drc.system.Input;
 import drc.types.GamepadEvent;
 import haxe.ds.Vector;
 import sdl.Joystick;
+import sdl.SDL;
+import drc.types.TextEvent;
 
 #if cpp
 
@@ -19,6 +21,8 @@ class Input implements drc.system.Input
 	 */
 	public var gamepadEvent:EventDispacher<GamepadEvent> = new EventDispacher<GamepadEvent>();
 	
+	public var textEvent:EventDispacher<TextEvent> = new EventDispacher<TextEvent>();
+
 	/**
 	 * 
 	 */
@@ -103,6 +107,28 @@ class Input implements drc.system.Input
 	public function onMouseWheel():Void
 	{
 		
+	}
+
+	public function beginTextInput():Void
+	{
+		SDL.startTextInput();
+	}
+
+	public function endTextInput():Void
+	{
+		SDL.stopTextInput();
+	}
+
+	public function onTextInput(char:String):Void
+	{
+		var _textEvent:TextEvent = 
+		{
+			data: char,
+
+			timestamp: 0
+		};
+
+		textEvent.dispatch(_textEvent);
 	}
 
 	public function postUpdate():Void

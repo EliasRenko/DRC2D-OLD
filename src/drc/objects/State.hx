@@ -3,10 +3,13 @@ package drc.objects;
 import drc.display.Drawable;
 import drc.part.Object;
 import drc.utils.Common;
+import drc.part.DrcRecycleList;
 
 class State extends Object 
 {
 	// ** Publics.
+
+	public var entities:DrcRecycleList<DrcEntity> = new DrcRecycleList<DrcEntity>();
 
 	public var graphics:Array<Drawable> = new Array<Drawable>();
 
@@ -20,6 +23,8 @@ class State extends Object
 	 */
 	public var mouseY(get, null):Float;
 
+	
+
 	public function new() {
 
 	}
@@ -30,6 +35,15 @@ class State extends Object
 	
 	override public function release():Void {
 
+	}
+
+	public function addEntity(entity:DrcEntity):DrcEntity
+	{
+		@:privateAccess entity.__state = this;
+		
+		//entity.body.space = space;
+		
+		return entities.add(entity);
 	}
 	
 	public function render():Void {
@@ -44,6 +58,12 @@ class State extends Object
 	
 	public function update():Void {
 
+		entities.forEachActive(__updateEntities);
+	}
+
+	private function __updateEntities(entity:DrcEntity):Void
+	{
+		entity.update();
 	}
 
 	public function addGraphic(graphic:Drawable):Void {

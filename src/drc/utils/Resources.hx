@@ -1,5 +1,7 @@
 package drc.utils;
 
+import drc.display.Region;
+import drc.display.Tileset;
 import stb.TrueType.StbBakedFont;
 import drc.backend.native.data.Texture;
 import sys.FileSystem;
@@ -88,6 +90,59 @@ class Resources
 		var bytes:Bytes = loadBytes(path);
 		
 		return bytes.toString();
+	}
+
+	public static function loadTileset(path:String):Tileset
+	{
+		//** Create a new tileset class.
+		
+		var tileset:Tileset = new Tileset();
+		
+		var regions:Array<Region>;
+		
+		//** Parse the requested profile source file.
+		
+		var data:Dynamic = Json.parse(loadText(path));
+		
+		#if debug // ------
+		
+		//** Parse the name.
+		
+		var name:String = data.name;
+		
+		#end // ------
+		
+		if (Reflect.hasField(data, "regions"))
+		{
+			var regionsData:Dynamic = Reflect.field(data, "regions");
+			
+			regions = new Array<Region>();
+			
+			for (i in 0...regionsData.length)
+			{
+				var region:Region =
+				{
+					values: regionsData[i].dimensions
+				}
+
+				regions[regionsData[i].id] = region;
+			}
+			
+			tileset.upload(regions);
+		}
+		
+		#if debug // ------
+		
+		else 
+		{
+			throw "Tileset: " + name + " has no regions attached.";
+		}
+		
+		#end // ------
+		
+		// ** Return.
+		
+		return tileset;
 	}
 
 	public static function loadFont(path:String):Texture {
@@ -314,7 +369,7 @@ class Resources
 		
 		#end // ------
 		
-		//trace(vertexShader);
+		trace(vertexShader);
 		//trace(fragmentShader);
 		
 		var vShader = WebGL.createShader(WebGL.VERTEX_SHADER);

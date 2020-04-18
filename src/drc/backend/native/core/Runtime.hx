@@ -307,6 +307,12 @@ class Runtime implements drc.core.Runtime
 				
 			case SDL_KEYUP:
 			
+			case SDL_TEXTEDITING:
+			
+			case SDL_TEXTINPUT:
+
+				__input.onTextInput(event.text.text);
+			
 			default:
 		}
 	}

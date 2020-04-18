@@ -1,0 +1,41 @@
+{
+	"name": "texture",
+	
+	"attributes":[
+	
+	{"name": "location", "format": "vec3", "varying": false, "struct":[
+	
+	{"name": "x"},
+	
+	{"name": "y"},
+	
+	{"name": "z"}]
+	
+	},
+
+	{"name": "uv", "format": "vec2", "varying": true, "struct":[
+	
+	{"name": "u"},
+	
+	{"name": "v"}]
+		
+	}
+	
+	],
+	
+	"uniforms":[
+	
+	{"name": "uMatrix", "format": "mat4"},
+	
+	{"name": "modelview", "format": "mat4"}
+	
+	],
+	
+	"textures":[
+	
+	{"name": "uImage0", "format": "rgba"}
+	
+	],
+	
+	"fragmentShader": "simple.frag"
+}
