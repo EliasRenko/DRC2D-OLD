@@ -129,11 +129,11 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
 
     public function appendScale(xScale:Float, yScale:Float, zScale:Float):Void
     {
-        // append(new Matrix(Float32Array.fromArray([
+        append(new Matrix(Float32Array.fromArray([
 
-        //     xScale, 0.0, 0.0, 0.0, 0.0, yScale, 0.0, 0.0, 0.0, 0.0, zScale, 0.0, 0.0, 0.0, 0.0, 1.0
+            xScale, 0.0, 0.0, 0.0, 0.0, yScale, 0.0, 0.0, 0.0, 0.0, zScale, 0.0, 0.0, 0.0, 0.0, 1.0
 
-        // ])));
+        ])));
 
         //this[0] *= xScale;
 
