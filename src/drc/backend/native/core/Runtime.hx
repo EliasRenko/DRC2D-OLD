@@ -241,7 +241,7 @@ class Runtime implements drc.core.Runtime
 				
 				var _normalized_val = ( -0.5 + _val) * 2.0;
 				
-				trace(event.caxis.which + ' - Axis: ' + event.caxis.axis + ' - Value:' + _normalized_val);
+				//trace(event.caxis.which + ' - Axis: ' + event.caxis.axis + ' - Value:' + _normalized_val);
 				
 			case SDL_CONTROLLERBUTTONDOWN:
 				
@@ -262,7 +262,7 @@ class Runtime implements drc.core.Runtime
 				
 				__input.onGamepadEvent(gamepadEvent);
 				
-				trace(event.cbutton.which + " - " + event.cbutton.button);
+				//trace(event.cbutton.which + " - " + event.cbutton.button);
 				
 			case SDL_CONTROLLERBUTTONUP:
 				

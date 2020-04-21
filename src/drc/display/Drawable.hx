@@ -21,15 +21,24 @@ class Drawable extends Graphic
 	 */
 	public var profile:Profile;
 
-	public var bitmaps:Array<Texture>;
+	/**
+	 * The textures of the graphic.
+	 */
+	public var textures:Array<Texture> = new Array<Texture>();
 
+	/**
+	 * The matrix of the graphic.
+	 */
 	public var matrix:Matrix = new Matrix();
 
+	/**
+	 * The shadings ofthe graphic.
+	 */
 	public var shadings:Map<String, Shading> = new Map<String, Shading>();
 	
-	//** Privates.
+	// ** Privates.
 	
-	//** Methods.
+	// ** Methods.
 	
 	/** @private **/ public var __indicesToRender:UInt = 0;
 	

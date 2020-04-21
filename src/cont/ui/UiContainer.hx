@@ -1,6 +1,6 @@
 package cont.ui;
 
-import drc.part.DrcGroup;
+import drc.part.Group;
 
 class UiContainer extends UiLayout
 {
@@ -10,7 +10,7 @@ class UiContainer extends UiLayout
 	
 	//** Privates.
 	
-	/** @private */ private var __children:DrcGroup<UiControl> = new DrcGroup<UiControl>();
+	/** @private */ private var __children:Group<UiControl> = new Group<UiControl>();
 	
 	/** @private */ private var __collisionIndex:Int = 0;
 	

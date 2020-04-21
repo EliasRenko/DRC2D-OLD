@@ -3,19 +3,19 @@ package cont.ui;
 import cont.ui.UiContainer;
 import cont.ui.UiForm;
 import drc.display.Tile;
-import drc.part.DrcGroup;
+import drc.part.Group;
 
 class UiStrip extends UiContainer
 {
 	//** Privates.
 	
-	/** @private */ private var __graphics:DrcGroup<Tile>;
+	/** @private */ private var __graphics:Group<Tile>;
 	
 	public function new(width:Float, x:Float, y:Float) 
 	{
 		super(width, 30, x, y);
 		
-		__graphics = new DrcGroup<Tile>(3);
+		__graphics = new Group<Tile>(3);
 		
 		//__graphics.addMemberAt(0, new DrcTile(null, UiForm.GRAPHIC_STRIP_0_ID));
 		//

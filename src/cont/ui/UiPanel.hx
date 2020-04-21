@@ -3,13 +3,13 @@ package cont.ui;
 import cont.ui.UiContainer;
 import cont.ui.UiForm;
 import drc.display.Tile;
-import drc.part.DrcGroup;
+import drc.part.Group;
 
 class UiPanel extends UiContainer
 {
 	//** Privates.
 	
-	/** @private */ private var __graphics:DrcGroup<Tile>;
+	/** @private */ private var __graphics:Group<Tile>;
 	
 	public function new(width:Float = 128, height:Float = 128, x:Float = 0, y:Float = 0, scrollable:Bool = false) 
 	{
@@ -25,7 +25,7 @@ class UiPanel extends UiContainer
 		
 		super(width, height, x, y, scrollable);
 		
-		__graphics = new DrcGroup<Tile>(9);
+		__graphics = new Group<Tile>(9);
 		
 		__graphics.addAt(0, new Tile(null, UiForm.GRAPHIC_PANEL_0_ID));
 		

@@ -1,6 +1,6 @@
 package cont.ui;
 
-import drc.part.DrcGroup;
+import drc.part.Group;
 import src.cont.ui.UiStripPanel;
 
 class UiMenustrip extends UiStrip
@@ -9,7 +9,7 @@ class UiMenustrip extends UiStrip
 	
 	/** @private */ private var __lastLabel:Float = 4;
 	
-	/** @private */ private var __panels:DrcGroup<UiStripPanel> = new DrcGroup<UiStripPanel>();
+	/** @private */ private var __panels:Group<UiStripPanel> = new Group<UiStripPanel>();
 	
 	/** @private */ private var __selectedLabel:Null<Int>;
 	

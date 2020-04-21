@@ -1,6 +1,7 @@
 package;
 
-import cont.TestCharmap;
+import cont.TestDrawable;
+import derivation.states.Playstate;
 import cont.TestForm;
 import drc.core.App;
 
@@ -10,7 +11,7 @@ class Main
 	{
 		var app:App = new App();
 		
-		app.addState(new TestForm());
+		app.addState(new TestDrawable());
 		
 		app.run();
 	}

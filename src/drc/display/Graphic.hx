@@ -4,6 +4,7 @@ import drc.data.VertexData;
 import drc.part.Object;
 
 class Graphic extends Object {
+
 	/**
 	 * The rotation of the graphic.
 	 */
@@ -32,24 +33,22 @@ class Graphic extends Object {
 	/**
 	 * The x origin of the graphic.
 	 */
-	@:isVar
-	public var originX(get, set):Float = 0; //** Define metadata isVar.
+	public var originX(get, set):Float;
 
 	/**
 	 * The y origin of the graphic.
 	 */
-	@:isVar
-	public var originY(get, set):Float = 0; //** Define metadata isVar.
+	public var originY(get, set):Float;
 
 	/**
 	 * The width of the graphic.
 	 */
-	public var width(get, set):Float; //** Define metadata isVar.
+	public var width(get, set):Float;
 
 	/**
 	 * The height of the graphic.
 	 */
-	public var height(get, set):Float; //** Define metadata isVar.
+	public var height(get, set):Float;
 
 	/**
 	 * The vertices of the graphic.
@@ -64,19 +63,19 @@ class Graphic extends Object {
 	/**
 	 * The x position of the graphic in space.
 	 */
-	public var x(get, set):Float; // ** Define metadata: isVar.
+	public var x(get, set):Float;
 
 	/**
 	 * The y position of the graphic in space.
 	 */
-	public var y(get, set):Float; // ** Define metadata: isVar.
+	public var y(get, set):Float;
 
 	/**
 	 * The z position of the graphic in space.
 	 */
-	public var z(get, set):Float; // ** Define metadata: isVar.
+	public var z(get, set):Float;
 
-	//** Privates.
+	// ** Privates.
 
 	/** @private **/ private var __angle:Float = 0;
 
@@ -136,8 +135,8 @@ class Graphic extends Object {
 
 	private function set_angle(value:Float):Float {
 
-		__angle = value;
-
+		__angle = (value %= 360) >= 0 ? value : (value + 360);
+		
 		return __angle;
 	}
 
@@ -158,7 +157,7 @@ class Graphic extends Object {
 
 	private function set_scaleX(value:Float):Float {
 
-		return __scaleX = value;
+		return __scaleX = value > 0 ? value : 0; 
 	}
 
 	private function get_scaleY():Float {
@@ -168,7 +167,7 @@ class Graphic extends Object {
 
 	private function set_scaleY(value:Float):Float {
 
-		return __scaleY = value;
+		return __scaleY = value > 0 ? value : 0; 
 	}
 
 	private function get_offsetX():Float {

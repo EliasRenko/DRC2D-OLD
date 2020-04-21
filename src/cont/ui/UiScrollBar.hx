@@ -1,6 +1,6 @@
 package cont.ui;
 
-import drc.part.DrcGroup;
+import drc.part.Group;
 import drc.display.Tile;
 
 class UiScrollBar extends UiLayout
@@ -15,7 +15,7 @@ class UiScrollBar extends UiLayout
 	
 	//** Privates.
 	
-	/** @private */ private var __graphics:DrcGroup<Tile>;
+	/** @private */ private var __graphics:Group<Tile>;
 	
 	/** @private */ private var __buttonDown:UiStamp;
 	
@@ -25,7 +25,7 @@ class UiScrollBar extends UiLayout
 	{
 		super(28, 128, x, y);
 		
-		__graphics = new DrcGroup<Tile>(2);
+		__graphics = new Group<Tile>(2);
 		
 		__graphics.addAt(0, new Tile(null, 42));
 		

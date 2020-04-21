@@ -72,6 +72,13 @@ class Text extends Graphic
 	{
 		super(x, y);
 
+		if (parent == null) {
+
+			__text = value;
+
+			return;
+		}
+
 		__parent = parent;
 		
 		text = value;
@@ -327,9 +334,11 @@ class Text extends Graphic
 			
 			if (i > __characters.length - 1)
 			{
-				tile = new Tile(parent, 0, 0, id);
+				tile = new Tile(parent, id, 0, 0);
 				
 				parent.addTile(tile);
+
+				//tile.add();
 				
 				__characters.push(tile);
 			}
@@ -475,9 +484,9 @@ class Text extends Graphic
 			tracking = parent.defaultKerning;
 		}
 		
-		text = __text;
-		
 		__parent = parent;
+
+		text = __text;
 		
 		//** Return.
 		

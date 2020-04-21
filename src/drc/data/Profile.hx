@@ -13,9 +13,11 @@ class Profile
 	public var dataPerVertex:UInt;
 	
 	public var name(get, null):String;
-	
+
+	public var textureCount:Int = 1;
+
 	public var program:Program;
-	
+
 	public var uniforms:Array<Uniform> = new Array<Uniform>();
 	
 	//** Privates.

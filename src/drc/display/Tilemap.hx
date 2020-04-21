@@ -5,7 +5,7 @@ import drc.data.Texture;
 import drc.data.Profile;
 import drc.display.Drawable;
 import drc.display.Tile;
-import drc.part.DrcRecycleList;
+import drc.part.RecycleList;
 
 class Tilemap extends Drawable {
 
@@ -13,7 +13,7 @@ class Tilemap extends Drawable {
 
 	//public var tiles:Array<Tile> = new Array<Tile>();
 
-	public var tiles:DrcRecycleList<Tile> = new DrcRecycleList<Tile>();
+	public var tiles:RecycleList<Tile> = new RecycleList<Tile>();
 
 	public var tileset:Tileset;
 
@@ -55,9 +55,9 @@ class Tilemap extends Drawable {
 			//}
 		//}
 
-		bitmaps = new Array<Texture>();
+		textures = new Array<Texture>();
 
-		bitmaps[0] = bitmapData;
+		textures[0] = bitmapData;
 		
 		if (tileset == null) {
 

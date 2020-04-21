@@ -1,5 +1,6 @@
 package drc.display;
 
+import drc.math.Matrix;
 import drc.core.Context;
 import drc.display.Drawable;
 import drc.data.Profile;
@@ -32,12 +33,16 @@ class Stage extends Drawable
 		width = 640;
 		
 		height = 480;
+
+		//x = -1;
+
+		//y = 1;
 		
-		bitmaps = new Array<Texture>();
+		textures = new Array<Texture>();
 
-		bitmaps[0] = new drc.backend.native.data.Texture();
+		textures[0] = new drc.backend.native.data.Texture();
 
-		bitmaps[0].create(640, 480);
+		textures[0].create(640, 480);
 
 		vertices.upload(
 		[
@@ -60,11 +65,13 @@ class Stage extends Drawable
 		__verticesToRender = 4;
 		
 		__indicesToRender = 6;
+
+		matrix = matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
 	}
 
 	public function setToDraw():Void {
 		
-		__context.setRenderToTexture(bitmaps[0]);
+		__context.setRenderToTexture(textures[0]);
 
 		renderToTexture = true;
 
@@ -77,21 +84,21 @@ class Stage extends Drawable
 
 		__context.setViewport(0, 0, 640, 480);
 
-		__drawTriangles(this);
+		__drawTriangles(this, matrix);
 	}
 
-	public function draw(image:Drawable):Void {
+	public function draw(image:Drawable, matrix:Matrix):Void {
 		
 		__drawCalls ++;
 
-		__drawTriangles(image);
+		__drawTriangles(image, matrix);
 	}
 
 	var projection:Float32Array;
 
 	var renderToTexture:Bool = false;
 
-	private function __drawTriangles(img:Drawable):Void {
+	private function __drawTriangles(img:Drawable, matrix:Matrix):Void {
 		
 		__context.generateVertexBuffer();
 		
@@ -103,8 +110,16 @@ class Stage extends Drawable
 		
 		WebGL.enable(WebGL.DEPTH_TEST);
 		
-		var projection:Float32Array = img.matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
-		
+		var projection:Matrix = matrix;
+
+		//var projection:Matrix = img.matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
+
+		//img.matrix[12] = img.x;
+
+		//img.matrix[13] = img.y;
+
+		//projection.append(matrix);
+
 		WebGL.useProgram(img.profile.program.innerData);
 		
 		var loc = WebGL.getUniformLocation(img.profile.program.innerData, "matrix");
@@ -124,11 +139,11 @@ class Stage extends Drawable
 
 		offset = 1;
 
-		for (i in 0...img.bitmaps.length) {
+		for (i in 0...img.textures.length) {
 
 			WebGL.activeTexture(WebGL.TEXTURE0);
 
-			WebGL.bindTexture(WebGL.TEXTURE_2D, img.bitmaps[i].glTexture);
+			WebGL.bindTexture(WebGL.TEXTURE_2D, img.textures[i].glTexture);
 		}
 
 		

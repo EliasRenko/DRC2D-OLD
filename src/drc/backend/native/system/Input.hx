@@ -69,7 +69,7 @@ class Input implements drc.system.Input
 	
 	public function onGamepadEvent(event:GamepadEvent):Void
 	{
-		trace('Gamepad event: ' + event.type);
+		//trace('Gamepad event: ' + event.type);
 		
 		gamepadEvent.dispatch(event);
 	}

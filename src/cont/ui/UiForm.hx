@@ -4,12 +4,12 @@ import drc.data.Profile;
 import drc.display.Charmap;
 import drc.display.Tile;
 import drc.display.Tilemap;
-import drc.objects.DrcEntity;
-import drc.part.DrcRecycleList;
+import drc.objects.Entity;
+import drc.part.RecycleList;
 import drc.utils.Resources;
 import drc.utils.Common;
 
-class UiForm extends DrcEntity
+class UiForm extends Entity
 {
 	//** Publics.
 	
@@ -109,7 +109,7 @@ class UiForm extends DrcEntity
 		
 		__profile = Resources.getProfile("res/profiles/ui.json");
 		
-		__charmap = new Charmap(__profile, Resources.loadText("res/fonts/nokiafc22.json"));
+		__charmap = new Charmap(Resources.getProfile("res/profiles/font.json"), Resources.loadText("res/fonts/nokiafc22.json"));
 		
 		__tilemap = new Tilemap(__profile, Resources.loadTexture("res/graphics/ui.png"), Resources.loadTileset("res/graphics/ui.json"));
 		

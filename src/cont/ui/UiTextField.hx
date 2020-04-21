@@ -4,7 +4,7 @@ import drc.graphics.DrcTile;
 import drc.utils.DrcCommon;
 import lime.ui.KeyCode;
 import lime.ui.KeyModifier;
-import drc.part.DrcGroup;
+import drc.part.Group;
 
 class UiTextField extends UiLayout
 {
@@ -18,7 +18,7 @@ class UiTextField extends UiLayout
 	
 	//** Privates.
 	
-	/** @private */ private var __graphics:DrcGroup<DrcTile>;
+	/** @private */ private var __graphics:Group<DrcTile>;
 	
 	/** @private */ private var __graphic:DrcTile;
 	
@@ -30,7 +30,7 @@ class UiTextField extends UiLayout
 	{
 		super(width, 30, x, y);
 		
-		__graphics = new DrcGroup<DrcTile>(3);
+		__graphics = new Group<DrcTile>(3);
 		
 		__graphics.addAt(0, new DrcTile(null, UiForm.GRAPHIC_TEXTFIELD_0_ID));
 		

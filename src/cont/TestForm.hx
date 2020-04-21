@@ -23,6 +23,11 @@ class TestForm extends State {
 
         form.addControl(c);
         //form.addControl(panel);
+
+        //c.addLabel('File');
+        //c.addLabel('Edit');
+        //c.addLabel('View');
+        //c.addLabel('Help');
     }
 
     override function render() {

@@ -1,7 +1,7 @@
 package cont.ui;
 
 import drc.graphics.DrcTile;
-import drc.part.DrcGroup;
+import drc.part.Group;
 
 class UiButton extends UiLayout
 {
@@ -11,7 +11,7 @@ class UiButton extends UiLayout
 	
 	//** Privates.
 	
-	/** @private */ private var __graphics:DrcGroup<DrcTile>;
+	/** @private */ private var __graphics:Group<DrcTile>;
 	
 	/** @private */ private var __label:UiLabel;
 	
@@ -21,7 +21,7 @@ class UiButton extends UiLayout
 		
 		super(width, 28, x, y);
 		
-		__graphics = new DrcGroup<DrcTile>(3);
+		__graphics = new Group<DrcTile>(3);
 		
 		__graphics.addAt(0, new DrcTile(null, UiForm.GRAPHIC_BUTTON_0_ID));
 		

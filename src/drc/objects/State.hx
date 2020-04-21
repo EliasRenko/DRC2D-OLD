@@ -1,15 +1,18 @@
 package drc.objects;
 
+import drc.buffers.Float32Array;
 import drc.display.Drawable;
 import drc.part.Object;
 import drc.utils.Common;
-import drc.part.DrcRecycleList;
+import drc.part.RecycleList;
 
 class State extends Object 
 {
 	// ** Publics.
 
-	public var entities:DrcRecycleList<DrcEntity> = new DrcRecycleList<DrcEntity>();
+	public var camera:Camera = new Camera();
+
+	public var entities:RecycleList<Entity> = new RecycleList<Entity>();
 
 	public var graphics:Array<Drawable> = new Array<Drawable>();
 
@@ -37,7 +40,7 @@ class State extends Object
 
 	}
 
-	public function addEntity(entity:DrcEntity):DrcEntity
+	public function addEntity(entity:Entity):Entity
 	{
 		@:privateAccess entity.__state = this;
 		
@@ -48,11 +51,14 @@ class State extends Object
 	
 	public function render():Void {
 
-		for(i in 0...graphics.length) {
+		for (i in 0...graphics.length) {
 
-			graphics[i].render();
+			if (graphics[i].visible) {
 
-			Common.stage.draw(graphics[i]);
+				graphics[i].render();
+
+				Common.stage.draw(graphics[i], camera.render(graphics[i].matrix));
+			}
 		}
 	}
 	
@@ -61,7 +67,7 @@ class State extends Object
 		entities.forEachActive(__updateEntities);
 	}
 
-	private function __updateEntities(entity:DrcEntity):Void
+	private function __updateEntities(entity:Entity):Void
 	{
 		entity.update();
 	}

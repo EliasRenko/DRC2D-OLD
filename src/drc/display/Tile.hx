@@ -52,6 +52,25 @@ class Tile extends Graphic {
         this.id = id;
     }
 
+    public function add():Void {
+
+        __add();
+    }
+
+    override function __add():Void 
+    {
+        //** Add itself to the parent tilemap.
+        
+        __parentTilemap.addTile(this);
+    }
+        
+        override function __remove():Void 
+        {
+            //** Remove itself from the parent tilemap.
+            
+            __parentTilemap.removeTile(this);
+        }
+
     override function render() {
         
         var radian = angle * (Math.PI / -180);
@@ -123,17 +142,17 @@ class Tile extends Graphic {
             rect = parentTilemap.tileset.regions[64];
         }
 
-        vertices.innerData[parentTilemap.shadings["u"].positions[0]] = rect.values[0] / parentTilemap.bitmaps[0].width;
-		vertices.innerData[parentTilemap.shadings["v"].positions[0]] = rect.values[1] / parentTilemap.bitmaps[0].height; //y
+        vertices.innerData[parentTilemap.shadings["u"].positions[0]] = rect.values[0] / parentTilemap.textures[0].width;
+		vertices.innerData[parentTilemap.shadings["v"].positions[0]] = rect.values[1] / parentTilemap.textures[0].height; //y
 		
-		vertices.innerData[parentTilemap.shadings["u"].positions[1]] = rect.values[0] / parentTilemap.bitmaps[0].width;	//down
-		vertices.innerData[parentTilemap.shadings["v"].positions[1]] = (rect.values[1] + rect.values[3]) / parentTilemap.bitmaps[0].height;
+		vertices.innerData[parentTilemap.shadings["u"].positions[1]] = rect.values[0] / parentTilemap.textures[0].width;	//down
+		vertices.innerData[parentTilemap.shadings["v"].positions[1]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height;
 		
-		vertices.innerData[parentTilemap.shadings["u"].positions[2]] = (rect.values[0] + rect.values[2]) / parentTilemap.bitmaps[0].width; //Width
-		vertices.innerData[parentTilemap.shadings["v"].positions[2]] = (rect.values[1] + rect.values[3]) / parentTilemap.bitmaps[0].height; //Height
+		vertices.innerData[parentTilemap.shadings["u"].positions[2]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //Width
+		vertices.innerData[parentTilemap.shadings["v"].positions[2]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height; //Height
 		
-		vertices.innerData[parentTilemap.shadings["u"].positions[3]] = (rect.values[0] + rect.values[2]) / parentTilemap.bitmaps[0].width; //up
-		vertices.innerData[parentTilemap.shadings["v"].positions[3]] = rect.values[1] / parentTilemap.bitmaps[0].height;
+		vertices.innerData[parentTilemap.shadings["u"].positions[3]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //up
+		vertices.innerData[parentTilemap.shadings["v"].positions[3]] = rect.values[1] / parentTilemap.textures[0].height;
 
         width = rect.values[2];
 		

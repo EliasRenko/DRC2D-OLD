@@ -1,7 +1,7 @@
 package cont.ui;
 
 import drc.graphics.DrcTile;
-import drc.part.DrcGroup;
+import drc.part.Group;
 
 class UiGroupBox extends UiContainer
 {
@@ -11,7 +11,7 @@ class UiGroupBox extends UiContainer
 	
 	//** Privates.
 	
-	/** @private */ private var __graphics:DrcGroup<DrcTile>;
+	/** @private */ private var __graphics:Group<DrcTile>;
 	
 	/** @private */ private var __label:UiLabel;
 	
@@ -19,7 +19,7 @@ class UiGroupBox extends UiContainer
 	{
 		super(width, height, x, y);
 		
-		__graphics = new DrcGroup<DrcTile>(5);
+		__graphics = new Group<DrcTile>(5);
 		
 		__graphics.addAt(0, new DrcTile(null, 13));
 		
