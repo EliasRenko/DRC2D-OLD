@@ -6,6 +6,11 @@ void main(void)
 {
 	vec4 _color = texture2D(diffuse, out_uv.xy); 
 	
+	if (_color.w == 0.0)
+	{
+		discard;
+	}
+
 	gl_FragColor = _color;	
 }
 
