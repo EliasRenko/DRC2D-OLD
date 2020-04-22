@@ -10,11 +10,11 @@ class Tile extends Graphic {
 
     public var id(get, set):Null<UInt>;
 
-    /** Privates. **/
+    public var parentTilemap(get, set):Tilemap;
+
+    // ** Privates.
 
     private var __id:Null<UInt>;
-
-    public var parentTilemap(get, set):Tilemap;
 
     /** @private */ private var __parentTilemap:Tilemap;
 
@@ -25,25 +25,8 @@ class Tile extends Graphic {
         if (parent != null)
         {
             parentTilemap = parent;
-
-            vertices.upload(
-            [
-                64, 64, 0, 0, 0,
-                64, 256, 0, 0, 1,
-                256, 256, 0, 1, 1,
-                256, 64, 0, 1, 0
-            ]);
-    
         }
        
-        //__width = 256;
-
-        //__height = 256;
-
-        //__originX = __width / 2;
-
-        //__originY = __height / 2;
-
         if (id == null) {
 
             return;
@@ -64,12 +47,19 @@ class Tile extends Graphic {
         __parentTilemap.addTile(this);
     }
         
-        override function __remove():Void 
-        {
-            //** Remove itself from the parent tilemap.
-            
-            __parentTilemap.removeTile(this);
-        }
+    public function centerOrigin():Void
+    {
+        originX = __width / 2;
+        
+        originY = __height / 2;
+    }
+
+    override function __remove():Void 
+    {
+        //** Remove itself from the parent tilemap.
+        
+        __parentTilemap.removeTile(this);
+    }
 
     override function render() {
         
@@ -82,8 +72,8 @@ class Tile extends Graphic {
 		var scaledWidth:Float = width * scaleX;
         var scaledHeight:Float = height * scaleY;
 		
-		var centerX:Float = originX;
-        var centerY:Float = originY;
+		var centerX:Float = originX * scaleX;
+        var centerY:Float = originY * scaleY;
 		
 		vertices.innerData[parentTilemap.shadings["x"].positions[0]] = (__x + offsetX) - (cosT * centerX) - (sinT * centerY);
 		

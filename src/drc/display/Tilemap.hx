@@ -11,8 +11,6 @@ class Tilemap extends Drawable {
 
 	// ** Publics.
 
-	//public var tiles:Array<Tile> = new Array<Tile>();
-
 	public var tiles:RecycleList<Tile> = new RecycleList<Tile>();
 
 	public var tileset:Tileset;
@@ -23,42 +21,28 @@ class Tilemap extends Drawable {
 
 	// **
 
-    public function new(profile:Profile, bitmapData:Texture, ?tileset:Tileset) {
+    public function new(profile:Profile, textures:Array<Texture>, ?tileset:Tileset) {
 
         super(profile);
 
-		//for (i in 0...profile.attributes.length) {
-//
-			//for (j in 0...profile.attributes[i].__pointers.length) {
-//
-				//var _name:String = profile.attributes[i].__pointers[j].name;
-//
-				//var _pos:Int = profile.attributes[i].__pointers[j].position;
-//
-				//var _positions:Array<Int> = new Array<Int>();
-//
-				//var sum:Int = _pos;
-//
-				//for (i in 0...4) {
-//
-					//_positions.push(sum);
-//
-					//sum += profile.dataPerVertex;
-				//}
-//
-				//var shading:Shading =
-				//{
-					//positions: _positions
-				//}
-//
-				//shadings.set(_name, shading);
-			//}
-		//}
+		if (textures == null) {
 
-		textures = new Array<Texture>();
+		}
+		else {
 
-		textures[0] = bitmapData;
-		
+			if (textures.length == profile.textureCount) {
+
+				this.textures = textures;
+			}
+			else {
+
+				for (i in 0...textures.length) {
+
+					this.textures[i] = textures[i];
+				}
+			}
+		}
+
 		if (tileset == null) {
 
 			this.tileset = new Tileset();

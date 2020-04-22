@@ -1,5 +1,6 @@
 package cont.ui;
 
+import drc.display.BlendFactor;
 import drc.data.Profile;
 import drc.display.Charmap;
 import drc.display.Tile;
@@ -83,7 +84,7 @@ class UiForm extends Entity
 	
 	/** @private */ private var __charmap:Charmap;
 	
-	/** @private */ private var __tilemap:Tilemap;
+	/** @private */ public var __tilemap:Tilemap;
 	
 	/** @private */ private var __profile:Profile;
 	
@@ -91,11 +92,11 @@ class UiForm extends Entity
 	
 	/** @private */ private var __selectedControl:UiControl;
 	
-	public function new(width:Float, height:Float) 
-	{
+	public function new(width:Float, height:Float) {
+
 		super();
 		
-		//DrcCommon.input.mouse.hide();
+		Common.input.mouse.showCursor(false);
 		
 		__container = new UiContainer(width, height);
 		
@@ -110,20 +111,24 @@ class UiForm extends Entity
 		__profile = Resources.getProfile("res/profiles/ui.json");
 		
 		__charmap = new Charmap(Resources.getProfile("res/profiles/font.json"), Resources.loadText("res/fonts/nokiafc22.json"));
+
+		__charmap.blendFactors.source = BlendFactor.SRC_ALPHA;
+
+		__charmap.blendFactors.destination = BlendFactor.ONE_MINUS_SRC_ALPHA;
 		
-		__tilemap = new Tilemap(__profile, Resources.loadTexture("res/graphics/ui.png"), Resources.loadTileset("res/graphics/ui.json"));
-		
+		__tilemap = new Tilemap(__profile, [Resources.loadTexture("res/graphics/ui.png")], Resources.loadTileset("res/graphics/ui.json"));
+
 		__cursor = new Tile(__tilemap, 3, 0, 0);
 		
 		__cursor.z = -20;
 		
-		//__cursor.centerOrigin();
+		__cursor.centerOrigin();
 		
 		__selectedControl = __container;
 	}
 	
-	override public function init():Void 
-	{
+	override public function init():Void {
+
 		super.init();
 		
 		//** Add the character map to the state.
@@ -135,13 +140,13 @@ class UiForm extends Entity
 		__tilemap.addTile(__cursor);
 	}
 	
-	override public function release():Void 
-	{
+	override public function release():Void {
+
 		super.release();
 	}
 	
-	public function addControl(control:UiControl):UiControl
-	{
+	public function addControl(control:UiControl):UiControl {
+
 		//@:privateAccess control.__form = this;
 		
 		@:privateAccess control.__parent = __container;
@@ -153,8 +158,8 @@ class UiForm extends Entity
 		return __container.addControl(control);
 	}
 	
-	public function removeControl(control:UiControl):Void
-	{
+	public function removeControl(control:UiControl):Void {
+
 		//trace(@:privateAccess __container.__children.members[3] == null);
 		
 		control.release();
@@ -166,8 +171,8 @@ class UiForm extends Entity
 		//@:privateAccess __container.__children.members[1] = null;
 	}
 	
-	public function showDialog(dialog:UiDialog):Void
-	{
+	public function showDialog(dialog:UiDialog):Void {
+
 		if (__dialog != null)
 		{
 			__dialog.release();
@@ -184,8 +189,8 @@ class UiForm extends Entity
 		__dialog.y = (__container.height / 2) - (__dialog.height / 2); 
 	}
 	
-	public function hideDialog():Void
-	{
+	public function hideDialog():Void {
+
 		if (__dialog == null)
 		{
 			return;
@@ -196,8 +201,8 @@ class UiForm extends Entity
 		__dialog = null;
 	}
 	
-	public function resize(width:Float, height:Float):Void
-	{
+	public function resize(width:Float, height:Float):Void {
+
 		__container.width = width;
 		
 		__container.height = height;
@@ -205,8 +210,8 @@ class UiForm extends Entity
 		@:privateAccess __container.__setHitbox(0, 0, width, height);
 	}
 	
-	override public function update():Void
-	{
+	override public function update():Void {
+
 		cursorId = 3;
 		
 		//lastChar = Common.input.keyboard.lastControl;
@@ -215,9 +220,12 @@ class UiForm extends Entity
 		
 		rightClick = Common.input.mouse.pressed(2);
 		
-		//__cursor.x = mouseX = DrcCommon.input.mouse.windowX;
+		if (Common.input.mouse.hasMoved) {
+
+			__cursor.x = mouseX = Common.input.mouse.windowX;
 		
-		//__cursor.y = mouseY = DrcCommon.input.mouse.windowY;
+			__cursor.y = mouseY = Common.input.mouse.windowY;
+		}
 		
 		if (__dialog == null)
 		{
@@ -243,8 +251,8 @@ class UiForm extends Entity
 		// }
 	}
 	
-	private function __updateControls(control:UiControl):Void
-	{
+	private function __updateControls(control:UiControl):Void {
+
 		//control.update();
 		
 		//control.updateCollision();
@@ -254,28 +262,28 @@ class UiForm extends Entity
 	
 	//** Getters and Setters.
 	
-	private function get_cursorId():Int
-	{
+	private function get_cursorId():Int {
+
 		return __cursor.id;
 	}
 	
-	private function set_cursorId(value:Int):Int
-	{
+	private function set_cursorId(value:Int):Int {
+
 		return __cursor.id = value;
 	}
 	
-	private function get_selectedControl():UiControl
-	{
+	private function get_selectedControl():UiControl {
+
 		return __selectedControl;
 	}
 	
-	private function get_selected():Bool
-	{
+	private function get_selected():Bool {
+
 		return __container.selected;
 	}
 	
-	private function set_selectedControl(control:UiControl):UiControl
-	{
+	private function set_selectedControl(control:UiControl):UiControl {
+
 		__selectedControl.onFocusLost();
 		
 		__selectedControl.selected = false;

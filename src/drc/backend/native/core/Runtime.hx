@@ -289,7 +289,7 @@ class Runtime implements drc.core.Runtime
 				
 			case SDL_MOUSEMOTION:
 				
-				__input.onMouseMotion();
+				__input.onMouseMotion(event.button.x, event.button.y);
 				
 			case SDL_MOUSEBUTTONDOWN:
 				
@@ -434,7 +434,7 @@ class Runtime implements drc.core.Runtime
 		SDL.GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 		SDL.GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 		SDL.GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-		//SDL.GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
+		SDL.GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		

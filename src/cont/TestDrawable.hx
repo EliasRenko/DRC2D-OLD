@@ -1,5 +1,7 @@
 package cont;
 
+import drc.display.Tile;
+import drc.display.Tilemap;
 import drc.utils.Common;
 import drc.input.Control;
 import drc.utils.Resources;
@@ -9,7 +11,11 @@ import drc.objects.State;
 
 class TestDrawable extends State {
 
-    private var _image:Image;
+    private var __image:Image;
+
+    private var __tilemap:Tilemap;
+
+    private var __tile:Tile;
 
     private var _profile:Profile;
 
@@ -19,69 +25,83 @@ class TestDrawable extends State {
 
         _profile = Resources.getProfile('res/profiles/texture.json');
 
-        _image = new Image(_profile, [Resources.loadTexture('res/graphics/grid_bw.png')]);
+        __image = new Image(_profile, [Resources.loadTexture('res/graphics/grid_bw.png')]);
 
-        _image.centerOrigin();
+        __image.centerOrigin();
 
-        addGraphic(_image);
+        // ** ---
+
+        __tilemap = new Tilemap(_profile, [Resources.loadTexture('res/graphics/grid_mt.png')], null);
+
+        __tilemap.tileset.addRegion({values: [0, 0, 128, 128]});
+
+        __tile = new Tile(__tilemap, 0);
+
+        __tile.centerOrigin();
+
+        __tile.add();
+
+        //addGraphic(__image);
+
+        addGraphic(__tilemap);
     }
 
     override function update() {
 
-        super.update();
+        //__tile.x = Common.input.mouse.windowX;
+		
+		//__tile.y = Common.input.mouse.windowY;
 
         if (Common.input.getGamepad(0).check(Control.A)) {
 
-            trace(_image.angle);
+            //trace(__image.angle);
         }
 
         if (Common.input.getGamepad(0).check(Control.Y)) {
 
-            _image.scaleX += 0.01;
-
-            _image.scaleY += 0.01;
+            camera.z += 1;
         }
         
         if (Common.input.getGamepad(0).check(Control.X)) {
 
-            _image.scaleX -= 0.01;
-            
-            _image.scaleY -= 0.01;
+            camera.z -= 1;
 		}
 
         if (Common.input.getGamepad(0).check(Control.LEFT_SHOULDER)) {
 
-            _image.angle += 0.1;
+            camera.yaw -= 1;
         }
         
         if (Common.input.getGamepad(0).check(Control.RIGHT_SHOULDER)) {
 
-            _image.angle -= 0.1;
+            camera.yaw += 1;
 		}
 
 		if (Common.input.getGamepad(0).check(Control.DPAD_DOWN)) {
 
-            _image.y += 1;
+            __tile.y += 1;
 		}
 
         if (Common.input.getGamepad(0).check(Control.DPAD_UP)) {
 
-            _image.y -= 1;
+            camera.y -= 1;
 		}
 
 		if (Common.input.getGamepad(0).check(Control.DPAD_DOWN)) {
 
-            _image.y += 1;
+            camera.y += 1;
 		}
 
 		if (Common.input.getGamepad(0).check(Control.DPAD_LEFT)) {
 
-            _image.x -= 1;
+            camera.x -= 1;
 		}
 
 		if (Common.input.getGamepad(0).check(Control.DPAD_RIGHT)) {
 
-            _image.x += 1;
-		}
+            camera.x += 1;
+        }
+        
+        super.update();
     }
 }

@@ -7,10 +7,19 @@ import drc.data.Texture;
 import drc.math.Matrix;
 import drc.display.Shading;
 
+typedef BlendFactors = 
+{
+	source:Int,
+
+	destination:Int
+}
+
 class Drawable extends Graphic
 {
 	//** Publics.
 	
+	public var blendFactors:BlendFactors;
+
 	/**
 	 * The indices of the graphic.
 	 */
@@ -48,6 +57,13 @@ class Drawable extends Graphic
 		
 		this.profile = profile;
 		
+		blendFactors = 
+		{
+			source: BlendFactor.NONE,
+
+			destination: BlendFactor.NONE
+		}
+
 		for (i in 0...profile.attributes.length) {
 
 			for (j in 0...profile.attributes[i].__pointers.length) {

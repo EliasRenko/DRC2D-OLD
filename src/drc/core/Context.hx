@@ -12,6 +12,8 @@ class Context
 {
 	//** Privates.
 	
+	/** @private **/ private var __glDepthBuffer:GLRenderbuffer;
+
 	/** @private **/ private var __glFrameBuffer:GLFramebuffer;
 
 	/** @private **/ private var __glIndexBuffer:GLBuffer;
@@ -20,6 +22,8 @@ class Context
 
 	public function new() 
 	{
+		__glDepthBuffer = WebGL.createRenderbuffer();
+
 		__glFrameBuffer = WebGL.createFramebuffer();
 
 		__glIndexBuffer = WebGL.createBuffer();
@@ -63,16 +67,33 @@ class Context
 
 		WebGL.framebufferTexture2D(WebGL.FRAMEBUFFER, attachmentPoint, WebGL.TEXTURE_2D, bitmapData.glTexture, 0);
 
+		WebGL.bindRenderbuffer(WebGL.RENDERBUFFER, __glDepthBuffer);
+
+		WebGL.renderbufferStorage(WebGL.RENDERBUFFER, WebGL.DEPTH_COMPONENT16, bitmapData.width, bitmapData.height);
+		WebGL.framebufferRenderbuffer(WebGL.FRAMEBUFFER, WebGL.DEPTH_ATTACHMENT, WebGL.RENDERBUFFER, __glDepthBuffer);
+
 		if (WebGL.checkFramebufferStatus(WebGL.FRAMEBUFFER) != WebGL.FRAMEBUFFER_COMPLETE) {
 			
 			trace('Framebuffer problem!');
 		}
 	}
 
-	public function setBlendFactors():Void {
+	public function setBlendFactors(source:Null<Int>, dest:Null<Int>):Void {
 		
-		WebGL.blendFunc(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA);
 		WebGL.enable(WebGL.BLEND);
+
+		if (source == -1 || dest == -1) {
+
+			WebGL.blendFunc(WebGL.ONE, WebGL.ONE_MINUS_SRC_ALPHA);
+
+			return;
+		}
+		
+		//WebGL.blendFunc(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA);
+
+		WebGL.blendFunc(source, dest);
+
+		//WebGL.blendFuncSeparate(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA, WebGL.ONE, WebGL.ZERO);
 	}
 
 	public function setSamplerState():Void {
@@ -80,8 +101,8 @@ class Context
 		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_S, WebGL.CLAMP_TO_EDGE);
 		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_T, WebGL.CLAMP_TO_EDGE);
 
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MAG_FILTER, WebGL.LINEAR);
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MIN_FILTER, WebGL.LINEAR);
+		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MAG_FILTER, WebGL.NEAREST);
+		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MIN_FILTER, WebGL.NEAREST);
 	}
 
 	public function setRenderToBackbuffer():Void {

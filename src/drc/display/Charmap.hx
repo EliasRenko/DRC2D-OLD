@@ -123,6 +123,6 @@ class Charmap extends Tilemap
 		
 		var tileset = new Tileset(regions);
 		
-		super(profile, Resources.loadFont('res/fonts/' + source), tileset);
+		super(profile, [Resources.loadFont('res/fonts/' + source)], tileset);
 	}
 }

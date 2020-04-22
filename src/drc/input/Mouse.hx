@@ -10,6 +10,10 @@ interface Mouse
 	
 	public var hasMoved(get, null):Bool;
 
+	public var windowX(get, null):Int;
+
+	public var windowY(get, null):Int;
+
 	//** Privates.
 	
 	/** @private **/ private var __active:Bool;
@@ -22,6 +26,8 @@ interface Mouse
 	
 	public function released(control:Int):Bool;
 	
+	public function showCursor(value:Bool):Void;
+
 	//** Getters and setters.
 	
 	private function get_active():Bool;
@@ -29,5 +35,9 @@ interface Mouse
 	private function get_doubleClick():Bool;
 
 	private function get_hasMoved():Bool;
+
+	private function get_windowX():Int;
+
+	private function get_windowY():Int;
 }
 

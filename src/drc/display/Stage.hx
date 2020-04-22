@@ -108,8 +108,10 @@ class Stage extends Drawable
 		
 		__context.loadIndexBuffer(img.indices.innerData);
 		
-		WebGL.enable(WebGL.DEPTH_TEST);
 		
+		
+		WebGL.depthFunc(WebGL.LESS);
+
 		var projection:Matrix = matrix;
 
 		//var projection:Matrix = img.matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
@@ -146,10 +148,9 @@ class Stage extends Drawable
 			WebGL.bindTexture(WebGL.TEXTURE_2D, img.textures[i].glTexture);
 		}
 
-		
 		__context.setSamplerState();
 
-		__context.setBlendFactors();
+		__context.setBlendFactors(img.blendFactors.source, img.blendFactors.destination);
 
 		__context.generateIndexBuffer();
 		
@@ -157,6 +158,9 @@ class Stage extends Drawable
 
 			//__context.bindFrameBuffer();
 		}
+
+
+		WebGL.enable(WebGL.DEPTH_TEST);
 
 		__context.drawElements(0, img.__indicesToRender);
 

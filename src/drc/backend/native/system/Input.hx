@@ -89,9 +89,9 @@ class Input implements drc.system.Input
 		
 	}
 	
-	public function onMouseMotion():Void 
+	public function onMouseMotion(x:Int, y:Int):Void 
 	{
-		__mouse.onMove();
+		__mouse.onMove(x, y);
 	}
 
 	public function onMouseButtonDown(button:Int, clicks:Int):Void

@@ -1,9 +1,7 @@
 package cont.ui;
 
-import drc.graphics.DrcTile;
-import drc.utils.DrcCommon;
-import lime.ui.KeyCode;
-import lime.ui.KeyModifier;
+import drc.display.Tile;
+import drc.utils.Common;
 import drc.part.Group;
 
 class UiTextField extends UiLayout
@@ -18,9 +16,9 @@ class UiTextField extends UiLayout
 	
 	//** Privates.
 	
-	/** @private */ private var __graphics:Group<DrcTile>;
+	/** @private */ private var __graphics:Group<Tile>;
 	
-	/** @private */ private var __graphic:DrcTile;
+	/** @private */ private var __graphic:Tile;
 	
 	/** @private */ private var __label:UiLabel;
 	
@@ -30,13 +28,13 @@ class UiTextField extends UiLayout
 	{
 		super(width, 30, x, y);
 		
-		__graphics = new Group<DrcTile>(3);
+		__graphics = new Group<Tile>(3);
 		
-		__graphics.addAt(0, new DrcTile(null, UiForm.GRAPHIC_TEXTFIELD_0_ID));
+		__graphics.addAt(0, new Tile(null, UiForm.GRAPHIC_TEXTFIELD_0_ID));
 		
-		__graphics.addAt(1, new DrcTile(null, UiForm.GRAPHIC_TEXTFIELD_1_ID));
+		__graphics.addAt(1, new Tile(null, UiForm.GRAPHIC_TEXTFIELD_1_ID));
 		
-		__graphics.addAt(2, new DrcTile(null, UiForm.GRAPHIC_TEXTFIELD_2_ID));
+		__graphics.addAt(2, new Tile(null, UiForm.GRAPHIC_TEXTFIELD_2_ID));
 		
 		__label = new UiLabel(text, 6, 4);
 		
@@ -154,9 +152,9 @@ class UiTextField extends UiLayout
 		
 		__stamp.visible = true;
 		
-		DrcCommon.view.stage.window.onKeyDown.add(__windowOnKeyDown);
+		//DrcCommon.view.stage.window.onKeyDown.add(__windowOnKeyDown);
 		
-		DrcCommon.view.stage.window.onTextInput.add(__windowOnTextInput);
+		//DrcCommon.view.stage.window.onTextInput.add(__windowOnTextInput);
 	}
 	
 	override public function onFocusLost():Void 
@@ -165,69 +163,9 @@ class UiTextField extends UiLayout
 		
 		__stamp.visible = false;
 		
-		DrcCommon.view.stage.window.onKeyDown.remove(__windowOnKeyDown);
+		//DrcCommon.view.stage.window.onKeyDown.remove(__windowOnKeyDown);
 		
-		DrcCommon.view.stage.window.onTextInput.remove(__windowOnTextInput);
-	}
-	
-	private function __windowOnKeyDown(key:KeyCode, modifier:KeyModifier):Void
-	{
-		switch (key) 
-		{
-			case RETURN, NUMPAD_ENTER:
-				
-				__setText("\n");
-				
-			case BACKSPACE:
-				
-				__label.text = __label.text.substring(0, __label.text.length - 1);
-				
-			case DELETE:
-				
-			case LEFT:
-				
-			case RIGHT:
-				
-			case HOME:
-				
-			case END:
-				
-			case C:
-				
-				
-				
-			case X:
-				
-			case V:
-				
-				if (modifier.ctrlKey)
-				{
-					var clipboardValue:String = DrcCommon.clipboard.getString();
-					
-					if (clipboardValue == null)
-					{
-						return;
-					}
-					
-					__setText(clipboardValue);
-				}
-				
-			case A:
-				
-				if (modifier.ctrlKey)
-				{
-					//__selectionBeginIndex = 0;
-					
-					//__selectionEndIndex = __bitmapText.length;
-					
-					//setSelection();
-				}
-				
-			default:
-				
-		}
-		
-		__stamp.x = __label.width + 4;
+		//DrcCommon.view.stage.window.onTextInput.remove(__windowOnTextInput);
 	}
 	
 	private function __windowOnTextInput(value:String):Void

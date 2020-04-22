@@ -5,16 +5,19 @@ import drc.display.Drawable;
 import drc.part.Object;
 import drc.utils.Common;
 import drc.part.RecycleList;
+import drc.input.Control;
 
-class State extends Object 
-{
+class State extends Object {
+
 	// ** Publics.
 
 	public var camera:Camera = new Camera();
 
 	public var entities:RecycleList<Entity> = new RecycleList<Entity>();
 
-	public var graphics:Array<Drawable> = new Array<Drawable>();
+	public var graphics:RecycleList<Drawable> = new RecycleList<Drawable>();
+
+	//public var graphics:Array<Drawable> = new Array<Drawable>();
 
 	/**
 	 * The x position of the mouse in the state.
@@ -26,55 +29,70 @@ class State extends Object
 	 */
 	public var mouseY(get, null):Float;
 
-	
+	// ** Privates.
 
-	public function new() {
+	private var __perpspective:Bool = false;
 
-	}
-	
-	override public function init():Void {
+	public function new() {}
 
-	}
-	
-	override public function release():Void {
+	override public function init():Void {}
 
-	}
+	override public function release():Void {}
 
-	public function addEntity(entity:Entity):Entity
-	{
+	public function addEntity(entity:Entity):Entity {
+
 		@:privateAccess entity.__state = this;
-		
-		//entity.body.space = space;
-		
+
 		return entities.add(entity);
-	}
-	
-	public function render():Void {
-
-		for (i in 0...graphics.length) {
-
-			if (graphics[i].visible) {
-
-				graphics[i].render();
-
-				Common.stage.draw(graphics[i], camera.render(graphics[i].matrix));
-			}
-		}
-	}
-	
-	public function update():Void {
-
-		entities.forEachActive(__updateEntities);
-	}
-
-	private function __updateEntities(entity:Entity):Void
-	{
-		entity.update();
 	}
 
 	public function addGraphic(graphic:Drawable):Void {
 
-		graphics.push(graphic);
+		graphics.add(graphic);
+	}
+
+	public function render():Void {
+
+		graphics.forEachActive(__renderGraphic);
+	}
+
+	public function update():Void {
+
+		if (Common.input.getGamepad(0).pressed(Control.BACK)) {
+
+			if (__perpspective) {
+
+				__perpspective = false;
+			}
+			else {
+
+				__perpspective = true;
+			}
+		}
+
+		entities.forEachActive(__updateEntitie);
+	}
+
+	private function __renderGraphic(drawable:Drawable):Void {
+		
+		if (drawable.visible) {
+
+			drawable.render();
+
+			if (__perpspective) {
+
+				Common.stage.draw(drawable, camera.render2(drawable.matrix));
+			}
+			else {
+
+				Common.stage.draw(drawable, camera.render(drawable.matrix));
+			}
+		}
+	}
+
+	private function __updateEntitie(entity:Entity):Void {
+
+		entity.update();
 	}
 
 	// ** Getters and setters.

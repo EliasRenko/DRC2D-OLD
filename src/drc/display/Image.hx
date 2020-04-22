@@ -1,9 +1,9 @@
 package drc.display;
 
-import drc.math.Vector4;
-import drc.display.Drawable;
 import drc.data.Profile;
 import drc.data.Texture;
+import drc.display.Drawable;
+import drc.math.Vector4;
 
 class Image extends Drawable {
 	
@@ -118,7 +118,6 @@ class Image extends Drawable {
 
 	private function __appendMatrix():Void {
 
-
 	}
 
 	override function render() {
@@ -127,15 +126,11 @@ class Image extends Drawable {
 
 			matrix.identity();
 
-			matrix.appendRotation(__angle, Vector4.Z_AXIS);
-
 			matrix.appendScale(__scaleX, __scaleY, 1);
 
-			matrix[12] = __x;
+			matrix.appendRotation(__angle, Vector4.Y_AXIS);
 
-			matrix[13] = __y;
-
-			matrix[14] = 0;
+			matrix.appendTranslation(__x, __y, __z);
 
 			__shouldTransform = false;
 		}

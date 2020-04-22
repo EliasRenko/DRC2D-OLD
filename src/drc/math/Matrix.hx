@@ -129,17 +129,17 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
 
     public function appendScale(xScale:Float, yScale:Float, zScale:Float):Void
     {
-        append(new Matrix(Float32Array.fromArray([
+        // append(new Matrix(Float32Array.fromArray([
 
-            xScale, 0.0, 0.0, 0.0, 0.0, yScale, 0.0, 0.0, 0.0, 0.0, zScale, 0.0, 0.0, 0.0, 0.0, 1.0
+        //     xScale, 0.0, 0.0, 0.0, 0.0, yScale, 0.0, 0.0, 0.0, 0.0, zScale, 0.0, 0.0, 0.0, 0.0, 1.0
 
-        ])));
+        // ])));
 
-        //this[0] *= xScale;
+        this[0] *= xScale;
 
-        //this[5] *= yScale;
+        this[5] *= yScale;
 
-        //this[10] *= zScale;
+        this[10] *= zScale;
     }
 
     public function appendTranslation(x:Float, y:Float, z:Float):Void {
@@ -255,6 +255,24 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
 
         return i;
     }
+
+    public function createPerspectiveMatrix(fieldOfView:Float, aspect:Float, width:Float, height:Float, zNear:Float, zFar:Float):Matrix {
+
+        var i = this;
+
+        if(i == null) i = new Float32Array(16);
+
+        var yScale:Float = 1.0/Math.tan(fieldOfView/2.0);
+		var xScale:Float = yScale / aspect; 
+
+
+            i[ 0] = xScale;        i[ 1] = 0;            i[ 2] = 0;                 i[ 3] = 0;
+            i[ 4] = 0;             i[ 5] = -(yScale);       i[ 6] = 0;                 i[ 7] = 0;
+            i[ 8] = 0;             i[ 9] = 0;            i[10] = (zFar/(zFar-zNear)); i[11] = 1;
+            i[12] = 0;       i[13] = 0;            i[14] = zNear*zFar/(zNear-zFar);  i[15] = 1;
+
+        return i;
+    }   
 
     // ** Getters and setters.
 

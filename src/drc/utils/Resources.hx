@@ -369,7 +369,7 @@ class Resources
 		
 		#end // ------
 		
-		trace(vertexShader);
+		//trace(vertexShader);
 		//trace(fragmentShader);
 		
 		var vShader = WebGL.createShader(WebGL.VERTEX_SHADER);
