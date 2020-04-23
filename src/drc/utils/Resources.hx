@@ -162,7 +162,11 @@ class Resources
 
 		_texture = new Texture(null);
 
-		_texture.uploadFont(_data.w, _data.h, _data.bytes);
+		trace('COMP:' + _data.comp);
+
+		//_texture.uploadFont(_data.w, _data.h, _data.bytes);
+
+		_texture.upload(_data);
 
 		return _texture;
 	}
@@ -181,6 +185,8 @@ class Resources
 
 			_data = stb.Image.load(SDL.getBasePath() + 'res/graphics/grid_mt.png', 0);
 		}
+
+		trace('COMP:' + _data.comp);
 
 		_texture = new Texture(_data);
 
@@ -343,7 +349,12 @@ class Resources
 
 			for (textureCount in 0...textureData.length) {
 
-				textures.push(textureData[textureCount].name);
+				profile.textures[textureCount] = 
+				{
+					name: textureData[textureCount].name,
+
+					format: textureData[textureCount].format
+				}
 			}
 		}
 		
@@ -419,9 +430,9 @@ class Resources
 			#end // ------
 		}
 
-		for (textureCount in 0...textures.length) {
+		for (textureCount in 0...profile.textures.length) {
 
-			var location:Int = WebGL.getUniformLocation(glProgram, textures[textureCount]);
+			var location:Int = WebGL.getUniformLocation(glProgram, profile.textures[textureCount].name);
 
 			trace('Tex loc: ' + location);
 		}

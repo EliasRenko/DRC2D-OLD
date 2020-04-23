@@ -14,6 +14,7 @@ import drc.types.GamepadEvent;
 import drc.types.GamepadEventType;
 import drc.types.WindowEventType;
 import drc.utils.Common;
+import drc.utils.Assets;
 
 #if cpp
 
@@ -23,6 +24,8 @@ class Runtime implements drc.core.Runtime
 
 	public var active(get, null):Bool;
 
+	public var assets(get, null):Assets;
+
 	public var input(get, null):Input;
 
 	public var name(get, null):String;
@@ -30,6 +33,8 @@ class Runtime implements drc.core.Runtime
 	// ** Privates.
 
 	/** @private **/ private var __active:Bool;
+
+	/** @private **/ private var __assets:Assets;
 
 	/** @private **/ private var __input:Input;
 
@@ -103,6 +108,10 @@ class Runtime implements drc.core.Runtime
 		
 		#end
 		
+		__assets = new Assets();
+
+		Common.assets = __assets;
+
 		__input = new Input();
 		
 		Common.input = __input;
@@ -468,6 +477,11 @@ class Runtime implements drc.core.Runtime
 	private function get_active():Bool
 	{
 		return __active;
+	}
+
+	private function get_assets():Assets
+	{
+		return __assets;
 	}
 
 	private function get_input():Input

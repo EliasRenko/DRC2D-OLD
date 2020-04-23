@@ -4,9 +4,12 @@ import drc.core.Context;
 import drc.system.Input;
 import drc.system.Window;
 import drc.display.Stage;
+import drc.utils.Assets;
 
 class Common 
 {
+	public static var assets:Assets;
+
 	public static var stage:Stage;
 
 	public static var context:Context;

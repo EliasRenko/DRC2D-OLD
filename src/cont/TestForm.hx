@@ -34,8 +34,6 @@ class TestForm extends State {
         //c.addLabel('Edit');
         //c.addLabel('View');
         //c.addLabel('Help');
-
-
     }
 
     override function render() {

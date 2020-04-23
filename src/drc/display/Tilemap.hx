@@ -1,6 +1,5 @@
 package drc.display;
 
-import drc.display.Shading;
 import drc.data.Texture;
 import drc.data.Profile;
 import drc.display.Drawable;

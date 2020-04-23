@@ -141,11 +141,36 @@ class Context
 		WebGL.bindBuffer(WebGL.ELEMENT_ARRAY_BUFFER, null);
 	}
 
-	public function loadTexture(width:Int, height:Int, data:Uint8Array):Void {
+	public function loadTexture(width:Int, height:Int, comp:Int, data:Uint8Array):Void {
 		
-		//WebGL.uniform1i(location, 0);
+		var _format:Int;
 
-		WebGL.texImage2D(WebGL.TEXTURE_2D, 0, WebGL.RGBA, width, height, 0, WebGL.RGBA, WebGL.UNSIGNED_BYTE, data);
+		switch(comp) {
+
+			case 1:
+
+				_format = WebGL.RED;
+
+			case 2:
+
+				_format = WebGL.LUMINANCE_ALPHA;
+
+			case 3:
+
+				_format = WebGL.RGB;
+
+			case 4:
+
+				_format = WebGL.RGBA;
+
+			default:
+
+			_format = WebGL.RGBA;
+		}
+
+		WebGL.texImage2D(WebGL.TEXTURE_2D, 0, _format, width, height, 0, _format, WebGL.UNSIGNED_BYTE, data);
+
+		WebGL.bindTexture(WebGL.TEXTURE_2D, null);
 	}
 	
 	public function loadVertexBuffer(data:Array<Float>):Void

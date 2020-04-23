@@ -93,6 +93,8 @@ class Graphic extends Object {
 
 	/** @private **/ private var __scaleY:Float = 1;
 
+	/** @private **/ private var __shouldTransform:Bool = true;
+
 	/** @private **/ public var __verticesToRender:Int = 0;
 
 	/** @private **/ private var __width:Float = 0;
@@ -137,6 +139,8 @@ class Graphic extends Object {
 
 		__angle = (value %= 360) >= 0 ? value : (value + 360);
 		
+		__shouldTransform = true;
+
 		return __angle;
 	}
 
@@ -147,7 +151,11 @@ class Graphic extends Object {
 
 	private function set_height(value:Float):Float {
 
-		return __height = value;
+		__height = value;
+
+		__shouldTransform = true;
+
+		return __height;
 	}
 
 	private function get_scaleX():Float {
@@ -157,7 +165,11 @@ class Graphic extends Object {
 
 	private function set_scaleX(value:Float):Float {
 
-		return __scaleX = value > 0 ? value : 0; 
+		__scaleX = value > 0 ? value : 0;
+
+		__shouldTransform = true;
+
+		return __scaleX; 
 	}
 
 	private function get_scaleY():Float {
@@ -167,7 +179,11 @@ class Graphic extends Object {
 
 	private function set_scaleY(value:Float):Float {
 
-		return __scaleY = value > 0 ? value : 0; 
+		__scaleY = value > 0 ? value : 0;
+
+		__shouldTransform = true;
+
+		return __scaleY; 
 	}
 
 	private function get_offsetX():Float {
@@ -177,7 +193,11 @@ class Graphic extends Object {
 
 	private function set_offsetX(value:Float):Float {
 
-		return __offsetX = value;
+		__offsetX = value;
+
+		__shouldTransform = true;
+
+		return __offsetX;
 	}
 
 	private function get_offsetY():Float {
@@ -187,7 +207,11 @@ class Graphic extends Object {
 
 	private function set_offsetY(value:Float):Float {
 
-		return __offsetY = value;
+		__offsetY = value;
+
+		__shouldTransform = true;
+
+		return __offsetY;
 	}
 
 	private function get_originX():Float {
@@ -197,7 +221,11 @@ class Graphic extends Object {
 
 	private function set_originX(value:Float):Float {
 
-		return __originX = value;
+		__originX = value;
+
+		__shouldTransform = true;
+
+		return __originX;
 	}
 
 	private function get_originY():Float {
@@ -207,7 +235,11 @@ class Graphic extends Object {
 
 	private function set_originY(value:Float):Float {
 
-		return __originY = value;
+		__originY = value;
+
+		__shouldTransform = true;
+
+		return __originY;
 	}
 
 	public function get_width():Float {
@@ -217,7 +249,11 @@ class Graphic extends Object {
 
 	private function set_width(value:Float):Float {
 
-		return __width = value;
+		__width = value;
+
+		__shouldTransform = true;
+
+		return __width;
 	}
 
 	private function get_visible():Bool {
@@ -241,6 +277,8 @@ class Graphic extends Object {
 
 		__x = value;
 
+		__shouldTransform = true;
+
 		return __x;
 	}
 
@@ -253,6 +291,8 @@ class Graphic extends Object {
 
 		__y = value;
 
+		__shouldTransform = true;
+
 		return __y;
 	}
 
@@ -264,6 +304,8 @@ class Graphic extends Object {
 	private function set_z(value:Float):Float {
 		
 		__z = value;
+
+		__shouldTransform = true;
 
 		return __z;
 	}

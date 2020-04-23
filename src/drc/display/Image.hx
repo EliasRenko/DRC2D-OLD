@@ -11,8 +11,6 @@ class Image extends Drawable {
 
 	// ** Privates.
 
-	private var __shouldTransform:Bool = true;
-
 	public function new(profile:Profile, textures:Array<Texture>) {
 
 		// ** Super.

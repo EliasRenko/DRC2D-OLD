@@ -68,7 +68,6 @@ class App
 	{
 		while (runtime.active)
 		{
-			
 			__runtime.pollEvents();
 			
 			update();

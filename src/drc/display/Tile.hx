@@ -16,7 +16,7 @@ class Tile extends Graphic {
 
     private var __id:Null<UInt>;
 
-    /** @private */ private var __parentTilemap:Tilemap;
+    /** @private **/ private var __parentTilemap:Tilemap;
 
     public function new(parent:Tilemap, id:Null<UInt>, ?x:Int = 0, ?y:Int = 0) {
 
@@ -63,40 +63,48 @@ class Tile extends Graphic {
 
     override function render() {
         
-        var radian = angle * (Math.PI / -180);
+        if (__shouldTransform) {
+
+            var radian = angle * (Math.PI / -180);
 		
-		var cosT = Math.cos(radian);
-		
-		var sinT = Math.sin(radian);
-		
-		var scaledWidth:Float = width * scaleX;
-        var scaledHeight:Float = height * scaleY;
-		
-		var centerX:Float = originX * scaleX;
-        var centerY:Float = originY * scaleY;
-		
-		vertices.innerData[parentTilemap.shadings["x"].positions[0]] = (__x + offsetX) - (cosT * centerX) - (sinT * centerY);
-		
-		vertices.innerData[parentTilemap.shadings["x"].positions[1]] = (__x + offsetX) - (cosT * centerX) + (sinT * (scaledHeight - centerY)); 
-		
-		vertices.innerData[parentTilemap.shadings["x"].positions[2]] = (__x + offsetX) + (cosT * (scaledWidth - centerX)) + (sinT * (scaledHeight - centerY));
-		
-		vertices.innerData[parentTilemap.shadings["x"].positions[3]] =  (__x + offsetX) + (cosT * (scaledWidth - centerX)) - (sinT * centerY);
-		
-		vertices.innerData[parentTilemap.shadings["y"].positions[0]] = (__y + offsetY) + (sinT * centerX) - (cosT * centerY);
-		
-		vertices.innerData[parentTilemap.shadings["y"].positions[1]] = (__y + offsetY) + (sinT * centerX) + (cosT * (scaledHeight - centerY));
-		
-		vertices.innerData[parentTilemap.shadings["y"].positions[2]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) + (cosT * (scaledHeight - centerY));
-		
-		vertices.innerData[parentTilemap.shadings["y"].positions[3]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) - (cosT * centerY);
-		
-		//** ---
-		
-		vertices.innerData[parentTilemap.shadings["z"].positions[0]] = __z;
-		vertices.innerData[parentTilemap.shadings["z"].positions[1]] = __z;
-		vertices.innerData[parentTilemap.shadings["z"].positions[2]] = __z;
-		vertices.innerData[parentTilemap.shadings["z"].positions[3]] = __z;
+            var cosT = Math.cos(radian);
+            
+            var sinT = Math.sin(radian);
+            
+            var scaledWidth:Float = width * scaleX;
+            var scaledHeight:Float = height * scaleY;
+            
+            var centerX:Float = originX * scaleX;
+            var centerY:Float = originY * scaleY;
+            
+            vertices.innerData[parentTilemap.shadings["x"].positions[0]] = (__x + offsetX) - (cosT * centerX) - (sinT * centerY);
+            
+            vertices.innerData[parentTilemap.shadings["x"].positions[1]] = (__x + offsetX) - (cosT * centerX) + (sinT * (scaledHeight - centerY)); 
+            
+            vertices.innerData[parentTilemap.shadings["x"].positions[2]] = (__x + offsetX) + (cosT * (scaledWidth - centerX)) + (sinT * (scaledHeight - centerY));
+            
+            vertices.innerData[parentTilemap.shadings["x"].positions[3]] =  (__x + offsetX) + (cosT * (scaledWidth - centerX)) - (sinT * centerY);
+            
+            vertices.innerData[parentTilemap.shadings["y"].positions[0]] = (__y + offsetY) + (sinT * centerX) - (cosT * centerY);
+            
+            vertices.innerData[parentTilemap.shadings["y"].positions[1]] = (__y + offsetY) + (sinT * centerX) + (cosT * (scaledHeight - centerY));
+            
+            vertices.innerData[parentTilemap.shadings["y"].positions[2]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) + (cosT * (scaledHeight - centerY));
+            
+            vertices.innerData[parentTilemap.shadings["y"].positions[3]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) - (cosT * centerY);
+            
+            //** ---
+            
+            vertices.innerData[parentTilemap.shadings["z"].positions[0]] = __z;
+
+            vertices.innerData[parentTilemap.shadings["z"].positions[1]] = __z;
+
+            vertices.innerData[parentTilemap.shadings["z"].positions[2]] = __z;
+
+            vertices.innerData[parentTilemap.shadings["z"].positions[3]] = __z;
+
+            __shouldTransform = false;
+        }
     }
 
     // ** Getters and setters.

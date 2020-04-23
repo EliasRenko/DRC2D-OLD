@@ -2,25 +2,53 @@ package drc.core;
 
 class Future<T>
 {
-	public var error():Dynamic;
+	// ** Publics.
+
+	public var error(default, null):Dynamic;
 	
-	public var isComplete():Bool;
+	public var isComplete(default, null):Bool;
 	
-	public var isError():Bool;
+	public var isError(default, null):Bool;
 	
-	public var value():T;
+	public var value(default, null):T;
 	
-	public function new(work:Void -> T = null, async:Bool = true) 
+	// ** Privates.
+
+	@:noCompletion
+	private var __completeListeners:Array<T->Void>;
+
+	@:noCompletion
+	private var __errorListeners:Array<Dynamic->Void>;
+
+	@:noCompletion
+	private var __progressListeners:Array<Int->Int->Void>;
+
+	public function new(work:Void -> T = null, async:Bool = false) 
 	{
 		if (work == null) return;
 		
-		if (async)
-		{
-			var promise:Promise<T>();
+		if (async) {
+
+			var _promise:Promise<T> = new Promise<T>();
 			
-			promise.future = this;
+			//_promise.future = this;
 			
-			FutureWork.queue({promise: promise, work: work});
+			FutureWork.queue({promise: _promise, work: work});
+		}
+		else {
+
+			try
+			{
+				value = work();
+
+				isComplete = true;
+			}
+			catch (error:Dynamic)
+			{
+				this.error = error;
+
+				isError = true;
+			}
 		}
 	}
 }
@@ -29,6 +57,6 @@ private class FutureWork
 {
 	public static function queue(state:Dynamic = null):Void
 	{
-		
+
 	}
 }

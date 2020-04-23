@@ -4,6 +4,13 @@ import drc.display.Attribute;
 import drc.display.Program;
 import drc.display.Uniform;
 
+typedef TextureData =
+{
+	name:String,
+
+	format:String
+}
+
 class Profile 
 {
 	//** Publics.
@@ -13,6 +20,8 @@ class Profile
 	public var dataPerVertex:UInt;
 	
 	public var name(get, null):String;
+
+	public var textures:Array<TextureData> = new Array<TextureData>();
 
 	public var textureCount:Int = 1;
 

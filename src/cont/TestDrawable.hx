@@ -8,6 +8,8 @@ import drc.utils.Resources;
 import drc.data.Profile;
 import drc.display.Image;
 import drc.objects.State;
+import drc.utils.Assets;
+import drc.core.Future;
 
 class TestDrawable extends State {
 
@@ -25,13 +27,15 @@ class TestDrawable extends State {
 
         _profile = Resources.getProfile('res/profiles/texture.json');
 
+        Common.assets.loadTexture('res/graphics/grid_mt.png');
+
         __image = new Image(_profile, [Resources.loadTexture('res/graphics/grid_bw.png')]);
 
         __image.centerOrigin();
 
         // ** ---
 
-        __tilemap = new Tilemap(_profile, [Resources.loadTexture('res/graphics/grid_mt.png')], null);
+        __tilemap = new Tilemap(_profile, [Common.assets.getTexture('res/graphics/grid_mt.png')], null);
 
         __tilemap.tileset.addRegion({values: [0, 0, 128, 128]});
 

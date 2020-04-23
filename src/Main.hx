@@ -11,7 +11,7 @@ class Main
 	{
 		var app:App = new App();
 		
-		app.addState(new TestForm());
+		app.addState(new TestDrawable());
 		
 		app.run();
 	}
