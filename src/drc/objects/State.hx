@@ -54,6 +54,8 @@ class State extends Object {
 	public function render():Void {
 
 		graphics.forEachActive(__renderGraphic);
+
+		//trace('render');
 	}
 
 	public function update():Void {

@@ -62,11 +62,13 @@ class Stage extends Drawable
 		
 		indices.upload([0, 1, 2, 0, 2, 3]);
 		
-		__verticesToRender = 4;
+		__verticesToRender = 3;
 		
-		__indicesToRender = 6;
+		__indicesToRender = 3;
 
 		matrix = matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
+
+		WebGL.enable(WebGL.DEPTH_TEST);
 	}
 
 	public function setToDraw():Void {
@@ -158,9 +160,6 @@ class Stage extends Drawable
 
 			//__context.bindFrameBuffer();
 		}
-
-
-		WebGL.enable(WebGL.DEPTH_TEST);
 
 		__context.drawElements(0, img.__indicesToRender);
 

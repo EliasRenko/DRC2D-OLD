@@ -447,7 +447,7 @@ class Runtime implements drc.core.Runtime
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		
-		SDL.GL_SetSwapInterval(false);
+		SDL.GL_SetSwapInterval(true);
 		
 		var gl = SDL.GL_CreateContext(__window.innerData);
 		

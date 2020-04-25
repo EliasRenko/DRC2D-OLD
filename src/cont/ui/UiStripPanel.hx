@@ -6,9 +6,9 @@ import cont.ui.UiListItem;
 
 class UiStripPanel extends UiPanel
 {
-	//** Privates.
+	// ** Privates.
 	
-	/** @private */ private var __lastItem:Float = 4;
+	/** @private **/ private var __lastItem:Float = 4;
 	
 	public function new(width:Float = 128, x:Float = 0, y:Float = 0) 
 	{
@@ -80,6 +80,8 @@ class UiStripPanel extends UiPanel
 	override public function onFocusGain():Void 
 	{
 		super.onFocusGain();
+
+		visible = true;
 	}
 	
 	override public function onFocusLost():Void 

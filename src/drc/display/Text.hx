@@ -13,7 +13,7 @@ class Text extends Graphic
 	/**
 	 * The 
 	 */
-	public var fieldWidth(get, set):Float; //** Define metadata isVar.
+	public var fieldWidth(get, set):Float;
 	
 	/**
 	 * The space between lines.
@@ -152,7 +152,7 @@ class Text extends Graphic
 	public function addToParent():Void 
 	{
 		__active = true;
-		
+
 		for (i in 0...__characters.length)
 		{
 			__parent.addTile(__characters[i]);
@@ -240,7 +240,7 @@ class Text extends Graphic
 			
 			tile.offsetX = lineX;
 			
-			trace(tile.id);
+			//trace(tile.id);
 
 			tile.offsetY = lineY + parent.tileset.regions[tile.id].values[5];
 			//tile.offsetY = __y + lineY;
@@ -336,7 +336,10 @@ class Text extends Graphic
 			{
 				tile = new Tile(parent, id, 0, 0);
 				
-				parent.addTile(tile);
+				if (__active) {
+
+					parent.addTile(tile);
+				}
 
 				//tile.add();
 				
@@ -470,6 +473,11 @@ class Text extends Graphic
 		return __text;
 	}
 	
+	override function get_height():Float {
+
+		return 24;
+	}
+
 	private function get_parent():Charmap
 	{
 		return __parent;
@@ -502,6 +510,11 @@ class Text extends Graphic
 		
 		return __visible = value;
 	}
+
+	override function get_width():Float {
+		
+		return __fieldWidth;
+	}
 	
 	override private function set_x(value:Float):Float
 	{
@@ -509,7 +522,7 @@ class Text extends Graphic
 		{
 			__characters[i].x = value;
 		}
-		
+
 		return __x = value;
 	}
 	

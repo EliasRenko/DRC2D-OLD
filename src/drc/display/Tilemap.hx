@@ -54,7 +54,14 @@ class Tilemap extends Drawable {
 	
 	public function addTile(tile:Tile):Tile {
 
-		tiles.add(tile);
+		//trace('ID: ' + tile.id);
+
+		if (tiles.add(tile) == null) {
+			
+			//trace('NULL');
+
+			return null;
+		} 
 		
 		__updateIndices();
 		
@@ -127,7 +134,9 @@ class Tilemap extends Drawable {
 
 	override public function render():Void {
 		
-		__activeVertices = -1;
+		__activeVertices = 0;
+
+		__verticesToRender = 0;
 
 		__indicesToRender = 0;
 
@@ -142,11 +151,11 @@ class Tilemap extends Drawable {
 
 			for (vertexData in 0...tile.vertices.innerData.length)
 			{
-				__activeVertices ++;
-				
 				// ** Push the vertex data in the tilemap.
 				
 				vertices.innerData[__activeVertices] = tile.vertices.innerData[vertexData];
+
+				__activeVertices ++;
 			}
 			
 			__verticesToRender += 4;

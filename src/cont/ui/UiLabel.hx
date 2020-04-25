@@ -69,13 +69,13 @@ class UiLabel extends UiControl
 		
 		if (__mask)
 		{
-			__bitmapText.setAttribute("maskX", __maskBox.x / 640);
+			//__bitmapText.setAttribute("maskX", __maskBox.x / 640);
 			
-			__bitmapText.setAttribute("maskY", __maskBox.y / 480);
+			//__bitmapText.setAttribute("maskY", __maskBox.y / 480);
 			
-			__bitmapText.setAttribute("maskW", __maskBox.width / 640);
+			//__bitmapText.setAttribute("maskW", __maskBox.width / 640);
 			
-			__bitmapText.setAttribute("maskH", __maskBox.height / 480);
+			//__bitmapText.setAttribute("maskH", __maskBox.height / 480);
 		}
 	}
 	
@@ -113,7 +113,7 @@ class UiLabel extends UiControl
 				{
 					return;
 				}
-				
+
 				onClickHandler(this);
 				
 				return;

@@ -12,7 +12,7 @@ class UiContainer extends UiLayout
 	
 	/** @private */ private var __children:Group<UiControl> = new Group<UiControl>();
 	
-	/** @private */ private var __collisionIndex:Int = 0;
+	/** @private */ private var __collisionIndex:Int = -1;
 	
 	/** @private */ private var __scrollable:Bool = false;
 	
@@ -101,7 +101,7 @@ class UiContainer extends UiLayout
 		
 		//** Set collision index to null.
 		
-		//__collisionIndex = null;
+		__collisionIndex = -1;
 		
 		//** For every control...
 		
@@ -173,19 +173,17 @@ class UiContainer extends UiLayout
 			
 			for (i in 0...__children.count)
 			{
+				__collisionIndex = i;
+
 				__children.members[i].updateCollision();
 				
-				if (__children.members[i] == null)
-				{
-					continue;
-				}
+				// if (__children.members[i] == null)
+				// {
+				// 	continue;
+				// }
 				
 				if (__children.members[i].collide)
 				{
-					__collisionIndex = i;
-					
-					//__form.selectedControl = __children.members[i];
-					
 					return;
 				}
 			}

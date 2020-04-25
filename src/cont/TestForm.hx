@@ -1,5 +1,6 @@
 package cont;
 
+import cont.ui.UiButton;
 import cont.ui.UiLabel;
 import cont.ui.UiTextField;
 import drc.input.Control;
@@ -23,24 +24,41 @@ class TestForm extends State {
 
         var panel:UiPanel = new UiPanel(128, 128, 128, 128);
 
-        //var txt:UiLabel = new UiLabel('Hello!');
+        var button:UiButton = new UiButton('Press', 128, 64, 64);
+
+        var txt1:UiLabel = new UiLabel('123', 32, 32);
+        var txt2:UiLabel = new UiLabel('456', 32, 64);
+        var txt3:UiLabel = new UiLabel('789', 32, 90);
+
+        //c.addLabel('F');
+        //c.addLabel('A');
+
+        form.addControl(c);
+        //form.addControl(button);
 
         addEntity(form);
 
-        form.addControl(c);
-        //form.addControl(txt);
+        //form.addControl(txt1);
+        //form.addControl(txt2);
+        //form.addControl(txt3);
+
+        //txt1.text += 'ABC';
 
         c.addLabel('File');
-        //c.addLabel('Edit');
-        //c.addLabel('View');
-        //c.addLabel('Help');
+        c.addLabel('Edit');
+        c.addLabel('View');
+        c.addLabel('Help');
+
+        c.addOption('New', 0);
+        c.addOption('Open', 0);
+        c.addOption('Save', 0);
+        c.addOption('Load', 0);
+        c.addOption('Exit', 0);
     }
 
     override function render() {
 
         super.render();
-
-        
     }
 
     override function update() {

@@ -67,8 +67,6 @@ class Camera {
 
         __matrix.identity();
 
-        __matrix.identity();
-
         __matrix.appendRotation(yaw, Vector4.Y_AXIS);
 
         __matrix.appendTranslation(x, y, z);

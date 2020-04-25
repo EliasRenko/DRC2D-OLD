@@ -77,6 +77,8 @@ class Graphic extends Object {
 
 	// ** Privates.
 
+	/** @private **/ private var __isAdded:Bool = false;
+
 	/** @private **/ private var __angle:Float = 0;
 
 	/** @private **/ private var __height:Float = 0;

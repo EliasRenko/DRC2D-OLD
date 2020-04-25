@@ -29,11 +29,11 @@ class Future<T>
 		
 		if (async) {
 
-			var _promise:Promise<T> = new Promise<T>();
+			//var _promise:Promise<T> = new Promise<T>();
 			
 			//_promise.future = this;
 			
-			FutureWork.queue({promise: _promise, work: work});
+			//FutureWork.queue({promise: _promise, work: work});
 		}
 		else {
 

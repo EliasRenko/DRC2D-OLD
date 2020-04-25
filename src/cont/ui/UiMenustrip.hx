@@ -5,13 +5,13 @@ import src.cont.ui.UiStripPanel;
 
 class UiMenustrip extends UiStrip
 {
-	//** Privates.
+	// ** Privates.
 	
-	/** @private */ private var __lastLabel:Float = 4;
+	/** @private **/ private var __lastLabel:Float = 4;
 	
-	/** @private */ private var __panels:Group<UiStripPanel> = new Group<UiStripPanel>();
+	/** @private **/ private var __panels:Group<UiStripPanel> = new Group<UiStripPanel>();
 	
-	/** @private */ private var __selectedLabel:Null<Int>;
+	/** @private **/ //private var __selectedLabel:Null<Int>;
 	
 	public function new(width:Float, x:Float = 0, y:Float = 0) 
 	{
@@ -37,8 +37,6 @@ class UiMenustrip extends UiStrip
 			__initMember(__panels.members[i]);
 			
 			__panels.members[i].x = __lastLabel;
-			
-			//trace(__lists.members[i].x);
 			
 			__panels.members[i].visible = false;
 			
@@ -99,6 +97,16 @@ class UiMenustrip extends UiStrip
 	{
 		super.updateCollision();
 		
+		if (__collisionIndex >= 0) {
+
+			if (__form.rightClick) {
+				
+				//__panels.members[__collisionIndex].visible = true;
+			}
+
+			return;
+		}
+
 		for (i in 0...__panels.count)
 		{
 			__panels.members[i].updateCollision();
@@ -112,25 +120,16 @@ class UiMenustrip extends UiStrip
 		}
 	}
 	
-	override public function onFocusGain():Void 
-	{
-		super.onFocusGain();
-		
-		//trace("GAIN");
-	}
-	
 	override public function onFocusLost():Void 
 	{
 		super.onFocusLost();
 		
-		//trace("LOST!");
+		// if (__selectedLabel != null)
+		// {
+		// 	__panels.members[__selectedLabel].visible = false;
+		// }
 		
-		if (__selectedLabel != null)
-		{
-			__panels.members[__selectedLabel].visible = false;
-		}
-		
-		__selectedLabel = null;
+		// __selectedLabel = null;
 	}
 	
 	public function removeLabel(label:UiLabel):Void
@@ -140,16 +139,18 @@ class UiMenustrip extends UiStrip
 	
 	private function __onLabelClick(control:UiControl):Void
 	{
-		if (__selectedLabel != null)
-		{
-			__panels.members[__selectedLabel].visible = false;
-		}
+		// if (__selectedLabel != null)
+		// {
+		// 	__panels.members[__selectedLabel].visible = false;
+		// }
 		
-		__selectedLabel = __collisionIndex;
+		// __selectedLabel = __collisionIndex;
 		
-		__panels.members[__selectedLabel].visible = true;
+		// __panels.members[__selectedLabel].visible = true;
 		
-		__form.selectedControl = __panels.members[__selectedLabel];
+		__form.selectedControl = __panels.members[__collisionIndex];
+
+		//__selectedLabel = __collisionIndex;
 	}
 	
 	//** Getters and setters.

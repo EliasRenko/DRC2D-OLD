@@ -88,15 +88,17 @@ class UiForm extends Entity
 	
 	/** @private */ private var __profile:Profile;
 	
-	/** @private */ private var __cursor:Tile;
+	/** @private */ public var __cursor:Tile;
 	
 	/** @private */ private var __selectedControl:UiControl;
+
+	/** @private */ private var __selectedControlOld:UiControl;
 	
 	public function new(width:Float, height:Float) {
 
 		super();
 		
-		Common.input.mouse.showCursor(false);
+		//Common.input.mouse.showCursor(false);
 		
 		__container = new UiContainer(width, height);
 		
@@ -124,7 +126,7 @@ class UiForm extends Entity
 		
 		__cursor.centerOrigin();
 		
-		__selectedControl = __container;
+		__selectedControlOld = __container;
 	}
 	
 	override public function init():Void {
@@ -222,9 +224,9 @@ class UiForm extends Entity
 		
 		if (Common.input.mouse.hasMoved) {
 
-			__cursor.x = mouseX = Common.input.mouse.windowX;
+			__cursor.x = mouseX = Common.input.mouse.x;
 		
-			__cursor.y = mouseY = Common.input.mouse.windowY;
+			__cursor.y = mouseY = Common.input.mouse.y;
 		}
 		
 		if (__dialog == null)
@@ -235,7 +237,17 @@ class UiForm extends Entity
 			
 			if (__selectedControl != null)
 			{
-				//__selectedControl.postUpdate();
+				__selectedControlOld.onFocusLost();
+		
+				__selectedControlOld.selected = false;
+				
+				__selectedControlOld = __selectedControl;
+				
+				__selectedControlOld.selected = true;
+				
+				__selectedControlOld.onFocusGain();
+
+				__selectedControl = null;
 			}
 			
 			return;
@@ -249,6 +261,8 @@ class UiForm extends Entity
 		// {
 		// 	hideDialog();
 		// }
+
+		//__updateControls();
 	}
 	
 	private function __updateControls(control:UiControl):Void {
@@ -283,6 +297,13 @@ class UiForm extends Entity
 	}
 	
 	private function set_selectedControl(control:UiControl):UiControl {
+
+		__selectedControl = control;
+		
+		return __selectedControl;
+	}
+
+	private function set_selectedControl2(control:UiControl):UiControl {
 
 		__selectedControl.onFocusLost();
 		

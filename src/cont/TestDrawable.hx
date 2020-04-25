@@ -25,7 +25,7 @@ class TestDrawable extends State {
 
         super();
 
-        _profile = Resources.getProfile('res/profiles/texture.json');
+        _profile = Resources.getProfile('res/profiles/ui.json');
 
         Common.assets.loadTexture('res/graphics/grid_mt.png');
 
@@ -41,7 +41,7 @@ class TestDrawable extends State {
 
         __tile = new Tile(__tilemap, 0);
 
-        __tile.centerOrigin();
+        //__tile.centerOrigin();
 
         __tile.add();
 
@@ -52,9 +52,9 @@ class TestDrawable extends State {
 
     override function update() {
 
-        //__tile.x = Common.input.mouse.windowX;
+        __tile.x = Common.input.mouse.x;
 		
-		//__tile.y = Common.input.mouse.windowY;
+		__tile.y = Common.input.mouse.y;
 
         if (Common.input.getGamepad(0).check(Control.A)) {
 

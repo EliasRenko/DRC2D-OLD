@@ -10,9 +10,9 @@ interface Mouse
 	
 	public var hasMoved(get, null):Bool;
 
-	public var windowX(get, null):Int;
+	public var x(get, null):Int;
 
-	public var windowY(get, null):Int;
+	public var y(get, null):Int;
 
 	//** Privates.
 	
@@ -36,8 +36,8 @@ interface Mouse
 
 	private function get_hasMoved():Bool;
 
-	private function get_windowX():Int;
+	private function get_x():Int;
 
-	private function get_windowY():Int;
+	private function get_y():Int;
 }
 

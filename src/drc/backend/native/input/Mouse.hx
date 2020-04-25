@@ -15,9 +15,9 @@ class Mouse extends Device implements drc.input.Mouse {
 
 	public var hasMoved(get, null):Bool;
 
-	public var windowX(get, null):Int;
+	public var x(get, null):Int;
 
-	public var windowY(get, null):Int;
+	public var y(get, null):Int;
 
 	// ** Privates.
 
@@ -27,9 +27,9 @@ class Mouse extends Device implements drc.input.Mouse {
 
 	/** @private **/ private var __hasMoved:Bool = false;
 
-	/** @private **/ private var __windowX:Int = 0;
+	/** @private **/ private var __x:Int = 0;
 
-	/** @private **/ private var __windowY:Int = 0;
+	/** @private **/ private var __y:Int = 0;
 
 	public function new() {
 
@@ -42,9 +42,9 @@ class Mouse extends Device implements drc.input.Mouse {
 
 	public function onMove(x:Int, y:Int):Void {
 
-		__windowX = x;
+		__x = x;
 
-		__windowY = y;
+		__y = y;
 
 		__hasMoved = true;
 	}
@@ -110,13 +110,13 @@ class Mouse extends Device implements drc.input.Mouse {
 		return __hasMoved;
 	}
 
-	private function get_windowX():Int {
+	private function get_x():Int {
 
-		return __windowX;
+		return __x;
 	}
 
-	private function get_windowY():Int {
+	private function get_y():Int {
 
-		return __windowY;
+		return __y;
 	}
 }

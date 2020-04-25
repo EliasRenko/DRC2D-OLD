@@ -47,6 +47,10 @@ class App
 		
 		__runtime = new drc.backend.native.core.Runtime();
 		
+		#elseif js
+
+		//__runtime = new drc.backend.web.core.Runtime();
+
 		#else
 		
 		throw 'No backend has been found.';

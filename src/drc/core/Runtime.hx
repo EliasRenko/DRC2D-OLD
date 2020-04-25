@@ -1,6 +1,5 @@
 package drc.core;
 
-import drc.backend.native.system.Input;
 import drc.system.Input;
 
 interface Runtime 

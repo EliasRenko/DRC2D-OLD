@@ -56,7 +56,7 @@ class List<T:Object>
 			
 			//** Return.
 			
-			return object;
+			return null;
 		}
 		
 		//** Check if the group is full...
