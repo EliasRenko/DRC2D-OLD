@@ -1,12 +1,18 @@
 package drc.core;
 
+import haxe.io.Int32Array;
+import haxe.io.Float32Array;
+//import haxe.io.UInt8Array;
+import haxe.io.UInt8Array;
+import drc.display.Drawable.TextureParameters;
 import drc.data.Texture;
 import drc.display.Uniform;
-import opengl.WebGL;
-import drc.buffers.Float32Array;
-import drc.buffers.Int32Array;
+import drc.core.GL;
+//import drc.buffers.Float32Array;
+//import drc.buffers.Int32Array;
 import drc.buffers.Uint8Array;
-import haxe.io.Bytes;
+
+
 
 class Context 
 {
@@ -22,57 +28,57 @@ class Context
 
 	public function new() 
 	{
-		__glDepthBuffer = WebGL.createRenderbuffer();
+		__glDepthBuffer = GL.createRenderbuffer();
 
-		__glFrameBuffer = WebGL.createFramebuffer();
+		__glFrameBuffer = GL.createFramebuffer();
 
-		__glIndexBuffer = WebGL.createBuffer();
+		__glIndexBuffer = GL.createBuffer();
 		
-		__glVertexBuffer = WebGL.createBuffer();
+		__glVertexBuffer = GL.createBuffer();
 	}
 	
 	public function clear(r:Float, g:Float, b:Float, a:Float):Void
 	{
-		WebGL.clearDepth(1.0);
+		GL.clearDepth(1.0);
 		
-		WebGL.clearStencil(0);
+		GL.clearStencil(0);
 		
-		//WebGL.clearColor(0, 0.2, 0.2, 1);
+		//GL.clearColor(0, 0.2, 0.2, 1);
 
-		WebGL.clearColor(r, g, b, a);
+		GL.clearColor(r, g, b, a);
 		
-		WebGL.clear(WebGL.COLOR_BUFFER_BIT | WebGL.DEPTH_BUFFER_BIT | WebGL.STENCIL_BUFFER_BIT);
+		GL.clear(GL.COLOR_BUFFER_BIT | GL.DEPTH_BUFFER_BIT | GL.STENCIL_BUFFER_BIT);
 	}
 	
 	public function drawArrays(offset:Int, count:Int):Void
 	{
-		WebGL.drawArrays(WebGL.TRIANGLES, offset, count);
+		GL.drawArrays(GL.TRIANGLES, offset, count);
 	}
 	
 	public function drawElements(offset:Int, count:Int):Void
 	{
-		WebGL.drawElements(WebGL.TRIANGLES, count, WebGL.UNSIGNED_INT, offset);
+		GL.drawElements(GL.TRIANGLES, count, GL.UNSIGNED_INT, offset);
 	}
 
 	public function bindFrameBuffer():Void {
 		
-		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
+		GL.bindFramebuffer(GL.FRAMEBUFFER, __glFrameBuffer);
 	}
 
 	public function setRenderToTexture(bitmapData:Texture):Void {
 		
-		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, __glFrameBuffer);
+		GL.bindFramebuffer(GL.FRAMEBUFFER, __glFrameBuffer);
 
-		var attachmentPoint = WebGL.COLOR_ATTACHMENT0;
+		var attachmentPoint = GL.COLOR_ATTACHMENT0;
 
-		WebGL.framebufferTexture2D(WebGL.FRAMEBUFFER, attachmentPoint, WebGL.TEXTURE_2D, bitmapData.glTexture, 0);
+		GL.framebufferTexture2D(GL.FRAMEBUFFER, attachmentPoint, GL.TEXTURE_2D, bitmapData.glTexture, 0);
 
-		WebGL.bindRenderbuffer(WebGL.RENDERBUFFER, __glDepthBuffer);
+		GL.bindRenderbuffer(GL.RENDERBUFFER, __glDepthBuffer);
 
-		WebGL.renderbufferStorage(WebGL.RENDERBUFFER, WebGL.DEPTH_COMPONENT16, bitmapData.width, bitmapData.height);
-		WebGL.framebufferRenderbuffer(WebGL.FRAMEBUFFER, WebGL.DEPTH_ATTACHMENT, WebGL.RENDERBUFFER, __glDepthBuffer);
+		GL.renderbufferStorage(GL.RENDERBUFFER, GL.DEPTH_COMPONENT16, bitmapData.width, bitmapData.height);
+		GL.framebufferRenderbuffer(GL.FRAMEBUFFER, GL.DEPTH_ATTACHMENT, GL.RENDERBUFFER, __glDepthBuffer);
 
-		if (WebGL.checkFramebufferStatus(WebGL.FRAMEBUFFER) != WebGL.FRAMEBUFFER_COMPLETE) {
+		if (GL.checkFramebufferStatus(GL.FRAMEBUFFER) != GL.FRAMEBUFFER_COMPLETE) {
 			
 			trace('Framebuffer problem!');
 		}
@@ -80,68 +86,70 @@ class Context
 
 	public function setBlendFactors(source:Null<Int>, dest:Null<Int>):Void {
 		
-		WebGL.enable(WebGL.BLEND);
+		GL.enable(GL.BLEND);
 
 		if (source == -1 || dest == -1) {
 
-			WebGL.blendFunc(WebGL.ONE, WebGL.ONE_MINUS_SRC_ALPHA);
+			GL.blendFunc(GL.ONE, GL.ONE_MINUS_SRC_ALPHA);
 
 			return;
 		}
 		
-		//WebGL.blendFunc(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA);
+		//GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
-		WebGL.blendFunc(source, dest);
+		GL.blendFunc(source, dest);
 
-		//WebGL.blendFuncSeparate(WebGL.SRC_ALPHA, WebGL.ONE_MINUS_SRC_ALPHA, WebGL.ONE, WebGL.ZERO);
+		//GL.blendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ONE, GL.ZERO);
 	}
 
-	public function setSamplerState():Void {
+	public function setSamplerState(params:TextureParameters):Void {
 
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_S, WebGL.CLAMP_TO_EDGE);
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_WRAP_T, WebGL.CLAMP_TO_EDGE);
+		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, params.wrapX);
+		
+		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, params.wrapY);
 
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MAG_FILTER, WebGL.NEAREST);
-		WebGL.texParameteri(WebGL.TEXTURE_2D, WebGL.TEXTURE_MIN_FILTER, WebGL.NEAREST);
+		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, params.magnification);
+
+		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, params.minification);
 	}
 
 	public function setRenderToBackbuffer():Void {
 
-		WebGL.bindFramebuffer(WebGL.FRAMEBUFFER, null);
+		GL.bindFramebuffer(GL.FRAMEBUFFER, null);
 	}
 
 	public function generateFrameBuffer():Void {
 
-		WebGL.createFramebuffer();
+		GL.createFramebuffer();
 	}
 	
 	public function generateIndexBuffer():Void
 	{
-		WebGL.bindBuffer(WebGL.ELEMENT_ARRAY_BUFFER, __glIndexBuffer);
+		GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, __glIndexBuffer);
 	}
 
 	public function generateTexture():GLTexture
 	{
-		var _glTexture:GLTexture = WebGL.createTexture();
+		var _glTexture:GLTexture = GL.createTexture();
 
-		WebGL.bindTexture(WebGL.TEXTURE_2D, _glTexture);
+		GL.bindTexture(GL.TEXTURE_2D, _glTexture);
 
 		return _glTexture;
 	}
 	
 	public function generateVertexBuffer():Void
 	{
-		WebGL.bindBuffer(WebGL.ARRAY_BUFFER, __glVertexBuffer);
+		GL.bindBuffer(GL.ARRAY_BUFFER, __glVertexBuffer);
 	}
 	
 	public function loadIndexBuffer(data:Array<UInt>):Void
 	{
-		WebGL.bufferData(WebGL.ELEMENT_ARRAY_BUFFER, Int32Array.fromArray(data), WebGL.STATIC_DRAW);
+		GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, Int32Array.fromArray(data).view, GL.STATIC_DRAW);
 		
-		WebGL.bindBuffer(WebGL.ELEMENT_ARRAY_BUFFER, null);
+		GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, null);
 	}
 
-	public function loadTexture(width:Int, height:Int, comp:Int, data:Uint8Array):Void {
+	public function loadTexture(width:Int, height:Int, comp:Int, data:UInt8Array):Void {
 		
 		var _format:Int;
 
@@ -149,42 +157,42 @@ class Context
 
 			case 1:
 
-				_format = WebGL.RED;
+				_format = GL.RED;
 
 			case 2:
 
-				_format = WebGL.LUMINANCE_ALPHA;
+				_format = GL.LUMINANCE_ALPHA;
 
 			case 3:
 
-				_format = WebGL.RGB;
+				_format = GL.RGB;
 
 			case 4:
 
-				_format = WebGL.RGBA;
+				_format = GL.RGBA;
 
 			default:
 
-			_format = WebGL.RGBA;
+			_format = GL.RGBA;
 		}
 
-		WebGL.texImage2D(WebGL.TEXTURE_2D, 0, _format, width, height, 0, _format, WebGL.UNSIGNED_BYTE, data);
+		GL.texImage2D(GL.TEXTURE_2D, 0, _format, width, height, 0, _format, GL.UNSIGNED_BYTE, data.view);
 
-		WebGL.bindTexture(WebGL.TEXTURE_2D, null);
+		GL.bindTexture(GL.TEXTURE_2D, null);
 	}
 	
 	public function loadVertexBuffer(data:Array<Float>):Void
 	{
-		WebGL.bufferData(WebGL.ARRAY_BUFFER, Float32Array.fromArray(data), WebGL.STATIC_DRAW);
+		GL.bufferData(GL.ARRAY_BUFFER, Float32Array.fromArray(data).view, GL.STATIC_DRAW);
 		
-		WebGL.bindBuffer(WebGL.ARRAY_BUFFER, null);
+		GL.bindBuffer(GL.ARRAY_BUFFER, null);
 	}
 	
 	public function setAttributePointer(index:Int, size:Int, normalized:Bool, stride:Int, offset:Int):Void
 	{
-		WebGL.enableVertexAttribArray(index);
+		GL.enableVertexAttribArray(index);
 		
-		WebGL.vertexAttribPointer(index, size, WebGL.FLOAT, normalized, stride, offset);
+		GL.vertexAttribPointer(index, size, GL.FLOAT, normalized, stride, offset);
 	}
 
 	public function setUniform(uniform:Uniform, value:Dynamic):Void {
@@ -193,11 +201,11 @@ class Context
 
 			case FLOAT1:
 
-				WebGL.uniform1f(uniform.location, value);
+				GL.uniform1f(uniform.location, value);
 
 			case MAT4:
 
-				WebGL.uniformMatrix4fv(uniform.location, false, value);
+				GL.uniformMatrix4fv(uniform.location, false, value);
 
 			default:
 		}
@@ -205,6 +213,6 @@ class Context
 	
 	public function setViewport(x:Int, y:Int, width:Int, height:Int):Void
 	{
-		WebGL.viewport(0, 0, 640, 480);
+		GL.viewport(x, y, width, height);
 	}
 }

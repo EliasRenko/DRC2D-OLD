@@ -1,6 +1,6 @@
 package drc.types;
 
-@:enum abstract GamepadEventType(Null<Int>)
+@:enum abstract GamepadEventType(Null<Int>) from Int to Int
 {
 	var UNKNOWN = 0;
 	

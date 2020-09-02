@@ -1,0 +1,144 @@
+{
+    "controls": [
+
+        {
+            "control": "layout",
+
+            "children": [
+
+                {
+                    "control": "stamp",
+        
+                    "id": 36,
+        
+                    "name": "stamp_2",
+        
+                    "x": 32,
+        
+                    "y": 0
+                },
+                {
+                    "control": "stamp",
+        
+                    "id": 36,
+        
+                    "name": "stamp_3",
+        
+                    "x": 84,
+        
+                    "y": 20
+                }
+
+            ],
+
+            "width": 640,
+
+            "heigth": 40,
+
+            "x": 0,
+
+            "y": 440
+        },
+        {
+            "control": "textfield",
+
+            "text": "",
+
+            "name": "textfield_1",
+
+            "width": 64,
+
+            "x": 128,
+
+            "y": 64
+        },
+        {
+            "control": "stamp",
+
+            "id": 36,
+
+            "name": "stamp_1",
+
+            "x": 32,
+
+            "y": 64
+        },
+        {
+            "children": [
+
+                {
+                    "control": "stamp",
+        
+                    "id": 36,
+        
+                    "name": "stamp_2",
+        
+                    "x": 32,
+        
+                    "y": 64
+                },
+                {
+                    "control": "stamp",
+        
+                    "id": 36,
+        
+                    "name": "stamp_3",
+        
+                    "x": 32,
+        
+                    "y": 90
+                }
+
+            ],
+
+            "control": "window",
+
+            "header": "Test",
+
+            "name": "window_1",
+
+            "width": 280,
+
+            "heigth": 180,
+
+            "x": 32,
+
+            "y": 128
+        },
+        {
+            "control": "menustrip",
+
+            "name": "menustrip_1",
+
+            "labels": [
+
+                {
+                    "text": "File",
+
+                    "options": [
+
+                        {
+                            "text": "New"
+                        },
+                        {
+                            "text": "Open"
+                        },
+                        {
+                            "text": "Save"
+                        },
+                        {
+                            "text": "Exit"
+                        }
+                    ]
+                },
+                {
+                    "text": "Edit"
+                }
+            ]
+        }
+    ],
+
+    "x": 0,
+
+    "y": 0
+}

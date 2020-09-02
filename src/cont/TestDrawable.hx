@@ -45,9 +45,9 @@ class TestDrawable extends State {
 
         __tile.add();
 
-        //addGraphic(__image);
+        addGraphic(__image);
 
-        addGraphic(__tilemap);
+        //addGraphic(__tilemap);
     }
 
     override function update() {

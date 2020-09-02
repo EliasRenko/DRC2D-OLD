@@ -3,6 +3,7 @@ package drc.objects;
 import drc.math.Vector4;
 import drc.buffers.Float32Array;
 import drc.math.Matrix;
+import drc.utils.Common;
 
 class Camera {
 
@@ -52,7 +53,7 @@ class Camera {
 
         _view.append(__matrix);
 
-        _view.append(__matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000));
+        _view.append(__matrix.createOrthoMatrix(0, Common.window.width, Common.window.height, 0, 1000, -1000));
 
         return _view;
     }

@@ -1,0 +1,78 @@
+{
+    "controls": [
+        {
+            "control": "label",
+
+            "heading": "0",
+
+            "name": "label_1",
+
+            "text": "Hello",
+
+            "x": 128,
+
+            "y": 128
+        },
+
+        {
+            "control": "button",
+
+            "name": "button_1",
+
+            "text": "Press",
+
+            "x": 256,
+
+            "y": 128,
+
+            "width": 64
+        },
+
+        {
+            "control": "window",
+
+            "height": 128,
+
+            "name": "window_1",
+
+            "text": "New Game",
+
+            "x": 256,
+
+            "y": 256,
+
+            "width": 256,
+
+            "controls": [
+
+                {
+                    "control": "label",
+
+                    "name": "label_1",
+        
+                    "text": "Hello",
+        
+                    "x": 32,
+        
+                    "y": 32
+                },
+
+                {
+                    "control": "stamp",
+
+                    "id": 36,
+
+                    "name": "stamp_1",
+        
+                    "x": 32,
+        
+                    "y": 64
+                }
+            ]
+        }
+    ],
+
+    "x": 0,
+
+    "y": 0
+}

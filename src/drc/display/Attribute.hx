@@ -22,17 +22,17 @@ class Attribute
 	 */
 	public var offset(get, null):Int;
 	
-	//** Privates.
+	// ** Privates.
 	
-	/** @private */ private var __format:AttributeFormat;
+	/** @private **/ private var __format:AttributeFormat;
 	
-	/** @private */ private var __name:String;
+	/** @private **/ private var __name:String;
 	
-	/** @private */ private var __offset:Int;
+	/** @private **/ private var __offset:Int;
 	
-	/** @private */ private var __location:Int;
+	/** @private **/ private var __location:Int;
 
-	/** @private */ public var __pointers:Array<Vertex>;
+	/** @private **/ public var __pointers:Array<Vertex>;
 	
 	public function new(name:String, format:AttributeFormat, offset:Int, pointers:Array<Vertex>) 
 	{

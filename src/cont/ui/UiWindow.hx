@@ -1,122 +1,127 @@
 package cont.ui;
 
 import cont.ui.UiControl;
+import drc.display.Tile;
+import drc.part.Group;
+import cont.ui.UiEventType;
 
-class UiWindow extends UiContainer
+class UiWindow extends UiLayout
 {
-	//** Publics.
+	// ** Publics.
 	
 	public var header(get, set):String;
+
+	public var shouldClose:Bool = true;
 	
-	//** Privates.
+	// ** Privates.
 	
-	/** @private */ private var __label:UiLabel;
+	/** @private **/ private var __label:UiLabel;
+
+	/** @private **/ private var __stamp_close:UiStamp;
+
+	/** @private **/ private var __windowPanel:UiWindowPanel;
 	
-	/** @private */ private var __panel:UiPanel;
+	/** @private **/ private var __windowStrip:UiWindowStrip;
 	
-	/** @private */ private var __strip:UiStrip;
-	
-	public function new(text:String = "", width:Float = 128, height:Float = 128, x:Float = 0, y:Float = 0, scrollable:Bool = false) 
+	public function new(text:String = "", width:Float = 128, height:Float = 128, x:Float = 0, y:Float = 0) 
 	{
-		super(width, height, x, y, false);
+		// ** Super.
+
+		super(width, height, x, y);
 		
-		__label = new UiLabel(text, 8, 3);
+		__label = new UiLabel(text, 1, 6, 1);
+
+		__stamp_close = new UiStamp(54, width - 20, 9);
+
+		__windowStrip = new UiWindowStrip(width, 0, 0);
 		
-		__strip = new UiStrip(width, 0, 0);
-		
-		__panel = new UiPanel(width, height - 28, 0, 28, scrollable);
+		__windowPanel = new UiWindowPanel(width, height - 16, 0, 30);
+
+		__windowPanel.onEvent.add(__onWindowPanelEvent);
+
+		type = 'window';
 	}
 	
 	override public function init():Void 
 	{
+		// ** Super Init.
+
 		super.init();
+
+		super.addControl(__windowStrip);
+
+		super.addControl(__windowPanel);
+
+		__windowStrip.addControl(__label);
+
+		__windowStrip.addControl(__stamp_close);
 		
-		@:privateAccess __strip.__parent = this;
-		
-		__strip.z = 1;
-		
-		__initMember(__strip);
-		
-		@:privateAccess __panel.__parent = this;
-		
-		__panel.z = 1;
-		
-		__initMember(__panel);
-		
-		@:privateAccess __label.__parent = this;
-		
-		__initMember(__label);
-		
-		//** Set the hitbox.
+		// ** Set the hitbox.
 		
 		__setHitbox(0, 0, width, height);
 	}
 	
 	override public function release():Void 
 	{
-		__label.release();
-		
-		__strip.release();
-		
-		__panel.release();
-		
 		super.release();
 	}
 	
 	override public function addControl(control:UiControl):UiControl 
 	{
-		return __panel.addControl(control);
+		return __windowPanel.addControl(control);
 	}
 	
 	override public function removeControl(control:UiControl):Void 
 	{
-		__panel.removeControl(control);
+		__windowPanel.removeControl(control);
 	}
-	
-	override public function update():Void 
-	{
-		super.update();
-		
-		__strip.update();
-		
-		__panel.update();
-		
-		__label.update();
-	}
-	
+
 	override public function updateCollision():Void 
 	{
 		super.updateCollision();
-		
-		if (collide)
-		{
-			//** Call updateCollision method of the strip.
+
+		if (collide) {
 			
-			__strip.updateCollision();
-			
-			if (__strip.collide)
-			{
-				//** Call updateCollision method of the label.
-				
-				__label.updateCollision();
-				
-				if (__label.collide)
-				{
-					if (__form.leftClick)
-					{
-						__panel.visible = __panel.visible == true ? false : true;
+			if (__windowStrip.collide) {
+
+				if (__label.collide) {
+
+					if (__form.leftClick) {
+
+						__form.startDrag(this);
 					}
 				}
 			}
 			
-			//** Call updateCollision method of the strip.
-			
-			__panel.updateCollision();
+			if (__stamp_close.collide) {
+
+				if (__form.leftClick)
+				{
+					if (shouldClose) {
+
+						release();
+
+						return;
+					}
+
+					visible = false;
+				}
+			}
 		}
+	}
+
+	private function __onWindowPanelEvent(control:UiControl, type:UInt):Void {
+		
+		onEvent.dispatch(this, type);
 	}
 	
 	//** Getters and setters.
-	
+
+	override function get_controls():Group<UiControl> {
+		
+		return __windowPanel.controls;
+	}
+
 	private function get_header():String
 	{
 		return __label.text;
@@ -126,49 +131,57 @@ class UiWindow extends UiContainer
 	{
 		return __label.text = value;
 	}
-	
-	override function set_height(value:Float):Float 
-	{
-		__panel.height = value - 28;
+}
+
+private class UiWindowPanel extends UiPanel {
+
+	public function new(width:Float = 128, height:Float = 128, x:Float = 0, y:Float = 0) {
+
+		super(width, height, x, y);
+	}
+
+	override function __initGraphics() {
 		
+		__graphics.addAt(0, new Tile(null, 29));
+		
+		__graphics.addAt(1, new Tile(null, 30));
+		
+		__graphics.addAt(2, new Tile(null, 31));
+		
+		__graphics.addAt(3, new Tile(null, UiForm.GRAPHIC_PANEL_3_ID));
+		
+		__graphics.addAt(4, new Tile(null, UiForm.GRAPHIC_PANEL_4_ID));
+		
+		__graphics.addAt(5, new Tile(null, UiForm.GRAPHIC_PANEL_5_ID));
+		
+		__graphics.addAt(6, new Tile(null, UiForm.GRAPHIC_PANEL_6_ID));
+		
+		__graphics.addAt(7, new Tile(null, UiForm.GRAPHIC_PANEL_7_ID));
+		
+		__graphics.addAt(8, new Tile(null, UiForm.GRAPHIC_PANEL_8_ID));
+	}
+
+	override function set_height(value:Float):Float {
+
+		value -= 28;
+
 		return super.set_height(value);
 	}
-	
-	override function set_visible(value:Bool):Bool 
-	{
-		__strip.visible = value;
-		
-		__panel.visible = value;
-		
-		__label.visible = value;
-		
-		return super.set_visible(value);
-	}
-	
-	override function set_x(value:Float):Float 
-	{
-		@:privateAccess __strip.__setOffsetX(value);
-		
-		@:privateAccess __panel.__setOffsetX(value);
-		
-		@:privateAccess __label.__setOffsetX(value);
-		
-		return super.set_x(value);
-	}
-	
-	override function set_y(value:Float):Float 
-	{
-		@:privateAccess __strip.__setOffsetY(value);
-		
-		@:privateAccess __panel.__setOffsetY(value);
-		
-		@:privateAccess __label.__setOffsetY(value);
-		
-		return super.set_y(value);
-	}
-	
-	override function set_z(value:Float):Float 
-	{
-		return super.set_z(value);
-	}
 }
+
+private class UiWindowStrip extends UiStrip {
+
+	public function new(width:Float, x:Float, y:Float) {
+		
+		super(width, x, y);
+	}
+
+	override function __initGraphics() {
+		
+		__graphics.addAt(0, new Tile(null, 26));
+		
+		__graphics.addAt(1, new Tile(null, 27));
+		
+		__graphics.addAt(2, new Tile(null, 28));
+	}
+} 

@@ -1,18 +1,19 @@
 package cont.ui;
 
 import drc.display.Tile;
+import cont.ui.UiEventType;
 
 class UiStamp extends UiControl
 {
-	//** Publics.
+	// ** Publics.
 	
 	public var id(get, set):Int;
+
+	// ** Privates.
 	
-	//** Privates.
+	/** @private **/ private var __graphic:Tile;
 	
-	/** @private */ private var __graphic:Tile;
-	
-	/** @private */ private var __id:Int;
+	/** @private **/ private var __id:Int;
 	
 	public function new(id:Int = 0, x:Float = 0, y:Float = 0) 
 	{
@@ -27,6 +28,8 @@ class UiStamp extends UiControl
 		//** Create a new graphic class.
 		
 		__graphic = new Tile(null, id);
+
+		__type = 'stamp';
 	}
 	
 	override public function init():Void 
@@ -60,6 +63,17 @@ class UiStamp extends UiControl
 		//** Set the hitbox.
 		
 		__setHitbox(0, 0, width, height);
+
+		if (__mask)
+		{
+			__graphic.setAttribute("mX", __maskBox.x / 640);
+			
+			__graphic.setAttribute("mY", __maskBox.y / 480);
+			
+			__graphic.setAttribute("mW", __maskBox.width / 640);
+			
+			__graphic.setAttribute("mH", __maskBox.height / 480);
+		}
 	}
 	
 	override public function release():Void 
@@ -87,24 +101,85 @@ class UiStamp extends UiControl
 	override public function updateCollision():Void 
 	{
 		super.updateCollision();
-		
+
+		if (debug) {
+
+			return;
+		}
+
 		//** If collide...
 		
 		if (collide)
 		{
-			//** Set the cursor.
+			// ** Set the cursor.
 			
+			if (!hover) {
+
+				__form.hoverControl = this;
+			}
+
+			onMouseHover();
+
 			__form.cursorId = 4;
-			
-			//** If right click...
+
+			// ** If right click...
 			
 			if (__form.leftClick)
 			{
 				__form.selectedControl = this;
+
+				onEvent.dispatch(this, ON_CLICK);
 			}
+
+			if (shouldDebug)
+			{
+				if (__form.rightClick)
+				{
+					__form.__setDebugControl(this);
+				}
+			}
+
+			return;
 		}
 	}
 	
+	override function __debugOn() {
+
+		super.__debugOn();
+
+		__graphic.setAttribute('r', 1);
+
+		__graphic.setAttribute('g', 0);
+
+		__graphic.setAttribute('b', 0);
+	}
+
+	override function __debugOff() {
+
+		__graphic.setAttribute('r', 1);
+
+		__graphic.setAttribute('g', 1);
+
+		__graphic.setAttribute('b', 1);
+
+		debug = false;
+
+		super.__debugOff();
+	}
+
+	override function __setMask(x:Float, y:Float, width:Float, height:Float) {
+
+		super.__setMask(x, y, width, height);
+
+		__graphic.setAttribute("mX", __maskBox.x / 640);
+				
+		__graphic.setAttribute("mY", __maskBox.y / 480);
+		
+		__graphic.setAttribute("mW", __maskBox.width / 640);
+		
+		__graphic.setAttribute("mH", __maskBox.height / 480);
+	}
+
 	//** Getters and setters.
 	
 	private function get_id():Int
@@ -119,11 +194,29 @@ class UiStamp extends UiControl
 		return __id = value;
 	}
 	
+	override function set_height(value:Float):Float {
+
+		super.set_height(value);
+
+		__graphic.height = value;
+
+		return __height;
+	}
+
 	override function set_visible(value:Bool):Bool 
 	{
 		__graphic.visible = value;
 		
 		return super.set_visible(value);
+	}
+
+	override function set_width(value:Float):Float {
+
+		super.set_width(value);
+
+		__graphic.width = value;
+
+		return __width;
 	}
 	
 	override function set_x(value:Float):Float 

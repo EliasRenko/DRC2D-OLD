@@ -1,5 +1,6 @@
 package drc.display;
 
+import drc.objects.State;
 import drc.display.Graphic;
 import drc.data.IndexData;
 import drc.data.Profile;
@@ -12,6 +13,17 @@ typedef BlendFactors =
 	source:Int,
 
 	destination:Int
+}
+
+typedef TextureParameters = 
+{
+	magnification:Int,
+
+	minification:Int,
+
+	wrapX:Int,
+
+	wrapY:Int
 }
 
 class Drawable extends Graphic
@@ -30,6 +42,8 @@ class Drawable extends Graphic
 	 */
 	public var profile:Profile;
 
+	public var textureParams:TextureParameters;
+
 	/**
 	 * The textures of the graphic.
 	 */
@@ -44,24 +58,37 @@ class Drawable extends Graphic
 	 * The shadings ofthe graphic.
 	 */
 	public var shadings:Map<String, Shading> = new Map<String, Shading>();
-	
+
 	// ** Privates.
 	
 	// ** Methods.
 	
 	/** @private **/ public var __indicesToRender:UInt = 0;
 	
+	/** @private **/ private var __state:State;
+
 	public function new(profile:Profile) {
 
 		super(0, 0);
 		
 		this.profile = profile;
 		
-		blendFactors = 
-		{
+		blendFactors = {
+
 			source: BlendFactor.NONE,
 
 			destination: BlendFactor.NONE
+		}
+
+		textureParams = {
+
+			magnification: 0x2600,
+
+			minification: 0x2600,
+
+			wrapX: 0x812F,
+
+			wrapY: 0x812F
 		}
 
 		for (i in 0...profile.attributes.length) {
@@ -91,5 +118,22 @@ class Drawable extends Graphic
 				shadings.set(_name, shading);
 			}
 		}
+	}
+
+	public function remove():Void {
+
+		__state.removeGraphic(this);
+
+		super.release();
+	}
+
+	override function set_x(value:Float):Float {
+
+		return super.set_x(value);
+	}
+
+	override function set_y(value:Float):Float {
+
+		return super.set_y(value);
 	}
 }

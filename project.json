@@ -16,11 +16,13 @@
 		
 		"Build" :
 		{
-			"Assets" : "res",
+			"MainClass" :  "Main",
 			
-			"Source" : "src",
+			"SourceFolder" : "src",
+
+			"ResourcesFolder" : "res",
 			
-			"Dependencies" : ["sdl", "sdl_ttf", "stb", "opengl", "hxcpp-debug-server"],
+			"Dependencies" : ["sdl", "stb", "opengl", "hxcpp-debug-server", "format"],
 			
 			"Flags" : ["-debug", "-dce full"]
 		},

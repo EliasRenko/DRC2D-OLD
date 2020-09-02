@@ -3,11 +3,11 @@
 	
 	"regions":[
 	
-	{ "id": 0, "name": "menuStrip_0", "dimensions":[382, 0, 30, 30] },
+	{ "id": 0, "name": "menuStrip_0", "dimensions":[2, 2, 30, 30] },
 	
-	{ "id": 1, "name": "menuStrip_1", "dimensions":[412, 0, 30, 30] },
+	{ "id": 1, "name": "menuStrip_1", "dimensions":[32, 2, 30, 30] },
 	
-	{ "id": 2, "name": "menuStrip_2", "dimensions":[442, 0, 30, 30] },
+	{ "id": 2, "name": "menuStrip_2", "dimensions":[62, 2, 30, 30] },
 	
 	{ "id": 3, "name": "cursor_0", "dimensions":[0, 112, 58, 58] },
 	
@@ -21,9 +21,9 @@
 	
 	{ "id": 8, "name": "cursor_4", "dimensions":[0, 172, 32, 32] },
 	
-	{ "id": 9, "name": "checkbox_0", "dimensions":[0, 264, 32, 32] },
+	{ "id": 9, "name": "checkbox_0", "dimensions":[34, 158, 16, 16] },
 	
-	{ "id": 10, "name": "checkbox_1", "dimensions":[34, 264, 32, 32] },
+	{ "id": 10, "name": "checkbox_1", "dimensions":[34, 158, 16, 16] },
 	
 	{ "id": 11, "name": "selection_0", "dimensions":[622, 0, 24, 24] },
 	
@@ -38,11 +38,11 @@
 	{ "id": 16, "name": "clip_0", "dimensions":[102, 172, 32, 32] },
 	
 	
-	{ "id": 17, "name": "button_off_0", "dimensions":[0, 0, 6, 30] },
+	{ "id": 17, "name": "button_off_0", "dimensions":[2, 126, 7, 30] },
 	
-	{ "id": 18, "name": "button_off_1", "dimensions":[6, 0, 16, 30] },
+	{ "id": 18, "name": "button_off_1", "dimensions":[9, 126, 16, 30] },
 	
-	{ "id": 19, "name": "button_off_2", "dimensions":[22, 0, 6, 30] },
+	{ "id": 19, "name": "button_off_2", "dimensions":[25, 126, 7, 30] },
 	
 	{ "id": 20, "name": "button_on_0", "dimensions":[28, 0, 6, 30] },
 	
@@ -56,23 +56,23 @@
 	
 	{ "id": 25, "name": "textfield_2", "dimensions":[78, 0, 6, 30] },
 	
-	{"id": 26, "name": "panel_0", "dimensions":[112, 0, 30, 30] },
+	{"id": 26, "name": "panel_0", "dimensions":[2, 34, 30, 30] },
 	
-	{ "id": 27, "name": "panel_1", "dimensions":[142, 0, 30, 30] },
+	{ "id": 27, "name": "panel_1", "dimensions":[32, 34, 30, 30] },
 	
-	{ "id": 28, "name": "panel_2", "dimensions":[172, 0, 30, 30] },
+	{ "id": 28, "name": "panel_2", "dimensions":[62, 34, 30, 30] },
 	
-	{"id": 29, "name": "panel_3", "dimensions":[202, 0, 30, 30] },
+	{"id": 29, "name": "panel_3", "dimensions":[2, 64, 30, 30] },
 	
-	{ "id": 30, "name": "panel_4", "dimensions":[232, 0, 30, 30] },
+	{ "id": 30, "name": "panel_4", "dimensions":[32, 64, 30, 30] },
 	
-	{ "id": 31, "name": "panel_5", "dimensions":[262, 0, 30, 30] },
+	{ "id": 31, "name": "panel_5", "dimensions":[62, 64, 30, 30] },
 	
-	{"id": 32, "name": "panel_6", "dimensions":[292, 0, 30, 30] },
+	{"id": 32, "name": "panel_6", "dimensions":[2, 94, 30, 30] },
 	
-	{ "id": 33, "name": "panel_7", "dimensions":[322, 0, 30, 30] },
+	{ "id": 33, "name": "panel_7", "dimensions":[32, 94, 30, 30] },
 	
-	{ "id": 34, "name": "panel_8", "dimensions":[352, 0, 30, 30] },
+	{ "id": 34, "name": "panel_8", "dimensions":[62, 94, 30, 30] },
 	
 	{ "id": 35, "name": "tools", "dimensions":[0, 296, 136, 68] },
 	
@@ -90,7 +90,53 @@
 	
 	{ "id": 42, "name": "scroll_0", "dimensions":[472, 0, 28, 30] },
 	
-	{ "id": 43, "name": "scroll_1", "dimensions":[500, 0, 28, 30] }
+	{ "id": 43, "name": "scroll_1", "dimensions":[500, 0, 28, 30] },
+
+	{ "id": 44, "name": "close_window", "dimensions":[72, 42, 16, 14] },
+
+	{"id": 45, "name": "panel_0_alt", "dimensions":[112, 30, 30, 30] },
+	
+	{ "id": 46, "name": "panel_1_alt", "dimensions":[142, 30, 30, 30] },
+	
+	{ "id": 47, "name": "panel_2_alt", "dimensions":[172, 30, 30, 30] },
+	
+	{"id": 48, "name": "panel_3_alt", "dimensions":[202, 30, 30, 30] },
+	
+	{ "id": 49, "name": "panel_4_alt", "dimensions":[232, 30, 30, 30] },
+	
+	{ "id": 50, "name": "panel_5_alt", "dimensions":[262, 30, 30, 30] },
+	
+	{"id": 51, "name": "panel_6_alt", "dimensions":[292, 30, 30, 30] },
+	
+	{ "id": 52, "name": "panel_7_alt", "dimensions":[322, 30, 30, 30] },
+	
+	{ "id": 53, "name": "panel_8_alt", "dimensions":[352, 30, 30, 30] },
+
+	{ "id": 54, "name": "close", "dimensions":[48, 190, 11, 13] },
+
+	{ "id": 55, "name": "maximaze", "dimensions":[220, 172, 16, 14] },
+
+	{ "id": 56, "name": "fold", "dimensions":[236, 172, 16, 14] },
+
+	{ "id": 57, "name": "slider", "dimensions":[34, 126, 12, 24] },
+
+	{ "id": 58, "name": "slider_alt", "dimensions":[34, 126, 12, 24] },
+
+	{ "id": 59, "name": "slider_base_0", "dimensions":[80, 126, 7, 12] },
+
+	{ "id": 60, "name": "slider_base_1", "dimensions":[55, 126, 16, 12] },
+
+	{ "id": 61, "name": "slider_base_2", "dimensions":[71, 126, 7, 12] },
+
+	{ "id": 62, "name": "slider_full_0", "dimensions":[87, 126, 7, 12] },
+
+	{ "id": 63, "name": "indicator", "dimensions":[112, 126, 22, 16] },
+
+	{ "id": 64, "name": "slider_0", "dimensions":[34, 190, 12, 4] },
+
+	{ "id": 65, "name": "slider_1", "dimensions":[34, 194, 12, 8] },
+
+	{ "id": 66, "name": "slider_2", "dimensions":[34, 202, 12, 4] }
 	
 	]
 }

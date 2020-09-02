@@ -1,0 +1,49 @@
+{
+	"name": "debug",
+	
+	"attributes":[
+	
+	{"name": "location", "format": "vec3", "varying": false, "struct":[
+	
+	{"name": "x"},
+	
+	{"name": "y"},
+	
+	{"name": "z"}]
+	
+	},
+
+	{"name": "uv", "format": "vec2", "varying": true, "struct":[
+	
+	{"name": "u"},
+	
+	{"name": "v"}]
+		
+	},
+
+	{"name": "color", "format": "vec3", "varying": true, "struct":[
+	
+	{"name": "r"},
+	
+	{"name": "g"},
+
+	{"name": "b"}]
+		
+	}
+	
+	],
+	
+	"uniforms":[
+	
+	{"name": "matrix", "format": "mat4"}
+	
+	],
+	
+	"textures":[
+	
+	{"name": "diffuse", "format": "rgba"}
+	
+	],
+	
+	"fragmentShader": "ui.frag"
+}

@@ -1,22 +1,31 @@
 package cont.ui;
 
 import drc.display.Text;
+import cont.ui.UiEventType;
 
 class UiLabel extends UiControl
 {
-	//** Publics.
+	// ** Publics.
 	
+	public var fieldWidth(get, set):Float;
+
+	public var heading(get, set):UInt;
+
 	public var text(get, set):String;
 	
-	public var onClickHandler:UiControl->Void;
+	public var scale:Int;
+
+	public var size(get, null):UInt;
+
+	public var wordwrap(get, set):Bool;
+
+	// ** Privates.
 	
-	public var onRightClickHandler:UiControl->Void;
+	/** @private **/ private var __bitmapText:Text;
+
+	/** @private **/ private var __scale:Int = 1;
 	
-	//** Privates.
-	
-	/** @private */ private var __bitmapText:Text;
-	
-	public function new(text:String, x:Float = 0, y:Float = 0, onLeftClick:UiControl->Void = null, onRightClick:UiControl->Void = null) 
+	public function new(text:String, heading:UInt = 0, x:Float = 0, y:Float = 0) 
 	{
 		//** Super.
 		
@@ -24,24 +33,14 @@ class UiLabel extends UiControl
 		
 		//** Create a new bitmap text.
 		
-		__bitmapText = new Text(null, text);
+		__bitmapText = new Text(null, text, heading);
 		
-		//** Pass the left click function to it's variable counterpart.
-		
-		onClickHandler = onLeftClick;
-		
-		//** Pass the right click function to it's variable counterpart.
-		
-		onRightClickHandler = onRightClick;
+		__type = 'label';
 	}
 	
 	override public function init():Void 
 	{
 		super.init();
-		
-		//** Set the layout of the control.
-		
-		__form = @:privateAccess __parent.__form;
 		
 		//** Set the parent of the text.
 		
@@ -66,17 +65,6 @@ class UiLabel extends UiControl
 		//** Set the hitbox.
 		
 		__setHitbox(0, 0, width, height);
-		
-		if (__mask)
-		{
-			//__bitmapText.setAttribute("maskX", __maskBox.x / 640);
-			
-			//__bitmapText.setAttribute("maskY", __maskBox.y / 480);
-			
-			//__bitmapText.setAttribute("maskW", __maskBox.width / 640);
-			
-			//__bitmapText.setAttribute("maskH", __maskBox.height / 480);
-		}
 	}
 	
 	override function release():Void 
@@ -95,6 +83,11 @@ class UiLabel extends UiControl
 	{
 		super.updateCollision();
 		
+		if (debug) {
+
+			return;
+		}
+
 		//** If collide...
 		
 		if (collide)
@@ -109,34 +102,51 @@ class UiLabel extends UiControl
 			{
 				__form.selectedControl = this;
 				
-				if (onClickHandler == null)
-				{
-					return;
-				}
-
-				onClickHandler(this);
+				onEvent.dispatch(this, ON_CLICK);
 				
 				return;
 			}
 			
 			//** If right click...
 			
-			if (__form.rightClick)
-			{
-				__form.selectedControl = this;
-				
-				if (onRightClickHandler == null)
+			if (shouldDebug) {
+
+				if (__form.rightClick)
 				{
+					//__form.selectedControl = this;
+					
+					//onEvent.dispatch(this, ON_RIGHT_CLICK);
+					
+					__form.__setDebugControl(this);
+
 					return;
 				}
-				
-				onRightClickHandler(this);
-				
-				return;
 			}
 		}
 	}
-	
+
+	override function __debugOn() {
+
+		super.__debugOn();
+
+		__bitmapText.setAttribute('r', 1);
+
+		__bitmapText.setAttribute('g', 0);
+
+		__bitmapText.setAttribute('b', 0);
+	}
+
+	override function __debugOff() {
+
+		__bitmapText.setAttribute('r', 1);
+
+		__bitmapText.setAttribute('g', 1);
+
+		__bitmapText.setAttribute('b', 1);
+
+		super.__debugOff();
+	}
+
 	private function __setBitmapTextX():Void
 	{
 		__bitmapText.x = __x + __offsetX;
@@ -146,14 +156,46 @@ class UiLabel extends UiControl
 	{
 		__bitmapText.y = __y + __offsetY;
 	}
-	
+
+	override function __setMask(x:Float, y:Float, width:Float, height:Float) {
+
+		if (__mask) {
+
+			super.__setMask(x, y, width, height);
+ 
+			__bitmapText.setAttribute("mX", __maskBox.x / 640);
+					
+			__bitmapText.setAttribute("mY", __maskBox.y / 480);
+			
+			__bitmapText.setAttribute("mW", __maskBox.width / 640);
+			
+			__bitmapText.setAttribute("mH", __maskBox.height / 480);
+
+		}
+	}
+
 	//** Getters and setters.
 	
+	public function get_heading():UInt {
+
+		return __bitmapText.heading;
+	}
+
+	public function set_heading(value:UInt):UInt {
+	
+		return __bitmapText.heading = value;
+	}
+
 	override function get_height():Float 
 	{
 		return __bitmapText.height;
 	}
 	
+	public function get_size():UInt {
+
+		return __bitmapText.size;
+	}
+
 	public function get_text():String
 	{
 		return __bitmapText.text;
@@ -226,9 +268,29 @@ class UiLabel extends UiControl
 		return value;
 	}
 
+	private function get_fieldWidth():Float {
+		
+		return __bitmapText.fieldWidth;
+	}
+
+	private function set_fieldWidth(value:Float):Float {
+		
+		return __bitmapText.fieldWidth = value;
+	}
+
 	override function get_width():Float 
 	{
 		return __bitmapText.width;
+	}
+
+	private function get_wordwrap():Bool {
+		
+		return __bitmapText.wordwrap;
+	}
+
+	private function set_wordwrap(value):Bool {
+		
+		return __bitmapText.wordwrap = value;
 	}
 	
 	override function __setOffsetX(value:Float):Void 

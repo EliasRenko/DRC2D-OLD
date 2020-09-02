@@ -9,6 +9,8 @@
             "type": "hxcpp",
 
             "request": "launch",
+
+            "preLaunchTask": "Resources",
             
             "program": "${workspaceFolder}/bin/windows.debug/Main-debug.exe"
         },
@@ -19,6 +21,8 @@
 
             "request": "launch",
             
+            "preLaunchTask": "Resources",
+
             "program": "${workspaceFolder}/bin/windows/Main.exe"
         }
     ]

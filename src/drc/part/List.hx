@@ -52,7 +52,7 @@ class List<T:Object>
 		
 		if (@:privateAccess object.__active)
 		{
-			trace("Already active");
+			//trace("Already active");
 			
 			//** Return.
 			

@@ -1,5 +1,5 @@
 {
-	"name": "default",
+	"name": "texture",
 	
 	"attributes":[
 	
@@ -11,23 +11,31 @@
 	
 	{"name": "z"}]
 	
+	},
+
+	{"name": "uv", "format": "vec2", "varying": true, "struct":[
+	
+	{"name": "u"},
+	
+	{"name": "v"}]
+		
 	}
 	
 	],
 	
 	"uniforms":[
 	
-	{"name": "uMatrix", "format": "mat4"},
-	
-	{"name": "modelview", "format": "mat4"}
+	{"name": "matrix", "format": "mat4"}
 	
 	],
 	
 	"textures":[
 	
-	{"name": "uImage0", "format": "bgra"}
+	{"name": "diffuse", "format": "rgba"}
 	
 	],
 	
+	"vertexShader": "default.vert",
+
 	"fragmentShader": "default.frag"
 }

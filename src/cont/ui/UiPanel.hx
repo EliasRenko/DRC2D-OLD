@@ -5,28 +5,29 @@ import cont.ui.UiForm;
 import drc.display.Tile;
 import drc.part.Group;
 
-class UiPanel extends UiContainer
+class UiPanel extends UiLayout
 {
-	//** Privates.
+	// ** Privates.
 	
-	/** @private */ private var __graphics:Group<Tile>;
+	/** @private **/ private var __graphics:Group<Tile>;
+
+	/** @private **/ private var __tileSize = 30;
 	
-	public function new(width:Float = 128, height:Float = 128, x:Float = 0, y:Float = 0, scrollable:Bool = false) 
-	{
-		if (width < 34)
-		{
-			width = 34;
-		}
+	public function new(width:Float = 128, height:Float = 128, x:Float = 0, y:Float = 0) {
+
+		if (width < __tileSize) width = __tileSize;
 		
-		if (height < 34)
-		{
-			height = 34;
-		}
+		if (height < __tileSize) height = __tileSize;
 		
-		super(width, height, x, y, scrollable);
+		super(width, height, x, y);
 		
 		__graphics = new Group<Tile>(9);
-		
+
+		__initGraphics();
+	}
+
+	private function __initGraphics():Void {
+
 		__graphics.addAt(0, new Tile(null, UiForm.GRAPHIC_PANEL_0_ID));
 		
 		__graphics.addAt(1, new Tile(null, UiForm.GRAPHIC_PANEL_1_ID));
@@ -59,17 +60,17 @@ class UiPanel extends UiContainer
 			__graphics.members[i].visible = visible;
 		}
 		
-		__graphics.members[1].offsetX = 30;
+		__graphics.members[1].offsetX = __tileSize;
 		
-		__graphics.members[3].offsetY = 30;
+		__graphics.members[3].offsetY = __tileSize;
 		
-		__graphics.members[4].offsetX = 30;
+		__graphics.members[4].offsetX = __tileSize;
 		
-		__graphics.members[4].offsetY = 30;
+		__graphics.members[4].offsetY = __tileSize;
 		
-		__graphics.members[5].offsetY = 30;
+		__graphics.members[5].offsetY = __tileSize;
 		
-		__graphics.members[7].offsetX = 30;
+		__graphics.members[7].offsetX = __tileSize;
 		
 		__setWidth();
 		
@@ -79,16 +80,11 @@ class UiPanel extends UiContainer
 		
 		__setGraphicY();
 		
-		__setMask(__x + __offsetX, __y + __offsetY, width, height);
+		//__setMask(__x + __offsetX, __y + __offsetY, width, height);
 	}
 	
 	override public function release():Void 
 	{
-		//for (i in 0...__children.count) 
-		//{
-			//__children.members[i].release();
-		//}
-		
 		for (j in 0...__graphics.count) 
 		{
 			@:privateAccess __form.__tilemap.removeTile(__graphics.members[j]);
@@ -99,9 +95,9 @@ class UiPanel extends UiContainer
 	
 	public function dispose():Void
 	{
-		for (i in 0...__children.count)
+		for (i in 0...__controls.count)
 		{
-			__children.members[i].release();
+			__controls.members[i].release();
 		}
 	}
 	
@@ -122,17 +118,17 @@ class UiPanel extends UiContainer
 			//return;
 		//}
 		
-		__graphics.members[3].height = __height - 60;
+		__graphics.members[3].height = __height - (__tileSize * 2);
 		
-		__graphics.members[4].height = __height - 60;
+		__graphics.members[4].height = __height - (__tileSize * 2);
 		
-		__graphics.members[5].height = __height - 60;
+		__graphics.members[5].height = __height - (__tileSize * 2);
 		
-		__graphics.members[6].offsetY = __height - 30;
+		__graphics.members[6].offsetY = __height - __tileSize;
 		
-		__graphics.members[7].offsetY = __height - 30;
+		__graphics.members[7].offsetY = __height - __tileSize;
 		
-		__graphics.members[8].offsetY = __height - 30;
+		__graphics.members[8].offsetY = __height - __tileSize;
 	}
 	
 	private function __setWidth():Void
@@ -142,17 +138,17 @@ class UiPanel extends UiContainer
 			//return;
 		//}
 		
-		__graphics.members[1].width = __width - 60;
+		__graphics.members[1].width = __width - (__tileSize * 2);
 		
-		__graphics.members[2].offsetX = __width - 30;
+		__graphics.members[2].offsetX = __width - __tileSize;
 		
-		__graphics.members[4].width = __width - 60;
+		__graphics.members[4].width = __width - (__tileSize * 2);
 		
-		__graphics.members[5].offsetX = __width - 30;
+		__graphics.members[5].offsetX = __width - __tileSize;
 		
-		__graphics.members[7].width = __width - 60;
+		__graphics.members[7].width = __width - (__tileSize * 2);
 		
-		__graphics.members[8].offsetX = __width - 30;
+		__graphics.members[8].offsetX = __width - __tileSize;
 	}
 	
 	private function __setGraphicX():Void
@@ -175,9 +171,9 @@ class UiPanel extends UiContainer
 	
 	override function set_height(value:Float):Float
 	{
-		if (value < 34)
+		if (value < __tileSize)
 		{
-			value = 34;
+			value = __tileSize;
 		}
 		
 		super.set_height(value);
@@ -227,9 +223,9 @@ class UiPanel extends UiContainer
 	
 	override function set_width(value:Float):Float 
 	{
-		if (value < 34)
+		if (value < __tileSize)
 		{
-			value = 34;
+			value = __tileSize;
 		}
 		
 		super.set_width(value);

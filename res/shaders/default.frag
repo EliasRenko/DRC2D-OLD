@@ -1,4 +1,8 @@
-void main(void)
-{
-	gl_FragColor = vec4(0.2, 0.2, 1, 1);
+varying vec2 out_uv;
+
+uniform sampler2D diffuse;
+
+void main(void) {
+	
+	gl_FragColor = texture2D(diffuse, out_uv);
 }

@@ -6,7 +6,7 @@ class UiDialog extends UiWindow
 	
 	public function new(text:String = "", width:Float = 128, height:Float = 128, x:Float = 0, y:Float = 0, scrollable:Bool = false) 
 	{
-		super(text, width, height, x, y, false);
+		super(text, width, height);
 	}
 	
 	override function init():Void 

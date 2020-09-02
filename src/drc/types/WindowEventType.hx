@@ -1,34 +1,38 @@
 package drc.types;
 
-enum WindowEventType 
-{
-	UNKNOWN;
+@:enum abstract WindowEventType(UInt) from UInt to UInt {
+
+	var ANY = 0;
 	
-	SHOWN;
+	var SHOWN = 1;
 	
-	HIDDEN;
+	var HIDDEN = 2;
 	
-	EXPOSED;
+    var EXPOSED = 3;
+    
+    var MOVED = 4;
+
+    var RESIZED = 5;
+
+    var SIZE_CHANGED = 6;
+
+    var MOUSE_ENTER = 7;
+
+	var MOUSE_LEAVE = 8;
+
+	var MINIMIZED = 9;
 	
-	MOVED;
+	var MAXIMIZED = 10;
 	
-	RESIZED;
+	var RESTORED = 11;
 	
-	SIZE_CHANGED;
+	var ENTER = 12;
 	
-	MINIMIZED;
+	var LEAVE = 13;
 	
-	MAXIMIZED;
+	var FOCUS_GAINED = 14;
 	
-	RESTORED;
+	var FOCUS_LOST = 15;
 	
-	ENTER;
-	
-	LEAVE;
-	
-	FOCUS_GAINED;
-	
-	FOCUS_LOST;
-	
-	CLOSE;
+	var CLOSE = 16;
 }

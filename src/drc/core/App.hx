@@ -1,10 +1,13 @@
 package drc.core;
 
-import drc.core.Runtime;
+import cont.TestPNG;
 import drc.display.Stage;
 import drc.objects.State;
 import drc.part.ObjectList;
+import drc.system.Window;
+import drc.types.WindowEventType;
 import drc.utils.Common;
+import drc.utils.Res;
 import drc.utils.Resources;
 
 #if cpp
@@ -33,13 +36,17 @@ class App
 	 */
 	public var states:ObjectList<State> = new ObjectList<State>();
 
-	// Privates
+	// ** Privates
 
 	/** @private **/ private var __context:Context;
+
+	/** @private **/ private var __resources:Res;
 
 	/** @private **/ private var __runtime:Runtime;
 
 	/** @private **/ private var __stage:Stage;
+
+	/** @private **/ private var __promise:Promise<Dynamic>;
 
 	public function new()
 	{
@@ -49,7 +56,7 @@ class App
 		
 		#elseif js
 
-		//__runtime = new drc.backend.web.core.Runtime();
+		__runtime = new drc.backend.web.core.Runtime();
 
 		#else
 		
@@ -57,6 +64,8 @@ class App
 		
 		#end
 		
+		// ** Init runtime.
+
 		__runtime.init();
 		
 		__context = new Context();
@@ -64,14 +73,41 @@ class App
 		Common.context = __context;
 		
 		__stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
-		
+
+		__resources = new Res();
+
+		Common.res = __resources;
+
 		Common.stage = stage;
+
+		Common.window.onEvent.add(__onWindowEvent, WindowEventType.RESIZED);
+
+		preload();
 	}
 
-	public function run():Void
-	{
-		while (runtime.active)
-		{
+	public function preload():Void {
+
+		var _preloads:Array<Promise<Dynamic>> = [__resources.loadProfile('res/profiles/default.json')];
+
+		__promise = Promise.all(_preloads);
+	}
+
+	public function run():Void {
+
+		__promise.onComplete(function(result:Array<String>, type:Int) {
+			
+			addState(new TestPNG());
+
+			loop();
+		});
+	}
+
+	public function loop():Void {
+
+		// ** While runtime is active...
+
+		while (runtime.active) {
+
 			__runtime.pollEvents();
 			
 			update();
@@ -82,7 +118,7 @@ class App
 			
 			__context.setRenderToBackbuffer();
 			
-			__context.clear(1, 0, 0, 1);
+			__context.clear(0, 1, 0, 1);
 			
 			stage.present();
 			
@@ -94,41 +130,95 @@ class App
 		Sys.exit(0);
 	}
 
-	public function addState(state:State):State
-	{
-		return states.add(state);
+	public function addState(state:State):State {
+
+		// ** Add the state to the state list.
+
+		states.add(state);
+
+		// ** Init the state.
+
+		__initState(state);
+
+		// ** Return.
+
+		return state;
 	}
 
-	public function removeState(state:State):Void
-	{
-		states.remove(state);
+	public function removeState(state:State):Void {
+
+		// ** Release the state.
+
+		state.release();
 	}
 
-	public function render():Void
-	{
+	public function render():Void {
+
+		// ** For each state...
+
 		for (i in 0...states.count)
 		{
+			// ** Render.
+
 			states.members[i].render();
 		}
 	}
 
-	public function update():Void
-	{
+	public function update():Void {
+
+		// ** For each state...
+
 		for (i in 0...states.count)
 		{
+			// ** Update.
+
 			states.members[i].update();
+		}
+	}
+
+	// ** ------
+
+	private function __initState(state:State):Void {
+
+		@:privateAccess state.__parent = this;
+
+		@:privateAccess state.__z = states.count - 1;
+	}
+
+	private function __onWindowEvent(window:Window, type:WindowEventType):Void {
+		
+		switch type {
+
+			case CLOSE:
+
+				// ** Quit the application.
+
+			case RESIZED:
+
+				// ** Resize the stage.
+
+				__stage.resize(window.width, window.height);
+
+			case _:
+		}
+
+		// ** For each state.
+
+		for (i in 0...states.count) {
+
+			states.members[i].onWindowEvent(window, type);
 		}
 	}
 
 	// ** Getters and setters.
 
-	private function get_runtime():Runtime
-	{
+	private function get_runtime():Runtime {
+
 		return __runtime;
 	}
 
-	private function get_stage():Stage
-	{
+	private function get_stage():Stage {
+
 		return __stage;
 	}
 }

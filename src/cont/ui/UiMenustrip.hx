@@ -1,36 +1,40 @@
 package cont.ui;
 
+import drc.display.Tile;
+import cont.ui.UiEventType;
+import cont.ui.UiStripPanel;
 import drc.part.Group;
-import src.cont.ui.UiStripPanel;
 
 class UiMenustrip extends UiStrip
 {
 	// ** Privates.
 	
-	/** @private **/ private var __lastLabel:Float = 4;
+	/** @private **/ private var __lastLabel:Float = 6;
 	
 	/** @private **/ private var __panels:Group<UiStripPanel> = new Group<UiStripPanel>();
 	
-	/** @private **/ //private var __selectedLabel:Null<Int>;
-	
-	public function new(width:Float, x:Float = 0, y:Float = 0) 
-	{
+	/** @private **/ private var __stamp_close:UiStamp;
+
+	public function new(width:Float, x:Float = 0, y:Float = 0) {
+
+		// ** Super.
+
 		super(width, x, y);
-		
-		__graphics.members[0].id = UiForm.GRAPHIC_STRIP_0_ID;
-		
-		__graphics.members[1].id = UiForm.GRAPHIC_STRIP_1_ID;
-		
-		__graphics.members[2].id = UiForm.GRAPHIC_STRIP_2_ID;
+
+		// ** Set the 'type' of the control.
+
+		__type = 'menustrip';
+
+		__stamp_close = new UiStamp(54, width - 20, 9);
 	}
-	
+
 	override public function init():Void 
 	{
 		super.init();
 		
 		for (i in 0...__panels.count)
 		{
-			__children.members[i].x = __lastLabel;
+			__controls.members[i].x = __lastLabel;
 			
 			//** Call initMember method.
 			
@@ -40,8 +44,14 @@ class UiMenustrip extends UiStrip
 			
 			__panels.members[i].visible = false;
 			
-			__lastLabel += __children.members[i].width + 12;
+			__lastLabel += __controls.members[i].width + 12;
 		}
+
+		//addControl(__stamps.members[0]);
+
+		//addControl(__stamps.members[1]);
+
+		addControl(__stamp_close);
 	}
 	
 	override public function release():Void 
@@ -51,31 +61,48 @@ class UiMenustrip extends UiStrip
 	
 	public function addLabel(text:String):Void
 	{
-		var label:UiControl = addControl(new UiLabel(text, __lastLabel, 2, __onLabelClick));
-		
-		var list:UiStripPanel = new UiStripPanel(128, label.x, 24);
-		
-		@:privateAccess list.__parent = this;
+		var _label:UiMenustripLabel = new UiMenustripLabel(text, __lastLabel, 1);
+
+		addControl(_label);
+
+		_label.onEvent.add(__onLabel_click, ON_CLICK);
+
+		var _stripPanel:UiStripPanel = new UiStripPanel(128, _label.x, 24);
+
+		_label.stripPanel = _stripPanel;
+
+		//@:privateAccess _stripPanel.__parent = this;
 		
 		if (__form != null)
 		{
 			//** Call initMember method.
 			
-			__initMember(list);
+			__initMember(_stripPanel);
 			
-			list.visible = false;
+			_stripPanel.visible = false;
 			
-			__lastLabel += label.width + 12;
+			__lastLabel += _label.width + 12;
 		}
 		
-		__panels.add(list);
+		__panels.add(_stripPanel);
 	}
 	
-	public function addOption(text:String, index:UInt, handler:UiControl->Void = null)
+	public function addOption(text:String, index:UInt, handler:UiControl->UiEventType->Void = null)
 	{
-		//var label:UiControl = addControl(new UiLabel(text, 4, 0));
-		
-		__panels.members[index].addControl(new UiLabel(text, 0, 0, handler));
+		#if debug
+
+		if (__panels.members[index] == null) throw 'Invalid option index.';
+
+		#end
+
+		var _label:UiControl = new UiLabel(text, 0, 0);
+
+		if (handler != null) {
+
+			_label.onEvent.add(handler, ON_CLICK);
+		}
+
+		__panels.members[index].addControl(_label);
 	}
 	
 	private function __hideList(control:UiControl):Void
@@ -83,8 +110,8 @@ class UiMenustrip extends UiStrip
 		control.visible = false;
 	}
 	
-	override public function update():Void 
-	{
+	override public function update():Void {
+
 		super.update();
 		
 		for (i in 0...__panels.count)
@@ -93,75 +120,75 @@ class UiMenustrip extends UiStrip
 		}
 	}
 	
-	override public function updateCollision():Void 
-	{
+	override public function updateCollision():Void {
+
 		super.updateCollision();
-		
-		if (__collisionIndex >= 0) {
-
-			if (__form.rightClick) {
-				
-				//__panels.members[__collisionIndex].visible = true;
-			}
-
-			return;
-		}
 
 		for (i in 0...__panels.count)
 		{
 			__panels.members[i].updateCollision();
-			
-			if (__panels.members[i].collide)
-			{
-				__collide = true;
-				
-				return;
-			}
 		}
 	}
 	
-	override public function onFocusLost():Void 
-	{
-		super.onFocusLost();
-		
-		// if (__selectedLabel != null)
-		// {
-		// 	__panels.members[__selectedLabel].visible = false;
-		// }
-		
-		// __selectedLabel = null;
-	}
-	
-	public function removeLabel(label:UiLabel):Void
-	{
+	public function removeLabel(label:UiLabel):Void {
 		
 	}
 	
-	private function __onLabelClick(control:UiControl):Void
-	{
-		// if (__selectedLabel != null)
-		// {
-		// 	__panels.members[__selectedLabel].visible = false;
-		// }
+	override private function __initGraphics():Void {
 		
-		// __selectedLabel = __collisionIndex;
+		__graphics.addAt(0, new Tile(null, 0));
 		
-		// __panels.members[__selectedLabel].visible = true;
+		__graphics.addAt(1, new Tile(null, 1));
 		
-		__form.selectedControl = __panels.members[__collisionIndex];
+		__graphics.addAt(2, new Tile(null, 2));
+	}
 
-		//__selectedLabel = __collisionIndex;
+	private function __onLabel_click(control:UiControl, type:UiEventType):Void {
+
+		var _menustripLabel:UiMenustripLabel = cast(control, UiMenustripLabel);
+
+		__form.selectedControl = _menustripLabel.stripPanel;
+	}
+	
+	override function onFormResize() {
+
+		super.onFormResize();
+
+		width = __form.width;
 	}
 	
 	//** Getters and setters.
 	
+	override function set_width(value:Float):Float {
+
+		super.set_width(value);
+
+		__stamp_close.x = __width - 20;
+
+		return __width;
+	}
+
 	override function set_z(value:Float):Float 
 	{
+		super.set_z(value);
+
 		for (i in 0...__panels.count)
 		{
-			__panels.members[i].z = value;
+			__panels.members[i].z = value - 1;
 		}
 		
-		return super.set_z(value);
+		return __z;
+	}
+}
+
+private class UiMenustripLabel extends UiLabel {
+
+	// ** Publics.
+
+	public var stripPanel:UiStripPanel;
+
+	public function new(text:String, x:Float = 0, y:Float = 0) {
+
+		super(text, 1, x, y);
 	}
 }

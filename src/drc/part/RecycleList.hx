@@ -47,14 +47,21 @@ class RecycleList<T:Object> extends List<T>
 		return object;
 	}
 	
-	public function restore(object:T):Bool
+	public function restore(object:T):T
 	{
+		if (object == null) {
+
+			if (passiveCount == 0) return null;
+
+			return restoreAt(passiveCount - 1);
+		}
+
 		//** Return.
 		
 		return restoreAt(@:privateAccess object.__passiveIndex); //** Define metadata: privateAccess.
 	}
 	
-	public function restoreAt(index:Int):Bool
+	public function restoreAt(index:Int):T
 	{
 		//** If the object is active...
 		
@@ -62,7 +69,7 @@ class RecycleList<T:Object> extends List<T>
 		{
 			//** Return.
 			
-			return false;
+			return null;
 		}
 		
 		//** Null the active index of the object.
@@ -71,7 +78,7 @@ class RecycleList<T:Object> extends List<T>
 		
 		//** Add the object to the passive members array.
 		
-		add(__passiveMembers[index]);
+		var _object:T = add(__passiveMembers[index]);
 		
 		//** If index is lesser than the lenght of the members... 
 		
@@ -92,7 +99,7 @@ class RecycleList<T:Object> extends List<T>
 		
 		//** Return.
 		
-		return true;
+		return _object;
 	}
 	
 	public function recycle(object:T):Bool

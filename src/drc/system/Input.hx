@@ -1,5 +1,6 @@
 package drc.system;
 
+import drc.input.Keyboard;
 import drc.core.EventDispacher;
 import drc.input.Gamepad;
 import drc.input.Mouse;
@@ -14,7 +15,7 @@ interface Input
 
 	public var textEvent:EventDispacher<TextEvent>;
 	
-	//public var keyboard(get, null):Keyboard;
+	public var keyboard(get, null):Keyboard;
 	
 	public var mouse(get, null):Mouse;
 	
@@ -30,7 +31,7 @@ interface Input
 	
 	//** Getters and setters.
 	
-	//private function get_keyboard():Keyboard;
+	private function get_keyboard():Keyboard;
 	
 	private function get_mouse():Mouse;
 }

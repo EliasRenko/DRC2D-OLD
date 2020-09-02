@@ -3,19 +3,23 @@ package cont.ui;
 import drc.display.Tile;
 import drc.utils.Common;
 import drc.part.Group;
+import drc.utils.Common;
+import StringTools;
 
 class UiTextField extends UiLayout
 {
-	//** Publics.
+	// ** Publics.
 	
 	public var maxCharacters:Int = -1;
 	
 	public var onClickHandler:UiControl->Void;
 	
 	public var text(get, set):String;
+
+	public var restriction:String;
 	
-	//** Privates.
-	
+	// ** Privates.
+
 	/** @private */ private var __graphics:Group<Tile>;
 	
 	/** @private */ private var __graphic:Tile;
@@ -24,7 +28,7 @@ class UiTextField extends UiLayout
 	
 	/** @private */ private var __stamp:UiStamp;
 	
-	public function new(text:String, width:Float = 64, x:Float = 0, y:Float = 0) 
+	public function new(text:String, width:Float = 64, height:Float = 30, x:Float = 0, y:Float = 0) 
 	{
 		super(width, 30, x, y);
 		
@@ -36,9 +40,15 @@ class UiTextField extends UiLayout
 		
 		__graphics.addAt(2, new Tile(null, UiForm.GRAPHIC_TEXTFIELD_2_ID));
 		
-		__label = new UiLabel(text, 6, 4);
+		__label = new UiLabel(text, 1, 6, 4);
+
+		__label.wordwrap = true;
+
+		__label.fieldWidth = width;
 		
 		__stamp = new UiStamp(12, 0, 0);
+
+		__type = 'textfield';
 	}
 	
 	override public function init():Void 
@@ -125,12 +135,20 @@ class UiTextField extends UiLayout
 	override public function update():Void 
 	{
 		super.update();
+
+		if (focused) {
+
+			if (Common.input.keyboard.pressed(42)) {
+
+				__subString();
+			}
+		}
 	}
 	
 	override public function updateCollision():Void 
 	{
 		super.updateCollision();
-		
+
 		if (collide)
 		{
 			//** Set the cursor.
@@ -152,6 +170,10 @@ class UiTextField extends UiLayout
 		
 		__stamp.visible = true;
 		
+		__form.onTextBegin();
+
+		__form.onEvent.add(__windowOnTextInput, 1);
+
 		//DrcCommon.view.stage.window.onKeyDown.add(__windowOnKeyDown);
 		
 		//DrcCommon.view.stage.window.onTextInput.add(__windowOnTextInput);
@@ -163,16 +185,30 @@ class UiTextField extends UiLayout
 		
 		__stamp.visible = false;
 		
+		__form.onTextEnd();
+		
+		__form.onEvent.remove(__windowOnTextInput);
+
 		//DrcCommon.view.stage.window.onKeyDown.remove(__windowOnKeyDown);
 		
 		//DrcCommon.view.stage.window.onTextInput.remove(__windowOnTextInput);
 	}
 	
-	private function __windowOnTextInput(value:String):Void
+	private function __windowOnTextInput(char:String, type:UInt):Void
 	{
-		__setText(value);
+		if (restriction != null) {
+
+			if (!StringTools.contains(restriction, char)) {
+
+				return;
+			}
+		}
+
+		__setText(text + char);
 		
 		__stamp.x = __label.width + 4;
+
+		onEvent.dispatch(this, 10);
 	}
 	
 	private function __setText(value:String):Void
@@ -185,7 +221,14 @@ class UiTextField extends UiLayout
 			}
 		}
 		
-		__label.text += value;
+		__label.text = value;
+	}
+
+	private function __subString() {
+		
+		text = text.substring(0, text.length - 1);
+
+		onEvent.dispatch(this, 10);
 	}
 	
 	//** Getters and setters.

@@ -1,5 +1,6 @@
 package drc.backend.native.system;
 
+import drc.backend.native.input.Keyboard;
 import drc.backend.native.input.Gamepad;
 import drc.core.EventDispacher;
 import drc.input.Mouse;
@@ -27,6 +28,8 @@ class Input implements drc.system.Input
 	 * 
 	 */
 	public var mouse(get, null):Mouse;
+
+	public var keyboard(get, null):Keyboard;
 	
 	// ** Privates.
 	
@@ -35,6 +38,8 @@ class Input implements drc.system.Input
 	/** @private **/ private var __gamepads:Vector<Gamepad>;
 
 	/** @private **/ private var __mouse:drc.backend.native.input.Mouse;
+
+	/** @private **/ private var __keyboard:drc.backend.native.input.Keyboard;
 	
 	public function new() 
 	{
@@ -48,6 +53,8 @@ class Input implements drc.system.Input
 		}
 		
 		__mouse = new drc.backend.native.input.Mouse();
+
+		__keyboard = new drc.backend.native.input.Keyboard();
 	}
 	
 	public function getGamepad(index:UInt):Gamepad
@@ -71,7 +78,7 @@ class Input implements drc.system.Input
 	{
 		//trace('Gamepad event: ' + event.type);
 		
-		gamepadEvent.dispatch(event);
+		//gamepadEvent.dispatch(event);
 	}
 	
 	public function onGamepadButtonDown(id:Int, button:Int):Void
@@ -109,6 +116,18 @@ class Input implements drc.system.Input
 		
 	}
 
+	public function onKeyboardDown(button:Int):Void {
+
+		trace(button);
+
+		__keyboard.onButtonPress(button);
+	}
+
+	public function onKeyboardUp(button:Int):Void {
+		
+		__keyboard.onButtonRelease(button);
+	}
+
 	public function beginTextInput():Void
 	{
 		SDL.startTextInput();
@@ -142,13 +161,20 @@ class Input implements drc.system.Input
 		}
 		
 		__mouse.postUpdate();
+
+		__keyboard.postUpdate();
 	}
 
 	// ** Getters and setters.
 
-	private function get_mouse():Mouse
-	{
+	private function get_mouse():Mouse {
+
 		return __mouse;
+	}
+
+	private function get_keyboard():Keyboard {
+
+		return __keyboard;
 	}
 }
 

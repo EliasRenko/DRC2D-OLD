@@ -1,0 +1,1 @@
+msdf -font C:\Users\Renko\Documents\Libraries\JS_tools\FontEditor\deps\nokiafc22.ttf 'ABC' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render.png 1024 1024

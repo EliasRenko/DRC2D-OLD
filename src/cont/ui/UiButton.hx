@@ -2,12 +2,13 @@ package cont.ui;
 
 import drc.display.Tile;
 import drc.part.Group;
+import cont.ui.UiEventType;
 
 class UiButton extends UiLayout
 {
 	//** Publics.
-	
-	public var onClickHandler:UiControl->Void;
+
+	public var text(get, set):String;
 	
 	//** Privates.
 	
@@ -15,10 +16,10 @@ class UiButton extends UiLayout
 	
 	/** @private */ private var __label:UiLabel;
 	
-	public function new(text:String, width:Float, x:Float = 0, y:Float = 0, handler:UiControl->Void = null) 
+	public function new(text:String, width:Float, x:Float = 0, y:Float = 0, handler:UiControl->UiEventType->Void = null) 
 	{
 		//** Super.
-		
+
 		super(width, 28, x, y);
 		
 		__graphics = new Group<Tile>(3);
@@ -31,16 +32,23 @@ class UiButton extends UiLayout
 		
 		//** Create a new label class.
 		
-		__label = new UiLabel(text, 0, 3);
-		
-		onClickHandler = handler;
+		__label = new UiLabel(text, 1, 0, 2);
+
+		__label.shouldDebug = false;
+
+		if (handler != null) {
+
+			onEvent.add(handler, ON_CLICK);
+		}
+
+		__type = 'button';
 	}
 	
 	override public function init():Void 
 	{
 		super.init();
 		
-		__initMember(__label);
+		//__initMember(__label);
 		
 		//__graphic.parentTilemap = @:privateAccess __form.__tilemap;
 		//
@@ -62,6 +70,8 @@ class UiButton extends UiLayout
 		//
 		//__graphic.z = __parent.z - 1;
 		
+		addControl(__label);
+
 		for (i in 0...__graphics.count) 
 		{
 			__graphics.members[i].parentTilemap = @:privateAccess __form.__tilemap;
@@ -70,7 +80,7 @@ class UiButton extends UiLayout
 			
 			__graphics.members[i].visible = visible;
 			
-			__graphics.members[i].z = __parent.z - 1;
+			//__graphics.members[i].z = __parent.z - 1;
 		}
 		
 		__graphics.members[1].offsetX = 6;
@@ -87,7 +97,7 @@ class UiButton extends UiLayout
 		
 		__setGraphicY();
 		
-		__label.z = z - 3;
+		//__label.z = z - 3;
 		
 		__setHitbox(0, 0, width, height);
 	}
@@ -152,18 +162,57 @@ class UiButton extends UiLayout
 			{
 				__form.selectedControl = this;
 				
-				if (onClickHandler == null)
-				{
-					return;
+				onEvent.dispatch(this, ON_CLICK);
+			}
+
+			if (shouldDebug) {
+
+				if (__form.rightClick) {
+
+					__form.__setDebugControl(this);
 				}
-				
-				onClickHandler(this);
 			}
 		}
+	}
+
+	override function __debugOn() {
+		
+		for (i in 0...__graphics.count) {
+
+			__graphics.members[i].setAttribute('r', 1);
+
+			__graphics.members[i].setAttribute('g', 0);
+
+			__graphics.members[i].setAttribute('b', 0);
+		}
+	}
+
+	override function __debugOff() {
+
+		for (i in 0...__graphics.count) {
+
+			__graphics.members[i].setAttribute('r', 1);
+
+			__graphics.members[i].setAttribute('g', 1);
+
+			__graphics.members[i].setAttribute('b', 1);
+		}
+
+		super.__debugOff();
 	}
 	
 	//** Getters and setters.
 	
+	private function get_text():String {
+
+		return __label.text;
+	}
+
+	private function set_text(text:String):String {
+		
+		return __label.text = text;
+	}
+
 	override function set_visible(value:Bool):Bool 
 	{
 		for (i in 0...__graphics.count) 
@@ -171,7 +220,7 @@ class UiButton extends UiLayout
 			__graphics.members[i].visible = value;
 		}
 		
-		__label.visible = value;
+		//__label.visible = value;
 		
 		return super.set_visible(value);
 	}
@@ -182,7 +231,7 @@ class UiButton extends UiLayout
 		
 		__setGraphicX();
 		
-		@:privateAccess __label.__setOffsetX(x + value);
+		//@:privateAccess __label.__setOffsetX(x + value);
 		
 		return value;
 	}
@@ -193,15 +242,22 @@ class UiButton extends UiLayout
 		
 		__setGraphicY();
 		
-		@:privateAccess __label.__setOffsetY(y + value);
+		//@:privateAccess __label.__setOffsetY(y + value);
 		
 		return value;
 	}
 	
 	override function set_z(value:Float):Float 
 	{
-		@:privateAccess __label.z = value - 3;
+		//@:privateAccess __label.z = value - 3;
 		
+		for (i in 0...__graphics.count)
+		{
+			__graphics.members[i].z = value;
+		}
+
+		__label.z = value - 1;
+
 		return value;
 	}
 	
@@ -211,7 +267,7 @@ class UiButton extends UiLayout
 		
 		__setGraphicX();
 		
-		@:privateAccess __label.__setOffsetX(x + value);
+		//@:privateAccess __label.__setOffsetX(x + value);
 	}
 	
 	override function __setOffsetY(value:Float):Void 
@@ -220,6 +276,6 @@ class UiButton extends UiLayout
 		
 		__setGraphicY();
 		
-		@:privateAccess __label.__setOffsetY(y + value);
+		//@:privateAccess __label.__setOffsetY(y + value);
 	}
 }

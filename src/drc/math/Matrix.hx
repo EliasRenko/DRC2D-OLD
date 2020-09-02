@@ -1,6 +1,8 @@
 package drc.math;
 
-import drc.buffers.Float32Array;
+//import drc.buffers.Float32Array;
+import haxe.io.Bytes;
+import haxe.io.Float32Array;
 
 @:arrayAccess
 abstract Matrix(Float32Array) from Float32Array to Float32Array {
@@ -19,6 +21,11 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
         {
             this = Float32Array.fromArray(__identity);
         }
+    }
+
+    public function getData():Bytes {
+
+        return this.getData().bytes;
     }
 
     public function append(lhs:Float32Array):Void {
@@ -281,7 +288,7 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
     @:arrayAccess
     public function get(index:Int):Float {
 
-        return this[index];
+        return this.get(index);
     }
     
     @:dox(hide)
@@ -289,7 +296,7 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
     @:arrayAccess
     public function set(index:Int, value:Float):Float {
 
-        this[index] = value;
+        this.set(index, value);
         
         return value;
     }

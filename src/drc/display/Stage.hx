@@ -7,20 +7,20 @@ import drc.data.Profile;
 import drc.data.Texture;
 import drc.utils.Common;
 import opengl.WebGL;
-import drc.buffers.Float32Array;
+import haxe.io.Float32Array;
 import drc.utils.Resources;
 
-class Stage extends Drawable
-{
-	/** Publics. **/
+class Stage extends Drawable {
+
+	// ** Publics.
 
 	public var drawCalls(get, null):UInt = 0;
 
-	/** Privates. **/
+	// ** Privates.
 
 	/** @private **/ private var __drawCalls:UInt = 0;
 
-	/** @private **/private var __context:Context;
+	/** @private **/ private var __context:Context;
 
 	public function new(profile:Profile) 
 	{
@@ -34,26 +34,11 @@ class Stage extends Drawable
 		
 		height = 480;
 
-		//x = -1;
-
-		//y = 1;
-		
 		textures = new Array<Texture>();
 
 		textures[0] = new drc.backend.native.data.Texture();
 
 		textures[0].create(640, 480);
-
-		vertices.upload(
-		[
-			0, 0, 0, 0, 1,
-			
-			0, 480, 0, 0, 0,
-			
-			640, 480, 0, 1, 0,
-			
-			640, 0, 0, 1, 1
-		]);
 		
 		vertices.upload(
 		[0, 0, 0, 0, 1, 
@@ -71,20 +56,30 @@ class Stage extends Drawable
 		WebGL.enable(WebGL.DEPTH_TEST);
 	}
 
+	public function resize(width:Int, height:Int) {
+		
+		this.width = width;
+
+		this.height = height;
+
+		textures[0].create(width, height);
+	}
+
 	public function setToDraw():Void {
 		
 		__context.setRenderToTexture(textures[0]);
 
-		renderToTexture = true;
-
-		__context.clear(0.2, 0, 0.3, 1);
+		__context.clear(0.3, 0, 0.2, 1);
 	}
 
 	public function present():Void {
 
-		renderToTexture = false;
+		if (__shouldTransform) {
 
-		__context.setViewport(0, 0, 640, 480);
+			__shouldTransform = false;
+		}
+
+		__context.setViewport(0, 0, Std.int(width), Std.int(height));
 
 		__drawTriangles(this, matrix);
 	}
@@ -96,85 +91,64 @@ class Stage extends Drawable
 		__drawTriangles(image, matrix);
 	}
 
-	var projection:Float32Array;
-
-	var renderToTexture:Bool = false;
-
-	private function __drawTriangles(img:Drawable, matrix:Matrix):Void {
+	private function __drawTriangles(drawable:Drawable, matrix:Matrix):Void {
 		
 		__context.generateVertexBuffer();
 		
-		__context.loadVertexBuffer(img.vertices.innerData);
+		__context.loadVertexBuffer(drawable.vertices.innerData);
 		
 		__context.generateIndexBuffer();
 		
-		__context.loadIndexBuffer(img.indices.innerData);
-		
-		
+		__context.loadIndexBuffer(drawable.indices.innerData);
 		
 		WebGL.depthFunc(WebGL.LESS);
 
-		var projection:Matrix = matrix;
-
-		//var projection:Matrix = img.matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
-
-		//img.matrix[12] = img.x;
-
-		//img.matrix[13] = img.y;
-
-		//projection.append(matrix);
-
-		WebGL.useProgram(img.profile.program.innerData);
+		WebGL.useProgram(drawable.profile.program.innerData);
 		
-		var loc = WebGL.getUniformLocation(img.profile.program.innerData, "matrix");
+		var matrixLocation = WebGL.getUniformLocation(drawable.profile.program.innerData, "matrix");
 
-		WebGL.uniformMatrix4fv(loc, false, projection);
-		
+		WebGL.uniformMatrix4fv(matrixLocation, false, matrix.getData());
+
 		__context.generateVertexBuffer();
 		
 		var offset:Int = 0;
 		
-		for (i in 0...img.profile.attributes.length) {
+		for (i in 0...drawable.profile.attributes.length) {
 
-			__context.setAttributePointer(img.profile.attributes[i].offset, img.profile.attributes[i].format, false, 5 * Float32Array.BYTES_PER_ELEMENT, offset * Float32Array.BYTES_PER_ELEMENT);
+			__context.setAttributePointer(drawable.profile.attributes[i].offset, drawable.profile.attributes[i].format, false,  drawable.profile.dataPerVertex * Float32Array.BYTES_PER_ELEMENT, offset * Float32Array.BYTES_PER_ELEMENT);
 			
-			offset += img.profile.attributes[i].format;
+			offset += drawable.profile.attributes[i].format;
 		}
 
 		offset = 1;
 
-		for (i in 0...img.textures.length) {
+		for (i in 0...drawable.textures.length) {
 
 			WebGL.activeTexture(WebGL.TEXTURE0);
 
-			WebGL.bindTexture(WebGL.TEXTURE_2D, img.textures[i].glTexture);
+			WebGL.bindTexture(WebGL.TEXTURE_2D, drawable.textures[i].glTexture);
 		}
 
-		__context.setSamplerState();
+		__context.setSamplerState(drawable.textureParams);
 
-		__context.setBlendFactors(img.blendFactors.source, img.blendFactors.destination);
+		__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
 
 		__context.generateIndexBuffer();
-		
-		if (renderToTexture) {
 
-			//__context.bindFrameBuffer();
-		}
-
-		__context.drawElements(0, img.__indicesToRender);
+		__context.drawElements(0, drawable.__indicesToRender);
 
 		WebGL.bindTexture(WebGL.TEXTURE_2D, null);
 	}
 
-	//** Getters and setters. **/
+	// ** Getters and setters. ** //
 
-	private function get_drawCalls():UInt
-	{
+	private function get_drawCalls():UInt {
+
 		return __drawCalls;
 	}
 	
-	override function set_height(value:Float):Float
-	{
+	override function set_height(value:Float):Float {
+
 		vertices.innerData[shadings["y"].positions[0]] = 0 - (originY * 2);
 		
 		vertices.innerData[shadings["y"].positions[1]] = 2 * (value - originY);
@@ -184,8 +158,8 @@ class Stage extends Drawable
 		return super.set_height(value);
 	}
 	
-	override function set_originX(value:Float):Float 
-	{
+	override function set_originX(value:Float):Float {
+
 		super.set_originX(value);
 		
 		width = __width;
@@ -193,17 +167,31 @@ class Stage extends Drawable
 		return __originX;
 	}
 	
-	override function set_originY(value:Float):Float 
-	{
+	override function set_originY(value:Float):Float {
+
 		super.set_originY(value);
 		
 		height = __height;
 		
 		return __originY;
 	}
+
+	override function set_x(value:Float):Float {
+
+		__shouldTransform = true;
+
+		return super.set_x(value);
+	}
+
+	override function set_y(value:Float):Float {
+
+		__shouldTransform = true;
+
+		return super.set_y(value);
+	}
 	
-	override function set_width(value:Float):Float
-	{
+	override function set_width(value:Float):Float {
+
 		vertices.innerData[shadings["x"].positions[0]] = 0 - (originX * 2);
 		
 		vertices.innerData[shadings["x"].positions[1]] = 0 - (originX * 2);

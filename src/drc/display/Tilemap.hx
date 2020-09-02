@@ -80,28 +80,26 @@ class Tilemap extends Drawable {
 			return tiles.insert(tile);
 		}
 		
-		public function restore(tile:Tile):Bool
+		public function restore(tile:Tile):Tile
 		{
-			if (tiles.restore(tile))
-			{
-				__updateIndices();
-				
-				return true;
-			}
+			var _tile:Tile = tiles.restore(tile);
+
+			if (_tile == null) return null;
 			
-			return false;
+			__updateIndices();
+
+			return _tile;
 		}
 		
-		public function restoreAt(index:Int):Bool
+		public function restoreAt(index:Int):Tile
 		{
-			if (tiles.restoreAt(index))
-			{
-				__updateIndices();
-				
-				return true;
-			}
+			var _tile:Tile = tiles.restoreAt(index);
+
+			if (_tile == null) return null;
 			
-			return false;
+			__updateIndices();
+
+			return _tile;
 		}
 		
 		public function recycle(tile:Tile):Bool

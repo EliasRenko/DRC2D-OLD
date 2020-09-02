@@ -1,15 +1,14 @@
 package cont.ui;
 
 import cont.ui.UiContainer;
-import cont.ui.UiForm;
 import drc.display.Tile;
 import drc.part.Group;
 
-class UiStrip extends UiContainer
+class UiStrip extends UiLayout
 {
 	//** Privates.
 	
-	/** @private */ private var __graphics:Group<Tile>;
+	/** @private **/ private var __graphics:Group<Tile>;
 	
 	public function new(width:Float, x:Float, y:Float) 
 	{
@@ -17,19 +16,20 @@ class UiStrip extends UiContainer
 		
 		__graphics = new Group<Tile>(3);
 		
-		//__graphics.addMemberAt(0, new DrcTile(null, UiForm.GRAPHIC_STRIP_0_ID));
-		//
-		//__graphics.addMemberAt(1, new DrcTile(null, UiForm.GRAPHIC_STRIP_1_ID));
-		//
-		//__graphics.addMemberAt(2, new DrcTile(null, UiForm.GRAPHIC_STRIP_2_ID));
-		
-		__graphics.addAt(0, new Tile(null, 39));
-		
-		__graphics.addAt(1, new Tile(null, 40));
-		
-		__graphics.addAt(2, new Tile(null, 41));
+		__type = 'strip';
+
+		__initGraphics();
 	}
 	
+	private function __initGraphics():Void {
+
+		__graphics.addAt(0, new Tile(null, 0));
+		
+		__graphics.addAt(1, new Tile(null, 1));
+		
+		__graphics.addAt(2, new Tile(null, 2));
+	}
+
 	override public function init():Void 
 	{
 		super.init();
@@ -42,10 +42,12 @@ class UiStrip extends UiContainer
 			
 			@:privateAccess __form.__tilemap.addTile(__graphics.members[i]);
 		}
-		
+
 		__graphics.members[1].offsetX = 30;
 		
-		__setWidth(__width);
+		__graphics.members[1].width = __width - 60;
+		
+		__graphics.members[2].offsetX = __width - 30;
 		
 		__setGraphicX();
 		
@@ -54,14 +56,9 @@ class UiStrip extends UiContainer
 	
 	override public function release():Void 
 	{
-		for (i in 0...__children.count) 
+		for (i in 0...__graphics.count) 
 		{
-			__children.members[i].release();
-		}
-		
-		for (j in 0...__graphics.count) 
-		{
-			@:privateAccess __form.__tilemap.removeTile(__graphics.members[j]);
+			@:privateAccess __form.__tilemap.removeTile(__graphics.members[i]);
 		}
 		
 		super.release();
@@ -142,22 +139,19 @@ class UiStrip extends UiContainer
 		return super.set_z(value);
 	}
 	
-	override function set_width(value:Float):Float 
-	{
+	override function set_width(value:Float):Float {
+
 		if (value < 48)
 		{
 			value = 48;
 		}
+
+		super.set_width(value);
 		
-		__setWidth(value);
+		__graphics.members[1].width = __width - 60;
 		
-		return super.set_width(value);
-	}
-	
-	private function __setWidth(value:Float):Void
-	{
-		__graphics.members[1].width = value - 60;
+		__graphics.members[2].offsetX = __width - 30;
 		
-		__graphics.members[2].offsetX = value - 30;
+		return value;
 	}
 }

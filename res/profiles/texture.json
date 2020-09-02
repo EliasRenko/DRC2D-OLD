@@ -35,5 +35,7 @@
 	
 	],
 	
+	"vertexShader": "texture.vert",
+
 	"fragmentShader": "texture.frag"
 }

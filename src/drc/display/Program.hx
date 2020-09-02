@@ -1,6 +1,6 @@
 package drc.display;
 
-import opengl.WebGL.GLProgram;
+import drc.core.GL.GLProgram;
 
 class Program 
 {

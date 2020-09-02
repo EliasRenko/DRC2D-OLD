@@ -1,8 +1,8 @@
 package drc.input;
 
-interface Mouse 
-{
-	//** Publics.
+interface Mouse {
+
+	// ** Publics.
 	
 	public var active(get, null):Bool;
 	
@@ -14,7 +14,7 @@ interface Mouse
 
 	public var y(get, null):Int;
 
-	//** Privates.
+	// ** Privates.
 	
 	/** @private **/ private var __active:Bool;
 
@@ -28,7 +28,7 @@ interface Mouse
 	
 	public function showCursor(value:Bool):Void;
 
-	//** Getters and setters.
+	// ** Getters and setters.
 	
 	private function get_active():Bool;
 	

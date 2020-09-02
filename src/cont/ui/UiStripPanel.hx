@@ -1,4 +1,4 @@
-package src.cont.ui;
+package cont.ui;
 
 import cont.ui.UiPanel;
 import cont.ui.UiControl;
@@ -26,7 +26,7 @@ class UiStripPanel extends UiPanel
 	{
 		super.release();
 	}
-	
+
 	override public function addControl(control:UiControl):UiControl 
 	{
 		var item:UiControl = super.addControl(new UiListItem(control, 4, __lastItem));
@@ -40,12 +40,7 @@ class UiStripPanel extends UiPanel
 			height = __lastItem + 4;
 		}
 		
-		return control;
-	}
-	
-	override public function removeControl(control:UiControl):Void 
-	{
-		removeControl(control);
+		return item;
 	}
 	
 	override public function dispose():Void

@@ -1,7 +1,5 @@
 package cont.ui;
 
-import drc.part.Group;
-
 class UiContainer extends UiLayout
 {
 	//** Publics.
@@ -10,14 +8,6 @@ class UiContainer extends UiLayout
 	
 	//** Privates.
 	
-	/** @private */ private var __children:Group<UiControl> = new Group<UiControl>();
-	
-	/** @private */ private var __collisionIndex:Int = -1;
-	
-	/** @private */ private var __scrollable:Bool = false;
-	
-	/** @private */ private var __scrollBar:UiScrollBar;
-	
 	/** @private */ private var __scrollValue:Float = 0;
 	
 	public function new(width:Float, height:Float, x:Float = 0, y:Float = 0, scrollable:Bool = false) 
@@ -25,72 +15,29 @@ class UiContainer extends UiLayout
 		//** Super.
 		
 		super(width, height, x, y);
-		
-		if (scrollable)
-		{
-			__scrollable = true;
-			
-			__scrollBar = new UiScrollBar(0, width - 28, 0);
-		}
 	}
 	
 	override public function init():Void 
 	{
 		super.init();
-		
-		if (__scrollable)
-		{
-			__scrollBar.z = -1;
-			
-			__initMember(__scrollBar);
-		}
-		
-		//** For each child...
-		
-		for (i in 0...__children.count)
-		{
-			//** Call the initChild method.
-			
-			__initMember(__children.members[i]);
-		}
 	}
 	
-	public function addControl(control:UiControl):UiControl
+	override public function addControl(control:UiControl):UiControl
 	{
-		//** Assign this as a parent to the control.
-		
-		@:privateAccess control.__parent = this; //** Define metadata privateAccess.
-		
-		//** If this is active...
-		
-		if (__form != null)
-		{
-			//** Call init method.
-			
-			__initMember(control);
-		}
-		
-		//** Return.
-		
-		return __children.add(control);
+		return super.addControl(control);
 	}
 	
-	public function removeControl(control:UiControl):Void
+	override public function removeControl(control:UiControl):Void
 	{
-		__children.remove(control);
+		super.removeControl(control);
 	}
 	
 	override public function release():Void 
 	{
-		for (i in 0...__children.count) 
-		{
-			__children.members[i].release();
-		}
-		
-		if (__scrollable)
-		{
-			__scrollBar.release();
-		}
+		// for (i in 0...__children.count) 
+		// {
+		// 	__children.__controls[i].release();
+		// }
 		
 		super.release();
 	}
@@ -104,21 +51,6 @@ class UiContainer extends UiLayout
 		__collisionIndex = -1;
 		
 		//** For every control...
-		
-		if (__scrollable)
-		{
-			__scrollBar.update();
-		}
-		
-		for (i in 0...__children.count)
-		{
-			if (__children.members[i] == null)
-			{
-				continue;
-			}
-			
-			__children.members[i].update();
-		}
 	}
 	
 	override public function updateCollision():Void 
@@ -129,74 +61,45 @@ class UiContainer extends UiLayout
 		
 		if (collide)
 		{
-			if (__scrollable)
-			{
-				__scrollBar.updateCollision();
+			// if (__scrollable)
+			// {
+			// 	__scrollBar.updateCollision();
 				
-				if (__scrollBar.collide)
-				{
-					if (__scrollBar.scrollUp)
-					{
-						__scrollValue -= 24;
+			// 	if (__scrollBar.collide)
+			// 	{
+			// 		if (__scrollBar.scrollUp)
+			// 		{
+			// 			__scrollValue -= 24;
 						
-						for (i in 0...__children.count)
-						{
-							//@:privateAccess __children.members[i].y -= 12;
+			// 			for (i in 0...__controls.count)
+			// 			{
+			// 				//@:privateAccess __children.__controls[i].y -= 12;
 							
-							@:privateAccess __children.members[i].__setOffsetY(y + __offsetY + __scrollValue);
-						}
+			// 				@:privateAccess __controls.members[i].__setOffsetY(y + __offsetY + __scrollValue);
+			// 			}
 						
-						return;
-					}
+			// 			return;
+			// 		}
 					
-					if (__scrollBar.scrollDown)
-					{
-						__scrollValue += 24;
+			// 		if (__scrollBar.scrollDown)
+			// 		{
+			// 			__scrollValue += 24;
 						
-						for (i in 0...__children.count)
-						{
-							//@:privateAccess __children.members[i].__setOffsetX(x + __offsetX + __scrollValue);
+			// 			for (i in 0...__controls.count)
+			// 			{
+			// 				//@:privateAccess __children.__controls[i].__setOffsetX(x + __offsetX + __scrollValue);
 							
-							@:privateAccess __children.members[i].__setOffsetY(y + __offsetY + __scrollValue);
+			// 				@:privateAccess __controls.members[i].__setOffsetY(y + __offsetY + __scrollValue);
 							
-							//__children.members[i].y += 10;
-						}
+			// 				//__children.__controls[i].y += 10;
+			// 			}
 						
-						return;
-					}
+			// 			return;
+			// 		}
 					
-					return;
-				}
-			}
-			
-			//** For every control...
-			
-			for (i in 0...__children.count)
-			{
-				__collisionIndex = i;
-
-				__children.members[i].updateCollision();
-				
-				// if (__children.members[i] == null)
-				// {
-				// 	continue;
-				// }
-				
-				if (__children.members[i].collide)
-				{
-					return;
-				}
-			}
-			
-			//** If right click...
-			
-			if (__allow)
-			{
-				if (__form.leftClick)
-				{
-					__form.selectedControl = this;
-				}
-			}
+			// 		return;
+			// 	}
+			// }
 		}
 	}
 	
@@ -210,46 +113,20 @@ class UiContainer extends UiLayout
 		super.__setMask(x, y, width, height);
 	}
 	
-	//** Getters and setters.
+	// ** Getters and setters.
 	
 	private function get_childrenCount():Int
 	{
-		return __children.count;
+		return __controls.count;
 	}
 	
 	override function set_visible(value:Bool):Bool 
-	{
-		if (__scrollable)
-		{
-			__scrollBar.visible = value;
-		}
-		
-		for (i in 0...__children.count)
-		{
-			//** Set the offsetX of the member.
-			
-			@:privateAccess __children.members[i].visible = value;
-		}
-		
+	{	
 		return super.set_visible(value);
 	}
 	
 	override function set_x(value:Float):Float 
 	{
-		//** For each child...
-		
-		for (i in 0...__children.count)
-		{
-			//** Set the offsetX of the member.
-			
-			@:privateAccess __children.members[i].__setOffsetX(value + __offsetX);
-		}
-		
-		if (__scrollable)
-		{
-			@:privateAccess __scrollBar.__setOffsetY(value + __offsetX);
-		}
-		
 		//** Return.
 		
 		return super.set_x(value);
@@ -257,20 +134,6 @@ class UiContainer extends UiLayout
 	
 	override function set_y(value:Float):Float 
 	{
-		//** For each child...
-		
-		for (i in 0...__children.count)
-		{
-			//** Set the offsetY of the member.
-			
-			@:privateAccess __children.members[i].__setOffsetY(value + __offsetY + __scrollValue);
-		}
-		
-		if (__scrollable)
-		{
-			@:privateAccess __scrollBar.__setOffsetY(value + __offsetY);
-		}
-		
 		//** Return.
 		
 		return super.set_y(value);
@@ -280,11 +143,11 @@ class UiContainer extends UiLayout
 	{
 		//** For each child...
 		
-		for (i in 0...__children.count)
+		for (i in 0...__controls.count)
 		{
 			//** Set the offsetX of the member.
 			
-			__children.members[i].z = value;
+			__controls.members[i].z = value;
 		}
 		
 		//** Return.
@@ -295,30 +158,10 @@ class UiContainer extends UiLayout
 	override function __setOffsetX(value:Float):Void 
 	{
 		super.__setOffsetX(value);
-		
-		for (i in 0...__children.count)
-		{
-			@:privateAccess __children.members[i].__setOffsetX(x + value);
-		}
-		
-		if (__scrollable)
-		{
-			@:privateAccess __scrollBar.__setOffsetX(x + value);
-		}
 	}
 	
 	override function __setOffsetY(value:Float):Void 
 	{
 		super.__setOffsetY(value);
-		
-		for (i in 0...__children.count)
-		{
-			@:privateAccess __children.members[i].__setOffsetY(y + value);
-		}
-		
-		if (__scrollable)
-		{
-			@:privateAccess __scrollBar.__setOffsetY(y + value);
-		}
 	}
 }

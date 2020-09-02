@@ -1,6 +1,6 @@
 package cont.ui;
 
-class UiList extends UiContainer
+class UiList<T:UiControl> extends UiLayout
 {
 	//** Publics.
 	
@@ -21,11 +21,11 @@ class UiList extends UiContainer
 	{
 		super.init();
 		
-		for (i in 0...__children.count) 
+		for (i in 0...__controls.count) 
 		{
-			__children.members[i].y = __lastItem;
+			__controls.members[i].y = __lastItem;
 			
-			__lastItem += __children.members[i].height;
+			__lastItem += __controls.members[i].height;
 			
 			height = __lastItem + 4;
 		}
@@ -36,11 +36,11 @@ class UiList extends UiContainer
 		super.release();
 	}
 	
-	public function addListItem(control:UiControl, onLeftClick:UiControl->Void = null, onRightClick:UiControl->Void = null):UiControl
+	public function addListItem(control:T):UiControl
 	{
 		//var item:UiControl = addControl(new UiListItem(control, 4, __lastItem, onLeftClick, onRightClick));
 		
-		var listItem:UiListItem = new UiListItem(control, 4, __lastItem, onLeftClick, onRightClick);
+		var listItem:UiListItem<T> = new UiListItem<T>(control, 4, __lastItem);
 		
 		addControl(listItem);
 		
@@ -88,13 +88,13 @@ class UiList extends UiContainer
 			//
 			//if (__scrollBar.scrollUp)
 			//{
-				//for (i in 0...__children.members.length) 
+				//for (i in 0...__children.__controls.length) 
 				//{
-					//if (__children.members[i] == null)
+					//if (__children.__controls[i] == null)
 					//{
 						//continue;
 						//
-						//__children.members[i].y -= 12;
+						//__children.__controls[i].y -= 12;
 					//}
 				//}
 				//
@@ -103,9 +103,9 @@ class UiList extends UiContainer
 			//
 			//if (__scrollBar.scrollDown)
 			//{
-				//for (i in 0...__children.members.length) 
+				//for (i in 0...__children.__controls.length) 
 				//{
-					//if (__children.members[i] == null)
+					//if (__children.__controls[i] == null)
 					//{
 						//
 						//
@@ -113,7 +113,7 @@ class UiList extends UiContainer
 						//
 						//
 						//
-						//__children.members[i].y += 12;
+						//__children.__controls[i].y += 12;
 					//}
 				//}
 				//

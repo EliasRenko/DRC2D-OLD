@@ -1,6 +1,7 @@
 package drc.backend.native.system;
 
-import sdl.Window;
+import drc.types.WindowEventType;
+import drc.core.EventDispacher;
 import drc.types.WindowEvent;
 import sdl.SDL;
 import drc.debug.Log;
@@ -11,40 +12,89 @@ class Window implements drc.system.Window
 {
 	/** Publics. **/
 	
+	public var fullscreen(get, set):Bool;
+
 	public var innerData:sdl.Window;
 	
 	public var height(get, null):Int;
 
+	public var onEvent:EventDispacher<drc.system.Window>;
+
 	public var onEventHandler:WindowEvent -> Void;
 	
 	public var width(get, null):Int;
+
+	public var x(get, null):Int;
+
+	public var y(get, null):Int;
 	
 	/** Privates. **/
-	
+
+	private var __fullscreen:Bool = false;
+
 	/**  **/
 
 	public function new() {
-		
+	
+		onEvent = new EventDispacher();
 	}
 	
 	public function showDialog(title:String, message:String):Void {
 		
 		SDL.showSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title, message, innerData);
 	}
-
-	public function onEvent(event:WindowEvent):Void {
-
-		if (onEventHandler == null)
-		{
-			return;
-		}
-		
-		onEventHandler(event);
-	}
 	
+	public function onEventExposed():Void {
+
+	}
+
+	public function onEventHidden():Void {
+		
+	}
+
+	public function onEventShown(data1:Int, data2:Int):Void {
+
+		trace(data1);
+
+		trace(data2);
+	}
+
+	public function onEventMoved(x:Int, y:Int):Void {
+		
+	}
+
+	public function onEventResized():Void {
+
+		onEvent.dispatch(this, RESIZED);
+	}
+
+	public function resize(width:Int, height:Int):Void {
+
+		SDL.setWindowSize(innerData, width, height);
+	}
+
 	//** Getters and setters.
 	
-	public function get_height():Int {
+	private function get_fullscreen():Bool {
+		
+		return __fullscreen;
+	}
+
+	private function set_fullscreen(value:Bool):Bool {
+
+		if (value) {
+
+			SDL.setWindowFullscreen(innerData, SDL_WINDOW_FULLSCREEN);
+		}
+		else {
+
+			SDL.setWindowFullscreen(innerData, 0);
+		}
+
+		return __fullscreen = value;
+	}
+
+	private function get_height():Int {
 
 		var size:SDLSize = {w:0, h:0};
 		
@@ -52,8 +102,26 @@ class Window implements drc.system.Window
 		
 		return size.h;
 	}
+
+	private function get_x():Int {
+
+		var position:SDLPoint = {x:0, y:0};
+
+		SDL.getWindowPosition(innerData, position);
+
+		return position.x;
+	}
+
+	private function get_y():Int {
+
+		var position:SDLPoint = {x:0, y:0};
+
+		SDL.getWindowPosition(innerData, position);
+
+		return position.y;
+	}
 	
-	public function get_width():Int {
+	private function get_width():Int {
 
 		var size:SDLSize = {w:0, h:0};
 		

@@ -1,22 +1,20 @@
 package cont.ui;
 
+import cont.ui.UiControl;
+import cont.ui.UiEventType;
 import drc.display.Tile;
 
-class UiListItem extends UiLayout
-{
-	//** Publics.
+class UiListItem<T:UiControl> extends UiLayout
+{	
+	// ** Publics.
+
+	// ** Privates.
 	
-	public var onLeftClickHandler:UiControl->Void;
+	/** @private **/ private var __control:T;
 	
-	public var onRightClickHandler:UiControl->Void;
+	/** @private **/ private var __graphic:Tile;
 	
-	//** Privates.
-	
-	/** @private */ private var __control:UiControl;
-	
-	/** @private */ private var __graphic:Tile;
-	
-	public function new(control:UiControl, x:Float = 0, y:Float = 0, onLeftClick:UiControl->Void = null, onRightClick:UiControl->Void = null) 
+	public function new(control:T, x:Float = 0, y:Float = 0) 
 	{
 		super(0, 24, x, y);
 		
@@ -25,23 +23,17 @@ class UiListItem extends UiLayout
 		//** Create a new graphic class.
 		
 		__graphic = new Tile(null, 11);
-		
-		//** Pass the left click function to it's variable counterpart.
-		
-		onLeftClickHandler = onLeftClick;
-		
-		//** Pass the right click function to it's variable counterpart.
-		
-		onRightClickHandler = onRightClick;
 	}
 	
 	override public function init():Void 
 	{
 		super.init();
 		
-		@:privateAccess __control.__parent = this;
+		//@:privateAccess __control.__parent = this;
 		
-		__initMember(__control);
+		//__initMember(__control);
+
+		addControl(__control);
 		
 		__width = __parent.width - 8;
 		
@@ -88,13 +80,13 @@ class UiListItem extends UiLayout
 		
 		if (__mask)
 		{
-			__graphic.setAttribute("maskX", __maskBox.x / 640);
+			// __graphic.setAttribute("maskX", __maskBox.x / 640);
 			
-			__graphic.setAttribute("maskY", __maskBox.y / 480);
+			// __graphic.setAttribute("maskY", __maskBox.y / 480);
 			
-			__graphic.setAttribute("maskW", __maskBox.width / 640);
+			// __graphic.setAttribute("maskW", __maskBox.width / 640);
 			
-			__graphic.setAttribute("maskH", __maskBox.height / 480);
+			// __graphic.setAttribute("maskH", __maskBox.height / 480);
 		}
 	}
 	
@@ -121,6 +113,8 @@ class UiListItem extends UiLayout
 	{
 		super.update();
 		
+		__control.update();
+
 		__graphic.visible = false;
 	}
 	
@@ -138,21 +132,10 @@ class UiListItem extends UiLayout
 			
 			__form.cursorId = 4;
 			
-			__control.updateCollision();
-			
 			//** If left click...
 			
 			if (__form.leftClick)
 			{
-				__form.selectedControl = this;
-				
-				if (onLeftClickHandler == null)
-				{
-					return;
-				}
-				
-				onLeftClickHandler(__control);
-				
 				return;
 			}
 			
@@ -160,25 +143,25 @@ class UiListItem extends UiLayout
 			
 			if (__form.rightClick)
 			{
-				__form.selectedControl = this;
-				
-				if (onRightClickHandler == null)
-				{
-					return;
-				}
-				
-				onRightClickHandler(__control);
+				//__form.selectedControl = this;
 				
 				return;
 			}
 		}
 	}
 	
+	override function __onClick():Void {
+
+		onEvent.dispatch(__control, ON_CLICK);
+	}
+
 	//** Getters and setters.
 	
 	override function set_visible(value:Bool):Bool 
 	{
 		__control.visible = value;
+
+		__graphic.visible = false;
 		
 		return super.set_visible(value);
 	}

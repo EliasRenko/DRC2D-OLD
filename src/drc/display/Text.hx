@@ -1,20 +1,20 @@
 package drc.display;
 
 import drc.display.Tile;
+import drc.display.TextAlign;
 
 class Text extends Graphic
 {
 	//** Publics.
 	
-	public var align(get, set):UInt;
+	public var align(get, set):TextAlign;
 	
 	public var parent(get, set):Charmap;
 	
-	/**
-	 * The 
-	 */
 	public var fieldWidth(get, set):Float;
-	
+
+	public var heading(get, set):UInt;
+
 	/**
 	 * The space between lines.
 	 */
@@ -23,8 +23,9 @@ class Text extends Graphic
 	/**
 	 * The number of lines the text has.
 	 */
-	@:isVar
-	public var lines(get, null):Int; //** Define metadata isVar.
+	public var lines(get, null):Int;
+
+	public var size(get, null):UInt;
 	
 	/**
 	 * The space between words.
@@ -34,7 +35,6 @@ class Text extends Graphic
 	/**
 	 * The string value of the text.
 	 */
-	@:isVar
 	public var text(get, set):String; //** Define metadata isVar.
 	
 	/**
@@ -43,20 +43,21 @@ class Text extends Graphic
 	public var tracking:Int = 1;
 	
 	/**
-	 * The y position of the text in space.
+	 * Wordwrap.
 	 */
-	@:isVar
-	public var wordwrap:Bool = false; //** Define metadata isVar.
+	public var wordwrap(get, set):Bool;
 	
-	//** Privates.
+	// ** Privates.
 	
-	/** @private */ private var __align:UInt = 1;
+	/** @private */ private var __align:UInt = 0;
 	
 	/** @private */ private var __fieldWidth:Float = 300;
+
+	/** @private */ private var __font:String;
 	
 	/** @private */ private var __lines:Int = 0;
 	
-	/** @private */ public var __characters:Array<Tile> = new Array<Tile>();
+	/** @private */ public var __characters:Array<Character> = new Array<Character>();
 	
 	/** @private */ private var __text:String = "";
 	
@@ -65,12 +66,20 @@ class Text extends Graphic
 	/** @private */ private var __lineBreak:Array<UInt> = new Array<UInt>();
 	
 	/** @private */ private var __lineStart:Array<Float> = new Array<Float>();
+
+	/** @private */ private var __lineSize:Array<Float> = new Array<Float>();
 	
 	/** @private */ private var __transition:UInt = 4;
-	
-	public function new(parent:Charmap, value:String, x:Float = 0, y:Float = 0) 
+
+	/** @private **/ private var __wordwrap:Bool = false;
+
+	/** @private **/ private var __heading:UInt = 0;
+
+	public function new(parent:Charmap, value:String, heading:UInt, x:Float = 0, y:Float = 0) 
 	{
 		super(x, y);
+
+		__heading = heading;
 
 		if (parent == null) {
 
@@ -83,24 +92,33 @@ class Text extends Graphic
 		
 		text = value;
 		
-		if (parent != null)
-		{
-			tracking = parent.defaultKerning;
-			
-			return;
+		tracking = parent.defaultKerning;
+	}
+
+	override function init() {
+
+		super.init();
+
+		if (parent == null) {
+
+			text = __text;
 		}
-		
-		tracking = 1;
 	}
 	
 	public function clear():Void
 	{
-		for (i in 0...__characters.length)
-		{
-			parent.tiles.pop();
-			
+		var i = __characters.length - 1;
+
+		while(i >= 0) {
+
+			__characters[i].__remove();
+
 			__characters.pop();
+		
+			i --;
 		}
+
+		__text = '';
 	}
 	
 	// ** Getters and setters.
@@ -112,7 +130,11 @@ class Text extends Graphic
 	
 	private function set_align(value:UInt):UInt
 	{
-		return __align = value;
+		__align = value;
+
+		setPosition();
+
+		return value;
 	}
 	
 	private function get_fieldWidth():Float
@@ -144,8 +166,6 @@ class Text extends Graphic
 		for (i in 0...__characters.length)
 		{
 			__characters[i].setAttribute(name, value);
-			
-			//trace("AT");
 		}
 	}
 
@@ -169,7 +189,6 @@ class Text extends Graphic
 		}
 	}
 	
-	@:access(drc.graphics.DrcCharMap) //** Define metadata access.
 	private function setPosition():Void
 	{
 		#if debug // ------
@@ -187,11 +206,30 @@ class Text extends Graphic
 		
 		#end // ------
 		
+		if (parent == null) return;
+
 		__lines = 0;
 		
-		var lineX:Float = __lineStart[__lines];
+		var lineX:Float = 0;
 		
-		
+		switch (__align) 
+		{
+			case LEFT:	
+			
+				lineX = __lineStart[__lines];
+
+			case CENTER:
+
+				lineX = Math.round((__fieldWidth - __lineSize[__lines]) / 2);
+
+				//__lineStart.push(Math.round(((fieldWidth - trueWidth) + spacing) / 2));
+
+			case RIGHT:
+
+			default:
+				
+		}
+
 		//var lineX:Float = 0;
 		
 		var lineY:Float = 0;
@@ -206,7 +244,7 @@ class Text extends Graphic
 		{
 			var track:Int = 0;
 			
-			if (wordwrap)
+			if (__wordwrap)
 			{
 				if (i == __lineBreak[__lines])
 				{
@@ -214,12 +252,18 @@ class Text extends Graphic
 					
 					switch (__align) 
 					{
-						case 1:	
+						case LEFT:	
 						
 							lineX = __lineStart[__lines];
-							
-							//trace(lineX);
-							
+
+						case CENTER:
+
+							lineX = Math.round((__fieldWidth - __lineSize[__lines]) / 2);
+
+							//__lineStart.push(Math.round(((fieldWidth - trueWidth) + spacing) / 2));
+
+						case RIGHT:
+
 						default:
 							
 					}
@@ -277,32 +321,117 @@ class Text extends Graphic
 				
 			if (tile.id == 32)
 			{
-				tile.width = spacing;
+				//tile.width = spacing;
 				
-				tile.offsetY += 12;
+				//tile.offsetY += 12;
 				
-				track = 0;
+				//track = 0;
 			}
 			
 			lineX += tile.width + track;
 		}
 		
-		if (!wordwrap)
+		if (!__wordwrap)
 		{
 			__fieldWidth = lineX;
 		}
 	}
 	
-	@:access(drc.graphics.DrcCharMap) //** Define metadata access.
-	private function set_text(text:String):String
+	private function setPositionNew():Void {
+
+		var _length:Int = 0;
+
+		var _positions:Array<Int> = [];
+
+		var _trueWidth:Float;
+
+		var _width:Float = 0;
+
+		var _word:UInt = 0;
+
+		var _y:Int = 0;
+
+		for (i in 0...__characters.length) {
+
+			_width += __characters[i].width;
+
+			if (__characters[i].char == ' ') {
+
+				_trueWidth = _width;
+
+				_word = -1;
+			}
+
+			_word ++;
+
+			if (_width > __fieldWidth || i == __characters.length - 1) {
+
+				var _x:Float;
+
+				switch (__align) {
+
+					case LEFT:
+
+						_x = 0;
+
+						for (j in _length...i) {
+
+							__characters[j].x = __x;
+
+							__characters[j].y = __y;
+
+							__characters[j].z = __z;
+
+							__characters[j].offsetX = _x;
+
+							__characters[j].offsetX = _y;
+
+							_x += 30;
+						}
+
+					case _:
+				}
+
+				_length = i;
+
+				_trueWidth = 0;
+
+				_y += leading;
+			}
+		}
+	}
+
+	private function set_text(value:String):String
 	{
-		if (__characters.length > text.length)
+		if (value == '' || value == null) {
+
+			clear();
+
+			return __text = '';
+		}
+
+		__text = value;
+
+		if (parent == null) {
+
+			return value;
+		}
+
+		if (__characters.length > value.length)
 		{
-			for (g in 0...__characters.length - text.length)
-			{
-				parent.tiles.pop();
-				
+			var num = __characters.length - value.length;
+
+			var i = __characters.length - 1;
+
+			var count = __characters.length - num;
+
+			while (i >= count) {
+
+				__characters[i].__remove();
+
 				__characters.pop();
+			
+				i --;
 			}
 		}
 		
@@ -316,7 +445,7 @@ class Text extends Graphic
 			__lineStart.pop();
 		}
 		
-		__text = text;
+		// ** ---
 		
 		var lineWidth:Float = 0;
 		
@@ -326,43 +455,39 @@ class Text extends Graphic
 		
 		var word:Int = -1;
 		
+		//__lineBreak.push(0);
+
 		for (i in 0...__text.length)
 		{
 			var id:UInt = __text.charCodeAt(i);
 			
-			var tile:Tile;
+			var char:Character;
 			
 			if (i > __characters.length - 1)
 			{
-				tile = new Tile(parent, id, 0, 0);
+				char = new Character(parent, id + (__heading * 100));
 				
+				char.char = __text.charAt(i);
+
+				char.scaleX = scaleX;
+
+				char.scaleY = scaleY;
+
 				if (__active) {
 
-					parent.addTile(tile);
+					parent.addTile(char);
 				}
 
-				//tile.add();
-				
-				__characters.push(tile);
+				__characters.push(char);
 			}
 			else 
 			{
-				tile = __characters[i];
+				char = __characters[i];
 				
-				tile.id = id;
+				char.id = id + (__heading * 100);
 			}
 			
-			//tile.x = __x;
-			
-			//tile.y = __y;
-			
-			tile.visible = __visible;
-			
-			//tile = new DrcTile(__parent, id);
-				//
-				////__parent.addTile(tile);
-				//
-				//__characters[i] = __parent.addTile(tile);
+			char.visible = __visible;
 			
 			track = 0;
 			
@@ -372,50 +497,44 @@ class Text extends Graphic
 			
 			var next:UInt = __text.charCodeAt(i + 1);
 			
-			if (next != 32)
-			{
-				if (parent.useKerningPairs)
-				{
-					//if (parent.kernings[id] != null)
-					//{
-						//track = parent.kernings[id].getValue(next);
-					//}
-					//
-					//if (track == null)
-					//{
-						//track = 0;
-					//}
-					//
-					//trace("Kerning Pairs"); //TO-DO:KERNINGS
-				}
-				
-				track += tracking;
-				
-				//track += tracking;
-			}
-			else
-			{
-				//track += tracking;
-			}
-			
-			if (id == 32)
-			{
+			if (id == 32) {
+
 				word = -1;
 				
-				tile.width = spacing;
+				char.width = spacing;
 				
-				tile.height = 4;
+				char.height = 16;
 				
 				//tile.setAttribute("r", 0.2);
 				//tile.setAttribute("g", 0.2); // DEBUG!!
 				
-				trueWidth = lineWidth + spacing;
+				trueWidth = lineWidth;
 				//trueWidth = lineWidth;
-				
-				track = 0;
+			}
+			else {
+
+				if (parent != null) {
+
+					if (parent.useKerningPairs)
+					{
+						//if (parent.kernings[id] != null)
+						//{
+							//track = parent.kernings[id].getValue(next);
+						//}
+						//
+						//if (track == null)
+						//{
+							//track = 0;
+						//}
+						//
+						//trace("Kerning Pairs"); //TO-DO:KERNINGS
+					}
+				}
+
+				track += tracking;
 			}
 			
-			lineWidth += tile.width + track;
+			lineWidth += char.width + track;
 			
 			if (lineWidth > __fieldWidth)
 			{
@@ -425,7 +544,9 @@ class Text extends Graphic
 				//__lineStart.push((fieldWidth - trueWidth) + spacing);
 				//__lineStart.push(Math.round(((fieldWidth - trueWidth) + spacing) / 2));
 				
-				lineWidth = lineWidth - trueWidth;
+				__lineSize.push(trueWidth);
+
+				lineWidth = lineWidth - (trueWidth + spacing + tracking);
 				
 				var start:Int = 0;
 				
@@ -449,33 +570,41 @@ class Text extends Graphic
 				
 				//__lineStart.push(start);
 			}
-			
-			
-			
-			
-			//** Add the tile to it's parent.
 		}
 		
 		__lineStart.push(0);
 		//__lineStart.push((fieldWidth - lineWidth));
 		//__lineStart.push(Math.round(((fieldWidth - lineWidth)) / 2));
 		
+		__lineSize.push(lineWidth);
+
 		setPosition();
-		
-		//trace(__lineStart);
-		//trace(__lineStart);
-		//trace(__characters.length);
-		for (w in 0...__characters.length)
-		{
-			//trace(__characters[w].id);
-		}
-		
+
 		return __text;
 	}
-	
+
+	private function get_heading():UInt {
+		
+		return __heading;
+	}
+
+	private function set_heading(value:UInt):UInt {
+		
+		__heading = value;
+
+		text = __text;
+
+		return __heading;
+	}
+
 	override function get_height():Float {
 
 		return 24;
+	}
+
+	private function get_size():UInt {
+
+		return __parent.variants[__heading];
 	}
 
 	private function get_parent():Charmap
@@ -515,6 +644,20 @@ class Text extends Graphic
 		
 		return __fieldWidth;
 	}
+
+	private function get_wordwrap():Bool {
+
+		return __wordwrap;
+	}
+
+	private function set_wordwrap(value:Bool):Bool {
+		
+		__wordwrap = value;
+
+		setPosition();
+
+		return value;
+	}
 	
 	override private function set_x(value:Float):Float
 	{
@@ -544,5 +687,17 @@ class Text extends Graphic
 		}
 		
 		return __z = value;
+	}
+}
+
+private class Character extends Tile {
+	
+	// ** Publics.
+
+	public var char:String;
+
+	public function new(parent:Charmap, id:Int) {
+
+		super(parent, id);
 	}
 }

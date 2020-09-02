@@ -1,88 +1,212 @@
 package drc.core;
 
-class Promise<T>
-{
-	// ** Publics.
+import haxe.Timer;
 
-	public var result:Dynamic;
+class Promise<T> {
 
-	public var state:PromiseState;
-	
-	// ** Privates.
+    // ** Publics.
 
-	private var fulfill_reactions: Array<Dynamic>;
+    public var isComplete(get, null):Bool;
 
-	private var reject_reactions: Array<Dynamic>;
-	
-    private var settle_reactions: Array<Dynamic>;
+    public var state(get, null):PromiseState;
 
-	public function new<T>(func:T) {
+    public var result(get, null):T;
 
-		state = PENDING;
+    public var time(get, null):Float;
 
-		fulfill_reactions = [];
+    // ** Privates.
 
-		reject_reactions = [];
-		
-		settle_reactions = [];
-		
-		Promises.queue(function() {
+    /** @private **/ private var __completeListeners:EventDispacher<T>;
 
-			
-		});
-	}
-}
+    /** @private **/ private var __isComplete:Bool = false;
 
-class Promises {
+    /** @private **/ private var __state:PromiseState = ON_QUEUE;
 
-	static var calls: Array<Dynamic> = [];
+    /** @private **/ private var __result:T;
 
-    static var defers: Array<{f:Dynamic,a:Dynamic}> = [];
+    /** @private **/ private var __queuedPromise:Promise<T>;
 
-        /** Call this once when you want to propagate promises */
-    public static function step() {
+    /** @private **/ private var __funcToRun:((T)->Void, ()->Void)->Void;
 
-        next();
+    /** @private **/ private var __time:Float = 0;
 
-        while(defers.length > 0) {
+    public function new(func:((T)->Void, ()->Void)->Void, shoudlRun:Bool = true) {
 
-			var defer = defers.shift();
-			
-			defer.f(defer.a);
+        __funcToRun = func;
+
+        if (shoudlRun) {
+            
+            run();
+
+            return;
+        }
+    }
+
+    public function run():Void {
+
+        __time = Timer.stamp();
+
+        if (__state == ON_QUEUE) {
+
+            __state = PENDING;
+
+            __funcToRun(__resolve, __reject);
+        }
+    }
+
+    public static function all<U>(promises:Array<Promise<U>>):Promise<Array<U>> {
+
+        var _count:Int = 0;
+
+        var _results:Array<U> = [];
+
+        return new Promise<Array<U>>(function(resolve, reject) {
+        
+            var _resolve = function(index:Int, result:U):Void {
+
+                _count ++;
+
+                _results[index] = result;
+
+                if (_count == promises.length) {
+
+                    resolve(_results);
+                }
+            }
+
+            var _reject = function():Void {
+
+            }
+
+            for (i in 0...promises.length) {
+
+                //promises[i].then(_resolve, _reject)
+
+                if (promises[i] == null) {
+
+                    _resolve(i, null);
+
+                    continue;
+                }
+
+                promises[i].onComplete(function(result:U, type:UInt) {
+
+                    _resolve(i, result);
+                });
+
+                // ** On error.
+            }
+
+            //resolve(new Array<U>());
+        });
+    }
+
+    public function onComplete(listener:(T, UInt)->Void):Promise<T> {
+
+        if (listener == null) return this;
+
+        if (__state == COMPLETE) {
+
+            listener(__result, 0);
+
+            if (__queuedPromise != null) {
+
+                __queuedPromise.run();
+            }
+        }
+        else if (__state == PENDING) {
+
+            if (__completeListeners == null) {
+
+                __completeListeners = new EventDispacher();
+            }
+
+            __completeListeners.add(listener, 0);
         }
 
-    } //
+        return this;
+    }
 
-        /** Handle the next job in the queue if any */
-    public static function next() {
+    public function then<U>(func:((T)->Void, ()->Void)->Void):Promise<T> {
 
-        if(calls.length > 0) (calls.shift())();
-    } //
+        // func:((T)->Void, ()->Void)->Void
 
-        /** Defer a call with an argument to the next step */
-	public static function defer<T,T1>(f:T, ?a:T1) {
+        // public function then<U>(func:(T)->Promise<U>):Promise<U> {
 
-		if(f == null) return;
-		
-        defers.push({f:f, a:a});
-    } //
+        switch(__state) {
 
-        /** Queue a job to be executed in order */
-	public static function queue<T>(f:T) {
+            case COMPLETE:
 
-		if(f == null) return;
-		
-        calls.push(f);
-    } //
+                return new Promise<T>(func);
+
+            case PENDING:
+
+                return __queuedPromise = new Promise<T>(func, false);
+
+            case REJECTED:
+
+                return null;
+
+            case _:
+
+                throw 'ERROR';
+        }
+    }
+
+    public function progress():Void {
+        
+    }
+
+    private function __resolve(result:T):Void {
+
+        __time = Timer.stamp() - __time;
+
+        __state = COMPLETE;
+
+        //__isComplete = true;
+
+        __result = result;
+
+        if (__completeListeners == null) return;
+
+        __completeListeners.dispatch(__result, 0);
+    }
+
+    private function __reject():Void {
+
+    }
+
+    // ** Getters and setters.
+
+    private function get_isComplete():Bool {
+
+        return __isComplete;
+    }
+
+    private function get_state():PromiseState {
+
+        return __state;
+    }
+
+    private function get_result():T {
+        
+        return __result;
+    }
+
+    private function get_time():Float {
+
+        return __time;
+    }
 }
 
 @:enum
 abstract PromiseState(Int) from Int to Int {
         
-    var PENDING = 0;
-        
-    var FULFILLED = 1;
-        
-    var REJECTED = 2;
+    var ON_QUEUE = 0;
 
+    var PENDING = 1;
+        
+    var COMPLETE = 2;
+        
+    var REJECTED = 3;
 }

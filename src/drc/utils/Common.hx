@@ -5,10 +5,15 @@ import drc.system.Input;
 import drc.system.Window;
 import drc.display.Stage;
 import drc.utils.Assets;
+import drc.utils.Res;
 
-class Common 
-{
+class Common {
+
+	#if cpp
+
 	public static var assets:Assets;
+
+	#end
 
 	public static var stage:Stage;
 
@@ -17,4 +22,6 @@ class Common
 	public static var input:Input;
 
 	public static var window:Window;
+
+	public static var res:Res;
 }

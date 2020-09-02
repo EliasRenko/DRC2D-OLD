@@ -33,6 +33,19 @@ class Object
 	{
 		
 	}
+
+	public function setProperty(name:String, value:Dynamic):Bool {
+
+		//var _fields:Array<String> = Reflect.fields(this);
+
+		//var _className = Type.getClassName(Type.getClass(this));
+
+		//var _field:Dynamic = Reflect.field(this, name);
+
+		//Reflect.setField(this, _field, value);
+		
+		return false;
+	}
 	
 	//** Getters and setters.
 	

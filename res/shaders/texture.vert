@@ -1,14 +1,13 @@
-attribute vec3 aPosition;
+attribute vec3 location;
 attribute vec2 uv;
 
 varying vec2 out_uv;
 
-uniform mat4 uMatrix;
-uniform mat4 modelview;
+uniform mat4 matrix;
 
 void main(void)
-{
-	gl_Position = uMatrix * modelview * vec4(aPosition, 1.0);
+{	
+	out_uv = uv;
 
-	uv_out = uv;
+	gl_Position = matrix * vec4(location.xyz, 1);
 }

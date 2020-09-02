@@ -1,5 +1,10 @@
 package drc.utils;
 
+import haxe.io.UInt8Array;
+import drc.buffers.Uint8Array;
+#if cpp
+
+import sys.io.File;
 import drc.display.Region;
 import drc.display.Tileset;
 import stb.TrueType.StbBakedFont;
@@ -12,7 +17,7 @@ import sdl.SDL;
 import drc.debug.Log;
 import sdl.RWops;
 import haxe.io.Bytes;
-import haxe.io.UInt8Array;
+//import haxe.io.UInt8Array;
 import drc.display.Program;
 import haxe.Json;
 import drc.display.AttributeFormat;
@@ -46,6 +51,31 @@ class Resources
 		}
 		
         return path;
+	}
+
+	public static function getDirectory(path:String):Array<String> {
+
+		if (FileSystem.exists(SDL.getBasePath() + '/' + path)) {
+
+			return FileSystem.readDirectory(SDL.getBasePath() + '/' + path);
+		}
+
+		return null;
+	}
+
+	public static function getJson(path:String):Dynamic {
+		
+		if (FileSystem.exists(SDL.getBasePath() + '/' + path)) {
+
+			return Json.parse(loadText(path));
+		}
+
+		return null;
+	}
+
+	public static function saveText(path:String, text:String):Void {
+
+		File.saveContent(SDL.getBasePath() + '/' + path, text);
 	}
 	
 	public static function handle(path:String, ?mode:String = "rb"):FileHandle
@@ -160,13 +190,15 @@ class Resources
 			_data = stb.Image.load(SDL.getBasePath() + 'res/graphics/grid_mt.png', 0);
 		}
 
-		_texture = new Texture(null);
+		//_texture = new Texture(UInt8Array.fromBytes(Bytes.ofData(_data.bytes)), _data.comp, _data.w, _data.h);
 
-		trace('COMP:' + _data.comp);
+		_texture = new Texture(UInt8Array.fromBytes(Bytes.ofData(_data.bytes)), _data.comp, _data.w, _data.h);
 
 		//_texture.uploadFont(_data.w, _data.h, _data.bytes);
 
-		_texture.upload(_data);
+
+		
+		//_texture.upload(_data.bytes, _data.w, _data.h);
 
 		return _texture;
 	}
@@ -186,9 +218,11 @@ class Resources
 			_data = stb.Image.load(SDL.getBasePath() + 'res/graphics/grid_mt.png', 0);
 		}
 
-		trace('COMP:' + _data.comp);
+		//trace('COMP:' + _data.comp);
 
-		_texture = new Texture(_data);
+		//Uint8Array.fromBytes(Bytes.ofData
+
+		_texture = new Texture(UInt8Array.fromBytes(Bytes.ofData(_data.bytes)), _data.comp, _data.w, _data.h);
 
 		return _texture;
 	}
@@ -416,7 +450,8 @@ class Resources
 		
 		if (WebGL.getProgramParameter(glProgram, WebGL.LINK_STATUS) == 0) {
 			
-            throw "Unable to link the shader program: " + WebGL.getProgramInfoLog(glProgram);
+
+			throw "Unable to link the shader program: " + WebGL.getProgramInfoLog(glProgram);
         }
 
 		for (uniformCount in 0...profile.uniforms.length) 
@@ -529,3 +564,5 @@ class Resources
 
     } //file_read
 }
+
+#end

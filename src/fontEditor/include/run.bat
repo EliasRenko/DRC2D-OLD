@@ -1,0 +1,2 @@
+start /d C:\Users\Renko\Documents\Libraries\drc2d\src\fontEditor\include\ msdfgen.exe msdf -font C:\Users\Renko\Documents\Libraries\drc2d\src\fontEditor\include\nokiafc22.ttf 'M' -o msdf.png -size 32 32 -pxrange 4 -autoframe -testrender render.png 1024 1024
+PAUSE

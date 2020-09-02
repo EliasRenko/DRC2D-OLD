@@ -1,5 +1,7 @@
 package drc.utils;
 
+#if cpp
+
 import drc.backend.native.data.Texture;
 import sys.FileSystem;
 import stb.Image;
@@ -58,7 +60,9 @@ class Assets {
 
         var _texture = cast(members.get(name), __Texture);
 
-        return new Texture(_texture.data);
+        //return new Texture(_texture.data);
+
+        return null;
     }
 
     public function add(name:String, type:AssetType):Void {
@@ -99,3 +103,5 @@ private class __Texture extends __Asset {
         this.data = data;
     }
 }
+
+#end

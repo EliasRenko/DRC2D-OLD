@@ -1,0 +1,124 @@
+{
+	"name": "ui",
+	
+	"regions":[
+	
+	{ "id": 0, "name": "menuStrip_0", "dimensions":[52, 530, 16, 16] },
+	
+	{ "id": 1, "name": "menuStrip_1", "dimensions":[68, 530, 16, 16] },
+	
+	{ "id": 2, "name": "menuStrip_2", "dimensions":[84, 530, 16, 16] },
+	
+	{ "id": 3, "name": "cursor_0", "dimensions":[0, 112, 58, 58] },
+	
+	{ "id": 4, "name": "cursor_1", "dimensions":[60, 112, 58, 58] },
+	
+	{ "id": 5, "name": "cursor_2", "dimensions":[120, 112, 58, 58] },
+	
+	{ "id": 6, "name": "cursor_3", "dimensions":[180, 112, 58, 58] },
+	
+	{ "id": 7, "name": "cursor_4", "dimensions":[240, 112, 58, 58] },
+	
+	{ "id": 8, "name": "cursor_4", "dimensions":[0, 172, 32, 32] },
+	
+	{ "id": 9, "name": "checkbox_0", "dimensions":[0, 264, 32, 32] },
+	
+	{ "id": 10, "name": "checkbox_1", "dimensions":[34, 264, 32, 32] },
+	
+	{ "id": 11, "name": "selection_0", "dimensions":[622, 0, 24, 24] },
+	
+	{ "id": 12, "name": "caret_0", "dimensions":[646, 0, 2, 24] },
+	
+	{ "id": 13, "name": "groupBox_0", "dimensions":[646, 2, 2, 2] }, 
+	
+	{ "id": 14, "name": "magnifier_0", "dimensions":[34, 172, 32, 32] },
+	
+	{ "id": 15, "name": "brush_0", "dimensions":[68, 172, 32, 32] }, 
+	
+	{ "id": 16, "name": "clip_0", "dimensions":[102, 172, 32, 32] },
+	
+	
+	{ "id": 17, "name": "button_off_0", "dimensions":[0, 0, 6, 30] },
+	
+	{ "id": 18, "name": "button_off_1", "dimensions":[6, 0, 16, 30] },
+	
+	{ "id": 19, "name": "button_off_2", "dimensions":[22, 0, 6, 30] },
+	
+	{ "id": 20, "name": "button_on_0", "dimensions":[28, 0, 6, 30] },
+	
+	{ "id": 21, "name": "button_on_1", "dimensions":[34, 0, 16, 30] },
+	
+	{ "id": 22, "name": "button_on_2", "dimensions":[50, 0, 6, 30] },
+	
+	{"id": 23, "name": "textfield_0", "dimensions":[56, 0, 6, 30] },
+	
+	{ "id": 24, "name": "textfield_1", "dimensions":[62, 0, 16, 30] },
+	
+	{ "id": 25, "name": "textfield_2", "dimensions":[78, 0, 6, 30] },
+	
+	{"id": 26, "name": "panel_0", "dimensions":[2, 530, 16, 16] },
+	
+	{ "id": 27, "name": "panel_1", "dimensions":[18, 530, 16, 16] },
+	
+	{ "id": 28, "name": "panel_2", "dimensions":[34, 0, 16, 16] },
+	
+	{"id": 29, "name": "panel_3", "dimensions":[2, 546, 16, 16] },
+	
+	{ "id": 30, "name": "panel_4", "dimensions":[18, 546, 16, 16] },
+	
+	{ "id": 31, "name": "panel_5", "dimensions":[34, 546, 16, 16] },
+	
+	{"id": 32, "name": "panel_6", "dimensions":[2, 562, 16, 16] },
+	
+	{ "id": 33, "name": "panel_7", "dimensions":[18, 562, 16, 16] },
+	
+	{ "id": 34, "name": "panel_8", "dimensions":[34, 562, 16, 16] },
+	
+	{ "id": 35, "name": "tools", "dimensions":[0, 296, 136, 68] },
+	
+	{ "id": 36, "name": "selectionTool_0", "dimensions":[0, 172, 32, 32] },
+	
+	{ "id": 37, "name": "manipulationTool_0", "dimensions":[136, 172, 32, 32] },
+	
+	{ "id": 38, "name": "tileTool_0", "dimensions":[170, 172, 32, 32] },
+	
+	{ "id": 39, "name": "strip_0", "dimensions":[382, 30, 30, 30] },
+	
+	{ "id": 40, "name": "strip_1", "dimensions":[412, 30, 30, 30] },
+	
+	{ "id": 41, "name": "strip_2", "dimensions":[442, 30, 30, 30] },
+	
+	{ "id": 42, "name": "scroll_0", "dimensions":[472, 0, 28, 30] },
+	
+	{ "id": 43, "name": "scroll_1", "dimensions":[500, 0, 28, 30] },
+
+	{ "id": 44, "name": "close_window", "dimensions":[72, 42, 16, 14] },
+
+	{"id": 45, "name": "panel_0_alt", "dimensions":[112, 30, 30, 30] },
+	
+	{ "id": 46, "name": "panel_1_alt", "dimensions":[142, 30, 30, 30] },
+	
+	{ "id": 47, "name": "panel_2_alt", "dimensions":[172, 30, 30, 30] },
+	
+	{"id": 48, "name": "panel_3_alt", "dimensions":[202, 30, 30, 30] },
+	
+	{ "id": 49, "name": "panel_4_alt", "dimensions":[232, 30, 30, 30] },
+	
+	{ "id": 50, "name": "panel_5_alt", "dimensions":[262, 30, 30, 30] },
+	
+	{"id": 51, "name": "panel_6_alt", "dimensions":[292, 30, 30, 30] },
+	
+	{ "id": 52, "name": "panel_7_alt", "dimensions":[322, 30, 30, 30] },
+	
+	{ "id": 53, "name": "panel_8_alt", "dimensions":[352, 30, 30, 30] },
+
+	{ "id": 54, "name": "close", "dimensions":[204, 172, 15, 14] },
+
+	{ "id": 55, "name": "maximaze", "dimensions":[220, 172, 16, 14] },
+
+	{ "id": 56, "name": "fold", "dimensions":[236, 172, 16, 14] },
+
+	{ "id": 57, "name": "slider", "dimensions":[622, 0, 12, 24] }
+	
+	]
+}

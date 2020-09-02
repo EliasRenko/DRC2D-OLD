@@ -19,13 +19,36 @@
 	
 	{"name": "v"}]
 		
-	}
+	},
+
+	{"name": "color", "format": "vec3", "varying": true, "struct":[
 	
+	{"name": "r"},
+	
+	{"name": "g"},
+
+	{"name": "b"}]
+		
+	},
+
+	{"name": "mask", "format": "vec4", "varying": true, "struct":[
+	
+		{"name": "mX"},
+		
+		{"name": "mY"},
+	
+		{"name": "mW"},
+
+		{"name": "mH"}]
+			
+		}
 	],
 	
 	"uniforms":[
 	
-	{"name": "matrix", "format": "mat4"}
+	{"name": "matrix", "format": "mat4"},
+
+	{"name": "window", "format": "vec2"}
 	
 	],
 	

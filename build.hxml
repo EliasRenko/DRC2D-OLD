@@ -1,0 +1,10 @@
+-cp src
+-main Main
+-cpp bin/windows
+
+-lib sdl
+-lib stb
+-lib opengl
+-lib lime
+-lib hxcpp-debug-server
+-lib format

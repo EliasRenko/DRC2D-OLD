@@ -21,8 +21,10 @@ class UiCheckBox extends UiLayout
 	{
 		super(32, 32, x, y);
 		
-		__label = new UiLabel(text, 38, 4);
+		//__label = new UiLabel(text, 38, 4);
 		
+		__label = new UiLabel(text, 0, 38, 4);
+
 		__stamp = new UiStamp(9, 0, 0);
 	}
 	
@@ -30,15 +32,9 @@ class UiCheckBox extends UiLayout
 	{
 		super.init();
 		
-		//** Set the layout of the control.
-		
-		@:privateAccess __label.__parent = this;
-		
-		__initMember(__label);
-		
-		@:privateAccess __stamp.__parent = this;
-		
-		__initMember(__stamp);
+		super.addControl(__label);
+
+		super.addControl(__stamp);
 		
 		__setHitbox(0, 0, width, height);
 	}

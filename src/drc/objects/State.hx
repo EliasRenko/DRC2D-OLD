@@ -1,5 +1,8 @@
 package drc.objects;
 
+import drc.core.App;
+import drc.types.WindowEventType;
+import drc.system.Window;
 import drc.buffers.Float32Array;
 import drc.display.Drawable;
 import drc.part.Object;
@@ -17,27 +20,36 @@ class State extends Object {
 
 	public var graphics:RecycleList<Drawable> = new RecycleList<Drawable>();
 
-	//public var graphics:Array<Drawable> = new Array<Drawable>();
+	/**
+	 * The x position of the mouse in the state. Cannot be set.
+	 */
+	public var mouseX(get, null):Int;
 
 	/**
-	 * The x position of the mouse in the state.
+	 * The y position of the mouse in the state. Cannot be set.
 	 */
-	public var mouseX(get, null):Float;
+	public var mouseY(get, null):Int;
 
-	/**
-	 * The y position of the mouse in the state.
-	 */
-	public var mouseY(get, null):Float;
+	public var z:Float;
 
 	// ** Privates.
 
+	private var __parent:App;
+
 	private var __perpspective:Bool = false;
+
+	private var __z:Float;
 
 	public function new() {}
 
-	override public function init():Void {}
+	override public function init():Void {
 
-	override public function release():Void {}
+	}
+
+	override public function release():Void {
+
+		__parent.removeState(this);
+	}
 
 	public function addEntity(entity:Entity):Entity {
 
@@ -48,14 +60,19 @@ class State extends Object {
 
 	public function addGraphic(graphic:Drawable):Void {
 
+		@:privateAccess graphic.__state = this;
+
 		graphics.add(graphic);
+	}
+
+	public function removeGraphic(graphic:Drawable):Void {
+
+		graphics.remove(graphic);
 	}
 
 	public function render():Void {
 
 		graphics.forEachActive(__renderGraphic);
-
-		//trace('render');
 	}
 
 	public function update():Void {
@@ -72,7 +89,56 @@ class State extends Object {
 			}
 		}
 
-		entities.forEachActive(__updateEntitie);
+		if (Common.input.getGamepad(0).check(Control.A)) {
+
+            //trace(__image.angle);
+        }
+
+        if (Common.input.getGamepad(0).check(Control.Y)) {
+
+            camera.z += 1;
+        }
+        
+        if (Common.input.getGamepad(0).check(Control.X)) {
+
+            camera.z -= 1;
+		}
+
+        if (Common.input.getGamepad(0).check(Control.LEFT_SHOULDER)) {
+
+            camera.yaw -= 1;
+        }
+        
+        if (Common.input.getGamepad(0).check(Control.RIGHT_SHOULDER)) {
+
+            camera.yaw += 1;
+		}
+
+        if (Common.input.getGamepad(0).check(Control.DPAD_UP)) {
+
+            camera.y += 2;
+		}
+
+		if (Common.input.getGamepad(0).check(Control.DPAD_DOWN)) {
+
+            camera.y -= 2;
+		}
+
+		if (Common.input.getGamepad(0).check(Control.DPAD_LEFT)) {
+
+            camera.x += 2;
+		}
+
+		if (Common.input.getGamepad(0).check(Control.DPAD_RIGHT)) {
+
+            camera.x -= 2;
+        }
+
+		entities.forEachActive(__updateEntity);
+	}
+
+	public function onWindowEvent(window:Window, type:WindowEventType):Void {
+
 	}
 
 	private function __renderGraphic(drawable:Drawable):Void {
@@ -83,29 +149,41 @@ class State extends Object {
 
 			if (__perpspective) {
 
-				Common.stage.draw(drawable, camera.render2(drawable.matrix));
+				__parent.stage.draw(drawable, camera.render2(drawable.matrix));
 			}
 			else {
 
-				Common.stage.draw(drawable, camera.render(drawable.matrix));
+				__parent.stage.draw(drawable, camera.render(drawable.matrix));
 			}
 		}
 	}
 
-	private function __updateEntitie(entity:Entity):Void {
+	private function __updateEntity(entity:Entity):Void {
 
 		entity.update();
 	}
 
 	// ** Getters and setters.
 
-	private function get_mouseX():Float {
+	private function get_mouseX():Int {
 
-		return 0;
+		return Common.input.mouse.x;
 	}
 
-	private function get_mouseY():Float {
+	private function get_mouseY():Int {
 
-		return 0;
+		return Common.input.mouse.y;
+	}
+
+	private function get_z():Float {
+		
+		return __z;
+	}
+}
+
+private class __GraphicManager {
+
+	public function new() {
+		
 	}
 }

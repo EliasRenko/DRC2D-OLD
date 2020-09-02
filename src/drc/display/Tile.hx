@@ -107,6 +107,23 @@ class Tile extends Graphic {
         }
     }
 
+    override function setAttribute(name:String, value:Float) {
+
+		#if debug // ------
+		
+		if (!parentTilemap.shadings.exists(name))
+		{
+			throw "Attribute: " + name + " does not exist.";
+		}
+		
+		#end // ------
+		
+		for (i in 0...4) 
+		{
+			vertices.innerData[parentTilemap.shadings[name].positions[i]] = value;
+		}
+	}
+
     // ** Getters and setters.
 
     private function get_id():UInt {
@@ -115,6 +132,8 @@ class Tile extends Graphic {
     }
 
     private function set_id(value:UInt):UInt {
+
+        //if (value == __id) return value;
 
         __id = value;
 

@@ -1,0 +1,35 @@
+{
+	"name": "empty",
+	
+	"attributes":[
+	
+	{"name": "location", "format": "vec3", "varying": false, "struct":[
+	
+	{"name": "x"},
+	
+	{"name": "y"},
+	
+	{"name": "z"}]
+	
+	},
+
+	{"name": "uv", "format": "vec2", "varying": true, "struct":[
+	
+		{"name": "u"},
+		
+		{"name": "v"}]
+
+	}],
+	
+	"uniforms":[
+	
+	{"name": "matrix", "format": "mat4"}
+	
+	],
+	
+	"textures":[
+	
+	],
+	
+	"fragmentShader": "empty.frag"
+}

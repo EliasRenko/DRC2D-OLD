@@ -9,5 +9,5 @@
     "contributors": ["EliasRenko"],
     "tags": [],
     "classPath": "src",
-    "dependencies": {"sdl" : "", "opengl" : ""}
+    "dependencies": {"sdl" : "", "opengl" : "", "stb" : ""}
 }

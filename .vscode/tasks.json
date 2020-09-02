@@ -19,11 +19,36 @@
             }
         },
         {
+            "label": "Build web",
+
+            "type": "shell",
+
+            "command": "haxelib run entry build web",
+
+            "problemMatcher": [],
+
+            "group": {
+
+                "kind": "build",
+                
+                "isDefault": true
+            }
+        },
+        {
             "label": "Clean",
 
             "type": "shell",
 
             "command": "haxelib run entry clean windows",
+
+            "problemMatcher": []
+        },
+        {
+            "label": "Resources",
+
+            "type": "shell",
+
+            "command": "haxelib run entry resources windows",
 
             "problemMatcher": []
         },
@@ -35,24 +60,6 @@
             "command": "haxelib run entry setup default",
 
             "problemMatcher": []
-        },
-        {
-            "type": "haxe",
-
-            "args": "active configuration",
-
-            "problemMatcher": [
-
-                "$haxe-absolute",
-
-                "$haxe",
-
-                "$haxe-error",
-
-                "$haxe-trace"
-            ],
-            
-            "group": "build"
         }
     ]
 }

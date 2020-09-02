@@ -313,9 +313,17 @@ class Runtime implements drc.core.Runtime
 				__input.onMouseWheel();
 				
 			case SDL_KEYDOWN:
+
+				//__input.onKeyboardDown(event.key.keysym.sym);
+
+				__input.onKeyboardDown(event.key.keysym.scancode);
 				
 			case SDL_KEYUP:
 			
+				//__input.onKeyboardUp(event.key.keysym.sym);
+
+				__input.onKeyboardUp(event.key.keysym.scancode);
+
 			case SDL_TEXTEDITING:
 			
 			case SDL_TEXTINPUT:
@@ -334,25 +342,33 @@ class Runtime implements drc.core.Runtime
 		
 		if (event.type == SDL_WINDOWEVENT)
 		{
-			var type:WindowEventType = WindowEventType.UNKNOWN;
+			var type:WindowEventType = 0;
 			
 			switch (event.window.event)
 			{
 				case SDL_WINDOWEVENT_SHOWN:
 					
 					type = WindowEventType.SHOWN;
+
+					__window.onEventShown(data1, data2);
 					
 				case SDL_WINDOWEVENT_HIDDEN:
 					
 					type = WindowEventType.HIDDEN;
+
+					__window.onEventHidden();
 					
 				case SDL_WINDOWEVENT_EXPOSED:
 					
 					type = WindowEventType.EXPOSED;
 					
+					__window.onEventExposed();
+
 				case SDL_WINDOWEVENT_MOVED:
 					
 					type = WindowEventType.MOVED;
+
+					__window.onEventMoved(data1, data2);
 					
 				case SDL_WINDOWEVENT_MINIMIZED:
 					
@@ -391,6 +407,8 @@ class Runtime implements drc.core.Runtime
 				case SDL_WINDOWEVENT_RESIZED:
 					
 					type = WindowEventType.RESIZED;
+
+					__window.onEventResized();
 					
 				case SDL_WINDOWEVENT_SIZE_CHANGED:
 					
@@ -399,11 +417,6 @@ class Runtime implements drc.core.Runtime
 				case SDL_WINDOWEVENT_NONE:
 					
 				default:
-			}
-			
-			if (type == WindowEventType.UNKNOWN)
-			{
-				return;
 			}
 			
 			var windowEvent:drc.types.WindowEvent =
@@ -417,13 +430,13 @@ class Runtime implements drc.core.Runtime
 				data2 : data2
 			}
 			
-			__window.onEvent(windowEvent);
+			//__window.onEvent(windowEvent);
 		}
 	}
 
 	private function __initVideo():Void
 	{
-		var _flags:SDLWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL;
+		var _flags:SDLWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 		
 		__window = new Window();
 		

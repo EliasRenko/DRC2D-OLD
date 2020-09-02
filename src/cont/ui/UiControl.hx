@@ -1,26 +1,54 @@
 package cont.ui;
 
-import drc.part.Object;
+import cont.ui.UiEvent;
+import cont.ui.UiEventType;
 import drc.math.Rectangle;
+import drc.part.Object;
 
 class UiControl extends Object
 {
-	//** Publics.
-	
-	public var collide(get, null):Bool;
+	// ** Publics.
 	
 	/**
-	 * The height of the control.
+	 * 
+	 */
+	public var collide(get, null):Bool;
+
+	public var debug:Bool = false;
+
+	public var shouldDebug:Bool = true;
+
+	public var focused(get, null):Bool;
+
+	/**
+	 * The height of the control. Cannot be set.
 	 */
 	public var height(get, set):Float;
 	
+	public var hover:Bool;
+
+	/**
+	 * The type of the control. Cannot be set.
+	 */
+	public var type(get, null):String;
+
+	/**
+	 * If the control is selected.
+	 */
 	public var selected:Bool = false;
 	
+	/**
+	 * The name of the control.
+	 */
+	public var name:String;
+
 	/**
 	 * The parent class of the control. Cannot be set.
 	 */
 	public var parent(get, null):UiControl;
 	
+	public var onEvent:UiEvent;
+
 	/**
 	 * If the control should be visible.
 	 */
@@ -48,40 +76,48 @@ class UiControl extends Object
 	
 	//** Privates. 
 	
-	/** @private */ private var __allow:Bool = true;
+	/** @private **/ private var __allow:Bool = true;
+
+	/** @private **/ private var __allowDragX:Bool = true;
+
+	/** @private **/ private var __allowDragY:Bool = true;
 	
-	/** @private */ private var __collide:Bool;
+	/** @private **/ private var __collide:Bool;
 	
-	/** @private */ private var __height:Float;
+	/** @private **/ private var __focused:Bool = false;
+
+	/** @private **/ private var __height:Float;
 	
-	/** @private */ private var __hitbox:Rectangle;
+	/** @private **/ private var __hitbox:Rectangle;
+
+	/** @private **/ private var __hover:Bool = false;
 	
-	/** @private */ private var __form:UiForm;
+	/** @private **/ private var __form:UiForm;
 	
-	/** @private */ private var __offsetX:Float = 0;
+	/** @private **/ private var __offsetX:Float = 0;
 	
-	/** @private */ private var __offsetY:Float = 0;
+	/** @private **/ private var __offsetY:Float = 0;
 	
-	/** @private */ private var __mask:Bool = false;
+	/** @private **/ private var __mask:Bool = false;
 	
-	/** @private */ private var __maskBox:Rectangle;
+	/** @private **/ private var __maskBox:Rectangle;
 	
-	/** @private */ private var __parent:UiControl;
+	/** @private **/ private var __parent:UiLayout;
 	
-	/** @private */ private var __visible:Bool = true;
+	/** @private **/ private var __type:String;
+
+	/** @private **/ private var __visible:Bool = true;
 	
-	/** @private */ private var __x:Float = 0;
+	/** @private **/ private var __x:Float = 0;
 	
-	/** @private */ private var __y:Float = 0;
+	/** @private **/ private var __y:Float = 0;
 	
-	/** @private */ private var __z:Float = 0;
+	/** @private **/ private var __z:Float = 0;
 	
-	/** @private */ private var __width:Float;
+	/** @private **/ private var __width:Float;
 	
 	public function new(x:Float = 0, y:Float = 0) 
-	{
-		//super();
-		
+	{		
 		//** Pass the x value to it's variable counterpart.
 		
 		__x = x;
@@ -89,12 +125,18 @@ class UiControl extends Object
 		//** Pass the y value to it's variable counterpart.
 		
 		__y = y;
+
+		// ** Create an event dispacher.
+
+		onEvent = new UiEvent();
 	}
 	
 	override public function init():Void 
 	{
 		super.init();
 		
+		// ** Set the parent layout of the control.
+
 		__form = @:privateAccess __parent.__form;
 	}
 	
@@ -102,7 +144,9 @@ class UiControl extends Object
 	{
 		super.release();
 		
-		//@:privateAccess parent.__allow = false;
+		// ** Remove this control from it's parent.
+
+		__parent.removeControl(this);
 	}
 	
 	private function __hitTest():Bool
@@ -120,7 +164,15 @@ class UiControl extends Object
 		
 		return false;
 	} 
-	
+
+	private function __debugOn():Void {
+		
+	}
+
+	private function __debugOff():Void {
+
+	}
+
 	private function __setHitbox(x:Float, y:Float, width:Float, height:Float):Void
 	{
 		__hitbox = new Rectangle(x, y, width, height);
@@ -153,23 +205,63 @@ class UiControl extends Object
 	public function updateCollision():Void
 	{
 		__collide = __hitTest();
-	}
-	
-	public function postUpdate():Void
-	{
-		__form.selectedControl = this;
+
+		#if debug
+
+		if (shouldDebug) {
+
+			if (debug) {
+
+				if (__form.leftCheck) {
+
+					//x = __form.mouseX;
+		
+					//y = __form.mouseY;
+				}
+			}
+		}
+
+		#end
 	}
 	
 	public function onFocusGain():Void
 	{
-		
+		__focused = true;
+
+		onEvent.dispatch(this, ON_FOCUS_GAIN);
 	}
 	
 	public function onFocusLost():Void
 	{
+		__focused = false;
+
+		onEvent.dispatch(this, ON_FOCUS_LOST);
+	}
+
+	public function onMouseHover():Void {
+
+		onEvent.dispatch(this, MOUSE_HOVER);
+	}
+
+	public function onMouseEnter():Void {
+
+		onEvent.dispatch(this, MOUSE_ENTER);
+	}
+
+	public function onMouseLeave():Void {
+
+		onEvent.dispatch(this, MOUSE_LEAVE);
+	}
+
+	public function onResize():Void {
 		
+		onEvent.dispatch(this, ON_RESIZE);
 	}
 	
+	public function onFormResize():Void {
+		
+	}
+
 	//** Getters and setters.
 	
 	private function get_collide():Bool
@@ -177,6 +269,11 @@ class UiControl extends Object
 		return __collide;
 	}
 	
+	private function get_focused():Bool {
+
+		return __focused;
+	}
+
 	private function get_height():Float
 	{
 		return __height;
@@ -186,7 +283,21 @@ class UiControl extends Object
 	{
 		__hitbox.height = value;
 		
-		return __height = value;
+		__height = value;
+
+		onResize();
+
+		return __height;
+	}
+
+	private function get_hover():Bool
+	{
+		return __hover;
+	}
+
+	private function get_type():String {
+
+		return __type;
 	}
 	
 	private function get_parent():UiControl
@@ -201,6 +312,8 @@ class UiControl extends Object
 	
 	private function set_visible(value:Bool):Bool
 	{	
+		value ? onEvent.dispatch(this, VISIBLE) : onEvent.dispatch(this, INVISIBLE);
+
 		return __visible = value;
 	}
 	
@@ -213,7 +326,11 @@ class UiControl extends Object
 	{
 		__hitbox.width = value;
 		
-		return __width = value;
+		__width = value;
+
+		onResize();
+
+		return __width;
 	}
 	
 	private function get_x():Float
