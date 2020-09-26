@@ -7,8 +7,6 @@ class EntryPoint {
     public static function main() {
 
 		var _appRef = Type.resolveClass("Game");
-		
-		trace(_appRef);
 
 		var _app:App = Type.createInstance(_appRef, []);
 
