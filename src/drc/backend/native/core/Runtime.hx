@@ -1,5 +1,10 @@
 package drc.backend.native.core;
 
+import cpp.RawPointer;
+import sdl.SysWM.HWND;
+import cpp.Int64;
+import cpp.Pointer;
+import sdl.SysWM.SysWMinfo;
 import drc.backend.native.system.Input;
 import drc.backend.native.system.Window;
 import drc.core.EventDispacher;
@@ -117,6 +122,16 @@ class Runtime implements drc.core.Runtime
 		Common.input = __input;
 		
 		__active = true;
+
+		var handle:HWND = getHWND();
+
+		trace(handle);
+		trace(RawPointer.addressOf(handle));
+	}
+
+	public function getHWND():HWND {
+
+		return SDL.getHWND(__window.innerData);
 	}
 
 	public function release():Void

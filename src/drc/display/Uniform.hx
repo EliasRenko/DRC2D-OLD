@@ -1,9 +1,10 @@
 package drc.display;
 
 import drc.display.UniformFormat;
+import drc.core.GL;
 
-class Uniform 
-{
+class Uniform {
+	
 	/**
 	 * The format of the uniform. Cannot be set.
 	 */
@@ -17,7 +18,7 @@ class Uniform
 	/**
 	 * The location of the uniform variable. Cannot be set.
 	 */
-	public var location(get, null):Int;
+	public var location(get, null):GLUniformLocation;
 	
 	//** Privates.
 	
@@ -25,7 +26,7 @@ class Uniform
 	
 	/** @private */ private var __name:String;
 	
-	/** @private */ private var __location:Int;
+	/** @private */ private var __location:GLUniformLocation;
 	
 	public function new(name:String, format:UniformFormat) 
 	{
@@ -51,7 +52,7 @@ class Uniform
 		return __format;
 	}
 	
-	private function get_location():Int
+	private function get_location():GLUniformLocation
 	{
 		return __location;
 	}

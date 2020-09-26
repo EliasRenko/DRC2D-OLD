@@ -127,6 +127,25 @@ class Drawable extends Graphic
 		super.release();
 	}
 
+	public function setUV(x:Float, y:Float, width:Float, height:Float):Void {	
+
+		vertices.innerData[shadings["u"].positions[0]] = x;
+		
+		vertices.innerData[shadings["u"].positions[1]] = x;
+		
+		vertices.innerData[shadings["u"].positions[2]] = width;
+		
+		vertices.innerData[shadings["u"].positions[3]] = width;
+		
+		vertices.innerData[shadings["v"].positions[0]] = y;
+		
+		vertices.innerData[shadings["v"].positions[1]] = height;
+		
+		vertices.innerData[shadings["v"].positions[2]] = height;
+		
+		vertices.innerData[shadings["v"].positions[3]] = y;
+	}
+
 	override function set_x(value:Float):Float {
 
 		return super.set_x(value);

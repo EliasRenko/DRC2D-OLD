@@ -16,7 +16,7 @@
 		
 		"Build" :
 		{
-			"MainClass" :  "Main",
+			"MainClass" :  "drc.utils.EntryPoint",
 			
 			"SourceFolder" : "src",
 

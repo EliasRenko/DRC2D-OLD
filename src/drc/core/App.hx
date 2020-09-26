@@ -1,6 +1,5 @@
 package drc.core;
 
-import cont.TestPNG;
 import drc.display.Stage;
 import drc.objects.State;
 import drc.part.ObjectList;
@@ -96,7 +95,7 @@ class App
 
 		__promise.onComplete(function(result:Array<String>, type:Int) {
 			
-			addState(new TestPNG());
+			//addState(new FontEditor());
 
 			loop();
 		});
@@ -127,7 +126,11 @@ class App
 			__runtime.input.postUpdate();
 		}
 		
+		#if cpp
+
 		Sys.exit(0);
+
+		#end
 	}
 
 	public function addState(state:State):State {

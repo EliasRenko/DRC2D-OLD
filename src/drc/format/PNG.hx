@@ -1,5 +1,6 @@
 package drc.format;
 
+import haxe.io.UInt8Array;
 import haxe.io.Bytes;
 import haxe.io.Input;
 
@@ -44,9 +45,13 @@ class PNG {
 
     public var data:List<Chunk>;
 
-    public function new(input:Input) {
+    public function new(input:haxe.io.Input) {
+
+        
 
         input.bigEndian = true;
+
+        var pos = 0;
 
         for (i in [137,80,78,71,13,10,26,10]) {
          
@@ -54,6 +59,8 @@ class PNG {
 
                 throw "Invalid header";
             }
+
+            pos ++;
         }
 
         var l = new List();
@@ -62,6 +69,8 @@ class PNG {
 
             var c = readChunk(input);
             
+            //var c = null;
+
             l.add(c);
             
 			if( c == CEnd )
@@ -73,8 +82,6 @@ class PNG {
         //** **/
 
         var header = getHeader(data);
-
-        
     }
 
     public static function getHeader( d : List<Chunk> ) : Header {
@@ -204,6 +211,113 @@ class PNG {
             var flipY = flipY ? -1 : 1;
 
             switch( h.color ) {
+
+                case ColIndexed:
+
+                    var pal = getPalette(d);
+
+                    if( pal == null ) throw "PNG Palette is missing";
+
+                    var alpha = null;
+
+                    for( t in d )
+                        switch( t ) {
+                        case CUnknown("tRNS", data): alpha = data; break;
+                        default:
+                        }
+
+                        if( alpha != null && alpha.length < 1 << h.colbits ) {
+                            var alpha2 = haxe.io.Bytes.alloc(1 << h.colbits);
+                            alpha2.blit(0,alpha,0,alpha.length);
+                            alpha2.fill(alpha.length, alpha2.length - alpha.length, 0xFF);
+                            alpha = alpha2;
+                        }
+            
+                        var width = h.width;
+                        var stride = Math.ceil(width * h.colbits / 8) + 1;
+            
+                        if( data.length < h.height * stride ) throw "Not enough data";
+            
+                        var tmp = (h.width * h.colbits);
+                        var rline = tmp >> 3;
+                        for( y in 0...h.height ) {
+                            var f = data.get(r++);
+                            if( f == 0 ) {
+                                r += rline;
+                                continue;
+                            }
+                            switch( f ) {
+                            case 1:
+                                var c = 0;
+                                for( x in 0...width ) {
+                                    var v = data.get(r);
+                                    c += v;
+                                    data.set(r++, c & 0xFF);
+                                }
+                            case 2:
+                                var stride = y == 0 ? 0 : (rline + 1);
+                                for( x in 0...width ) {
+                                    var v = data.get(r);
+                                    data.set(r, v + data.get(r - stride));
+                                    r++;
+                                }
+                            case 3:
+                                var c = 0;
+                                var stride = y == 0 ? 0 : (rline + 1);
+                                for( x in 0...width ) {
+                                    var v = data.get(r);
+                                    c = (v + ((c + data.get(r - stride)) >> 1)) & 0xFF;
+                                    data.set(r++, c);
+                                }
+                            case 4:
+                                var stride = rline + 1;
+                                var c = 0;
+                                for( x in 0...width ) {
+                                    var v = data.get(r);
+                                    c = (filter(data, x, y, stride, c, r, 1) + v) & 0xFF;
+                                    data.set(r++, c);
+                                }
+                            default:
+                                throw "Invalid filter "+f;
+                            }
+                        }
+            
+                        var r = 0;
+                        if( h.colbits == 8 ) {
+                            for( y in 0...h.height ) {
+                                r++;
+                                for( x in 0...h.width ) {
+                                    var c = data.get(r++);
+                                    bgra.set(w++, pal.get(c * 3 + 2));
+                                    bgra.set(w++, pal.get(c * 3 + 1));
+                                    bgra.set(w++, pal.get(c * 3));
+                                    bgra.set(w++, if( alpha != null ) alpha.get(c) else 0xFF);
+                                }
+                                w += lineDelta;
+                            }
+                        } else if( h.colbits < 8 ) {
+                            var req = h.colbits;
+                            var mask = (1 << req) - 1;
+                            for( y in 0...h.height ) {
+                                r++;
+                                var bits = 0, nbits = 0, v;
+                                for( x in 0...h.width ) {
+                                    if( nbits < req ) {
+                                        bits = (bits << 8) | data.get(r++);
+                                        nbits += 8;
+                                    }
+                                    var c = (bits >>> (nbits - req)) & mask;
+                                    nbits -= req;
+                                    bgra.set(w++, pal.get(c * 3 + 2));
+                                    bgra.set(w++, pal.get(c * 3 + 1));
+                                    bgra.set(w++, pal.get(c * 3));
+                                    bgra.set(w++, if( alpha != null ) alpha.get(c) else 0xFF);
+                                }
+                                w += lineDelta;
+                            }
+                        } else
+                            throw h.colbits+" indexed bits per pixel not supported";
+            
 
                 case ColTrue(alpha):
 
@@ -386,25 +500,14 @@ class PNG {
             return bgra;
         }
 
-        private function brgaToRgba(bytes:Bytes):Bytes {
-            //Sure.sure(bytes != null);
-            //Sure.sure(bytes.length % 4 == 0);
-    
-            var length:Int = bytes.length;
-            var i:Int = 0;
-            while (i < length) {
-                var b = bytes.get(i);
-                var r = bytes.get(i + 1);
-                var g = bytes.get(i + 2);
-                var a = bytes.get(i + 3);
-                bytes.set(i, r);
-                bytes.set(i + 1, g);
-                bytes.set(i + 2, b);
-                bytes.set(i + 3, a);
-                i += 4;
-            }
-            return bytes;
-        }
+        public static function getPalette( d : List<Chunk> ) : haxe.io.Bytes {
+            for( c in d )
+                switch( c )  {
+                case CPalette(b): return b;
+                default:
+                }
+            return null;
+	    }
 
         static inline function filter( data : #if flash10 format.tools.MemoryBytes #else haxe.io.Bytes #end, x, y, stride, prev, p, numChannels=4 ) {
             var b = y == 0 ? 0 : data.get(p - stride);

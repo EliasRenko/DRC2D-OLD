@@ -1,5 +1,5 @@
 -cp src
--main Main
+-main drc.utils.EntryPoint
 -cpp bin/windows
 
 -lib sdl

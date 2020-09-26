@@ -1,7 +1,10 @@
 package drc.utils;
 
+import haxe.io.ArrayBufferView;
+import haxe.io.UInt8Array;
+import haxe.io.Bytes;
 import drc.display.Program;
-import opengl.WebGL;
+import drc.core.GL;
 import drc.data.Texture;
 import drc.display.Uniform;
 import drc.display.Attribute;
@@ -9,8 +12,6 @@ import drc.display.Vertex;
 import drc.display.AttributeFormat;
 import drc.data.Profile;
 import drc.core.Promise;
-import haxe.io.Bytes;
-import haxe.io.UInt8Array;
 import haxe.Json;
 import drc.debug.Log;
 
@@ -60,6 +61,31 @@ class Res {
         var _textResource:__ProfileResource = cast(_resource, __ProfileResource);
 
         return _textResource.data;
+    }
+
+    public function loadBytes(path:String, cache:Bool = true):Promise<UInt8Array> {
+
+        return new Promise(function(resolve, reject) {
+
+            BackendAssets.loadBytes(path, function(status, response) {
+
+                if (status == 200) { 
+
+                    if (cache) {
+
+                        //__resources.set(path, new __TextResource(response));
+                    }
+
+                    var res:UInt8Array = response;
+
+                    resolve(res);
+                }
+                else {
+    
+                    reject();
+                }
+            });
+        });
     }
 
     public function loadText(path:String, cache:Bool = true):Promise<String> {
@@ -271,11 +297,11 @@ class Res {
                             _vertexShaderSource = result[0];
                         }
 
-                        var _vertexShader:GLShader = WebGL.createShader(WebGL.VERTEX_SHADER);
+                        var _vertexShader:GLShader = GL.createShader(GL.VERTEX_SHADER);
 		
-                        WebGL.shaderSource(_vertexShader, _vertexShaderSource);
+                        GL.shaderSource(_vertexShader, _vertexShaderSource);
                         
-                        WebGL.compileShader(_vertexShader);
+                        GL.compileShader(_vertexShader);
 
                         if (result[0] == null) {
 
@@ -285,21 +311,21 @@ class Res {
                             _fragmentShaderSource = result[1];
                         }
                         
-                        var _fragmentShader:GLShader = WebGL.createShader(WebGL.FRAGMENT_SHADER);
+                        var _fragmentShader:GLShader = GL.createShader(GL.FRAGMENT_SHADER);
 		
-                        WebGL.shaderSource(_fragmentShader, _fragmentShaderSource);
+                        GL.shaderSource(_fragmentShader, _fragmentShaderSource);
                         
-                        WebGL.compileShader(_fragmentShader);
+                        GL.compileShader(_fragmentShader);
 
                         // ** ---
 
-                        var _program:Program = new Program(WebGL.createProgram());
+                        var _program:Program = new Program(GL.createProgram());
                         
                         var _location:Int = 0;
 
                         for (i in 0..._profile.attributes.length) 
                         {
-                            WebGL.bindAttribLocation(_program.innerData, _location, _profile.attributes[i].name);
+                            GL.bindAttribLocation(_program.innerData, _location, _profile.attributes[i].name);
                             
                             _profile.attributes[i].assignLocation(_location);
                             
@@ -308,26 +334,26 @@ class Res {
 
                         // ** Attach the vertex shader.
 
-                        WebGL.attachShader(_program.innerData, _vertexShader);
+                        GL.attachShader(_program.innerData, _vertexShader);
         
                         // ** Attach the fragment shader.
 
-                        WebGL.attachShader(_program.innerData, _fragmentShader);
+                        GL.attachShader(_program.innerData, _fragmentShader);
                         
                         // ** Link the program.
 
-                        WebGL.linkProgram(_program.innerData);
+                        GL.linkProgram(_program.innerData);
 
-                        if (WebGL.getProgramParameter(_program.innerData, WebGL.LINK_STATUS) == 0) {
+                        if (GL.getProgramParameter(_program.innerData, GL.LINK_STATUS) == 0) {
 
-                            var _error:String = WebGL.getProgramInfoLog(_program.innerData);
+                            var _error:String = GL.getProgramInfoLog(_program.innerData);
 
                             throw "Unable to link the shader program: " + _error;
                         }
 
-                        for (i in 0..._profile.uniforms.length) 
-                        {
-                            var location:Int = WebGL.getUniformLocation(_program.innerData, _profile.uniforms[i].name);
+                        for (i in 0..._profile.uniforms.length) {
+                            
+                            var location:Int = GL.getUniformLocation(_program.innerData, _profile.uniforms[i].name);
                 
                             _profile.uniforms[i].assignLocation(location);
                             
@@ -338,7 +364,7 @@ class Res {
 
                         for (i in 0..._profile.textures.length) {
 
-                            var _location:Int = WebGL.getUniformLocation(_program.innerData, _profile.textures[i].name);
+                            var _location:Int = GL.getUniformLocation(_program.innerData, _profile.textures[i].name);
                         }
                 
                         _profile.program = _program;

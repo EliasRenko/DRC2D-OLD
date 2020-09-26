@@ -6,7 +6,7 @@ import drc.display.Drawable;
 import drc.data.Profile;
 import drc.data.Texture;
 import drc.utils.Common;
-import opengl.WebGL;
+import drc.core.GL in WebGL;
 import haxe.io.Float32Array;
 import drc.utils.Resources;
 
@@ -47,6 +47,8 @@ class Stage extends Drawable {
 		
 		indices.upload([0, 1, 2, 0, 2, 3]);
 		
+		setUV(0, 1, 2, -1);
+
 		__verticesToRender = 3;
 		
 		__indicesToRender = 3;
@@ -63,6 +65,8 @@ class Stage extends Drawable {
 		this.height = height;
 
 		textures[0].create(width, height);
+
+		matrix = matrix.createOrthoMatrix(0, width, height, 0, 1000, -1000);
 	}
 
 	public function setToDraw():Void {
@@ -82,6 +86,21 @@ class Stage extends Drawable {
 		__context.setViewport(0, 0, Std.int(width), Std.int(height));
 
 		__drawTriangles(this, matrix);
+	}
+
+	override function setUV(x:Float, y:Float, width:Float, height:Float) {
+
+		vertices.innerData[shadings["u"].positions[0]] = x;
+		
+		vertices.innerData[shadings["u"].positions[1]] = x;
+		
+		vertices.innerData[shadings["u"].positions[2]] = width;
+		
+		vertices.innerData[shadings["v"].positions[0]] = y;
+		
+		vertices.innerData[shadings["v"].positions[1]] = height;
+		
+		vertices.innerData[shadings["v"].positions[2]] = y;
 	}
 
 	public function draw(image:Drawable, matrix:Matrix):Void {

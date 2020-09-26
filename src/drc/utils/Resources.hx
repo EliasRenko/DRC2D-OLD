@@ -450,7 +450,6 @@ class Resources
 		
 		if (WebGL.getProgramParameter(glProgram, WebGL.LINK_STATUS) == 0) {
 			
-
 			throw "Unable to link the shader program: " + WebGL.getProgramInfoLog(glProgram);
         }
 

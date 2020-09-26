@@ -95,7 +95,7 @@ class Image extends Drawable {
 		//textures[0].uploadBitmapData(new BitmapData(width, height, false, color));
 	}
 	
-	public function setUV(x:Float, y:Float, width:Float, height:Float):Void
+	override function setUV(x:Float, y:Float, width:Float, height:Float):Void
 	{	
 		vertices.innerData[shadings["u"].positions[0]] = x;
 		

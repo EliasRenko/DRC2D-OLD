@@ -1,6 +1,8 @@
 package drc.core;
 
+import sdl.SysWM.HWND;
 import drc.system.Input;
+import sdl.Window;
 
 interface Runtime 
 {
@@ -25,6 +27,8 @@ interface Runtime
 	public function pollEvents():Void;
 	
 	public function present():Void;
+
+	public function getHWND():HWND;
 	
 	//** Getters and setters.
 	

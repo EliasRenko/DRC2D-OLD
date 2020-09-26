@@ -123,13 +123,13 @@ class Context
 		GL.createFramebuffer();
 	}
 	
-	public function generateIndexBuffer():Void
-	{
+	public function generateIndexBuffer():Void {
+		
 		GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, __glIndexBuffer);
 	}
 
-	public function generateTexture():GLTexture
-	{
+	public function generateTexture():GLTexture {
+
 		var _glTexture:GLTexture = GL.createTexture();
 
 		GL.bindTexture(GL.TEXTURE_2D, _glTexture);
@@ -137,13 +137,13 @@ class Context
 		return _glTexture;
 	}
 	
-	public function generateVertexBuffer():Void
-	{
+	public function generateVertexBuffer():Void {
+
 		GL.bindBuffer(GL.ARRAY_BUFFER, __glVertexBuffer);
 	}
 	
-	public function loadIndexBuffer(data:Array<UInt>):Void
-	{
+	public function loadIndexBuffer(data:Array<UInt>):Void {
+
 		GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, Int32Array.fromArray(data).view, GL.STATIC_DRAW);
 		
 		GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, null);
@@ -157,7 +157,9 @@ class Context
 
 			case 1:
 
-				_format = GL.RED;
+				//_format = GL.RED;
+
+				_format = GL.LUMINANCE;
 
 			case 2:
 
@@ -181,15 +183,15 @@ class Context
 		GL.bindTexture(GL.TEXTURE_2D, null);
 	}
 	
-	public function loadVertexBuffer(data:Array<Float>):Void
-	{
+	public function loadVertexBuffer(data:Array<Float>):Void {
+
 		GL.bufferData(GL.ARRAY_BUFFER, Float32Array.fromArray(data).view, GL.STATIC_DRAW);
 		
 		GL.bindBuffer(GL.ARRAY_BUFFER, null);
 	}
 	
-	public function setAttributePointer(index:Int, size:Int, normalized:Bool, stride:Int, offset:Int):Void
-	{
+	public function setAttributePointer(index:Int, size:Int, normalized:Bool, stride:Int, offset:Int):Void {
+
 		GL.enableVertexAttribArray(index);
 		
 		GL.vertexAttribPointer(index, size, GL.FLOAT, normalized, stride, offset);
@@ -211,8 +213,8 @@ class Context
 		}
 	}
 	
-	public function setViewport(x:Int, y:Int, width:Int, height:Int):Void
-	{
+	public function setViewport(x:Int, y:Int, width:Int, height:Int):Void {
+
 		GL.viewport(x, y, width, height);
 	}
 }
