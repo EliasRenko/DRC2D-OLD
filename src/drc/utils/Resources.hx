@@ -150,15 +150,17 @@ class Resources
 			
 			for (i in 0...regionsData.length)
 			{
+				var name:String = regionsData[i].name;
+
 				var region:Region =
 				{
 					values: regionsData[i].dimensions
 				}
 
 				regions[regionsData[i].id] = region;
+
+				tileset.addRegion(region, name);
 			}
-			
-			tileset.upload(regions);
 		}
 		
 		#if debug // ------

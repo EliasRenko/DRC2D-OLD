@@ -8,6 +8,8 @@ class Tileset {
 
     public var regions:Array<Region>;
 
+    public var names:Map<String, Int> = new Map<String, Int>();
+
     public function new(?regions:Array<Region>) {
         
         if (regions == null) {
@@ -20,9 +22,13 @@ class Tileset {
         this.regions = regions;
     }
 
-    public function addRegion(region:Region):Void {
+    public function addRegion(region:Region, ?name:String):Void {
 
-        regions.push(region);
+        var index:Int = regions.push(region);
+
+        if (name == null) return;
+
+        names.set(name, index);
     }
 
     public function upload(regions:Array<Region>):Void
