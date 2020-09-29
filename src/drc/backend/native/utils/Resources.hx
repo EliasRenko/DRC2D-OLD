@@ -32,6 +32,11 @@ typedef TextureData = {
 
 class Resources {
 
+    public static function getDirectory():String {
+        
+        return SDL.getBasePath();
+    }
+
     public static function loadBytes(path:String, func:(Int, Dynamic)->Void):Void {
 
         var _mode:String = 'rb';
@@ -83,7 +88,7 @@ class Resources {
 
         var header = PNG.getHeader(png.data);
         
-        var _texture:Texture = new Texture(UInt8Array.fromBytes(_bytes), header.colbits, header.width, header.height);
+        var _texture:Texture = new Texture(UInt8Array.fromBytes(_bytes), 4, header.width, header.height);
 
         func(200, _texture);
     }

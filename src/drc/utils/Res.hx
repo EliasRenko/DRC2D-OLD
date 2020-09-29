@@ -35,6 +35,11 @@ class Res {
 
     }
 
+    public function getDirectory():String {
+        
+        return BackendAssets.getDirectory();
+    }
+
     public function getText(name:String):String {
 
         var _resource:__Resource = __resources.get(name);

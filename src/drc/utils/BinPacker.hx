@@ -63,7 +63,7 @@ class BinPacker {
 
         usedRectangles.push(newRect);
 
-        return null;
+        return newRect;
     }
 
     public function occupancy():Float {

@@ -21,7 +21,7 @@ class Group<T:Object> extends List<T>
 	}
 	
 	/**
-	 * Pushes a an object into the group. Does not work if the group is fixed.
+	 * Pushes an object into the group. Does not work if the group is fixed.
 	 * 
 	 * @param	object The object to be added.
 	 * @return	DrcObject
@@ -79,7 +79,7 @@ class Group<T:Object> extends List<T>
 	}
 	
 	/**
-	 * Adds an object at the specific index of this group. Will override any other object if not empty.
+	 * Adds an object at the specific index of this group. Will override any other object at this position.
 	 * 
 	 * @param	index The index of the position.
 	 * @param	object The object to be added.

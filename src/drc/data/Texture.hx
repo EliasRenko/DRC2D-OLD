@@ -16,6 +16,7 @@ interface Texture {
 
     public var bytesPerPixel(get, null):Int;
 
+    
     public var glTexture:GLTexture;
 
     public var height(get, null):Int;
@@ -26,9 +27,11 @@ interface Texture {
 
     public function create(width:Int, height:Int):Void;
 
-    public function copyPixels(sourceTexture:drc.data.Texture, x:Int, y:Int, width:UInt, height:UInt, x2:Int, y2:Int):Void;
+    public function copyPixels(sourceTexture:drc.data.Texture, x:Int, y:Int, width:UInt, height:UInt):Void;
 
     public function draw(x:UInt, y:UInt, width:UInt, height:UInt, color:Color):Void;
+
+    public function generate(width:Int, height:Int):Void;
 
     public function upload(data:UInt8Array, bytesPerPixel:Int, width:Int, height:Int):Void;
 

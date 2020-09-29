@@ -82,6 +82,8 @@ class PNG {
         //** **/
 
         var header = getHeader(data);
+
+        trace('Color: ' + header.colbits);
     }
 
     public static function getHeader( d : List<Chunk> ) : Header {
@@ -90,7 +92,7 @@ class PNG {
 			case CHeader(h): return h;
 			default:
 			}
-		throw "Header not found";
+        throw "Header not found";
 	}
 
     public function readChunk(i:Input) {

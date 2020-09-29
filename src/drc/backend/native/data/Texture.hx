@@ -31,7 +31,7 @@ class Texture implements drc.data.Texture {
 
     // ** Privates.
 
-    /** @private **/ private var __bytes:UInt8Array;
+    /** @private **/ //private var __bytes:UInt8Array;
 
     /** @private **/ private var __bytesPerPixel:Int;
 
@@ -60,6 +60,39 @@ class Texture implements drc.data.Texture {
         return null;
     }
 
+    public function generate(width:Int, height:Int):Void {
+
+        __bytesPerPixel = 4;
+
+        __width = width;
+
+        __height = height;
+
+        if (__bytesPerPixel == 4) {
+
+            __transparent = true;
+        }
+
+        var dim = __width * __height;
+
+        var _bytes = new UInt8Array(dim * 4);
+
+        for (i in 0...dim) {
+
+            var pos = 4 * i;
+
+            _bytes[pos] = 0;
+
+            _bytes[pos + 1] = 0;
+
+            _bytes[pos + 2] = 0;
+
+            _bytes[pos + 3] = 0;
+        }
+
+        bytes = _bytes;
+    }
+
     public function create(width:Int, height:Int) {
 
         __bytesPerPixel = 4;
@@ -78,17 +111,62 @@ class Texture implements drc.data.Texture {
         Common.context.loadTexture(__width, __height, __bytesPerPixel, null);
     }
 
-    public function copyPixels(sourceTexture:drc.data.Texture, x:Int, y:Int, width:UInt, height:UInt, x2:Int, y2:Int):Void {
+    public function copyPixels(sourceTexture:drc.data.Texture, x:Int, y:Int, width:UInt, height:UInt):Void {
+        
+        if (bytes == null) return;
+
+        var pixels:UInt8Array = new UInt8Array((width * height) * sourceTexture.bytesPerPixel);
+
+        var count:Int = (width * height) * sourceTexture.bytesPerPixel;
+
+        for (i in 0...count) {
+
+            pixels[i] = sourceTexture.bytes[i];
+        }
+
+        var _w:UInt = x;
+
+        var _h:UInt = y;
+
+        var _j:Int = 0;
+
+        for (j in 0...height) {
+
+            for (i in 0...width) {
+
+                var _pos = (_w + (_h * __width)) * bytesPerPixel;
+
+                bytes[_pos] = pixels[_j];
+                bytes[_pos + 1] = pixels[_j + 1];
+                bytes[_pos + 2] = pixels[_j + 2];
+                bytes[_pos + 3] = 255;
+
+                _j += 4;
+
+                _w ++;
+            }
+
+            _h ++;
+
+            _w = x;
+        }
+
+        upload(bytes, 4, __width, __height);
+    }
+
+    public function copyPixels2(sourceTexture:drc.data.Texture, x:Int, y:Int, width:UInt, height:UInt, x2:Int, y2:Int):Void {
 
         if (bytes == null) return;
 
         //trace(sourceTexture.bytesPerPixel);
 
-        var pixels:UInt8Array = new UInt8Array(0);
+        var pixels:UInt8Array = new UInt8Array((width * height) * sourceTexture.bytesPerPixel);
 
         var _w:UInt = x;
 
         var _h:UInt = y;
+
+
 
         for (j in 0...height) {
 
@@ -96,11 +174,19 @@ class Texture implements drc.data.Texture {
 
                 var _pos = (_w + (_h * sourceTexture.width)) * bytesPerPixel;
 
+                var index = 0;
+
                 for (k in _pos..._pos + bytesPerPixel) {
 
                     //pixels.buffer.push(sourceTexture.bytes[k]);
 
-                    pixels[pixels.length] = sourceTexture.bytes[k];
+                    //pixels.set(index, sourceTexture.bytes[k])
+
+                    //pixels.
+
+                    pixels[index] = sourceTexture.bytes[k];
+
+                    index ++;
                 }
 
                 //pixels.push(sourceTexture.bytes[_pos]);
@@ -217,7 +303,7 @@ class Texture implements drc.data.Texture {
 
     private function get_bytes():UInt8Array {
         
-        return __bytes;
+        return null;
     }
 
     private function get_bytesPerPixel():Int {

@@ -229,6 +229,11 @@ class Resources
 		return _texture;
 	}
 
+	public function saveTexture():Void {
+
+		
+	}
+
 	//public static function loadProfile(path:String):Profile
 	//{
 		//var profileData:Json = new Json(loadText(path));

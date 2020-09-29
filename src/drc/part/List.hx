@@ -17,7 +17,7 @@ class List<T:Object>
 	public var count(get, null):Int;
 	
 	/**
-	 * A vector array of all the members.
+	 * An array of all the members.
 	 */
 	public var members:Array<T>;
 	
@@ -142,6 +142,14 @@ class List<T:Object>
 		//** Return.
 		
 		return object;
+	}
+
+	public function clear():Void {
+		
+		while (members.length > 0) {
+
+			members.pop();
+		}
 	}
 	
 	public function getMember(index:Int):T
