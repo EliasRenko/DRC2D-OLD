@@ -75,9 +75,9 @@ class Drawable extends Graphic
 		
 		blendFactors = {
 
-			source: BlendFactor.NONE,
+			source: BlendFactor.SRC_ALPHA,
 
-			destination: BlendFactor.NONE
+			destination: BlendFactor.ONE_MINUS_SRC_ALPHA
 		}
 
 		textureParams = {

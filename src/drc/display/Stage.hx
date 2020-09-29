@@ -56,6 +56,8 @@ class Stage extends Drawable {
 		matrix = matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
 
 		WebGL.enable(WebGL.DEPTH_TEST);
+
+		WebGL.enable(WebGL.BLEND);
 	}
 
 	public function resize(width:Int, height:Int) {
@@ -73,7 +75,9 @@ class Stage extends Drawable {
 		
 		__context.setRenderToTexture(textures[0]);
 
-		__context.clear(0.3, 0, 0.2, 1);
+		//__context.clear(0.3, 0, 0.2, 1);
+
+		__context.clear(0, 0, 0, 1);
 	}
 
 	public function present():Void {

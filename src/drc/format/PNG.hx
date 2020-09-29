@@ -379,33 +379,52 @@ class PNG {
                                 }
                             else
                                 for( x in 0...width ) {
-                                    bgra.set(w++,cb = data.get(r));
+                                    bgra.set(w++,cr = data.get(r));
                                     bgra.set(w++,cg = data.get(r + 1));
-                                    bgra.set(w++,cr = data.get(r + 2));
+                                    bgra.set(w++,cb = data.get(r + 2));
                                     bgra.set(w++,getAlphaValue());
                                     r += 3;
                                 }
                         case 1:
                             cr = cg = cb = ca = 0;
                             if( alpha )
-                                for( x in 0...width ) {
-                                    cb += data.get(r + 2);
-                                    cg += data.get(r + 1);
-                                    cr += data.get(r);
-                                    ca += data.get(r + 3);	
+                                for(x in 0...width ) {
 
+                                    // cr += data.get(r);
+                                    // bgra.set(w++,cr);
+
+                                    // cg += data.get(r + 1);
+                                    // bgra.set(w++,cg);
+
+                                    // cb += data.get(r + 2);
+                                    // bgra.set(w++,cb);
+
+                                    // ca += data.get(r + 3);	
+                                    // bgra.set(w++,ca);
+
+                                    // r += 4;
+
+                                    cr += data.get(r);
                                     bgra.set(w++,cr);
+
+                                    cg += data.get(r + 1);
                                     bgra.set(w++,cg);
+
+                                    cb += data.get(r + 2);
                                     bgra.set(w++,cb);
+
+                                    ca += data.get(r + 3);	
                                     bgra.set(w++,ca);
 
                                     r += 4;
                                 }
                             else
                                 for( x in 0...width ) {
-                                    cb += data.get(r + 2);	
-                                    cg += data.get(r + 1);	
+                                   
                                     cr += data.get(r);
+                                    cg += data.get(r + 1);
+                                    cb += data.get(r + 2);	
+                                    
 
                                     bgra.set(w++,cr);
                                     bgra.set(w++,cg);
@@ -456,28 +475,31 @@ class PNG {
                             cr = cg = cb = ca = 0;
                             if( alpha )
                                 for( x in 0...width ) {
-                                    cb = (filter(bgra, x, y, stride, cb, w) + data.get(r + 2)) & 0xFF;
-                                    cg = (filter(bgra, x, y, stride, cg, w) + data.get(r + 1)) & 0xFF;
-                                    cr = (filter(bgra, x, y, stride, cr, w) + data.get(r + 0)) & 0xFF;
-                                    ca = (filter(bgra, x, y, stride, ca, w) + data.get(r + 3)) & 0xFF;
-
-                                    bgra.set(w++, cr);
-                                    bgra.set(w++, cg);
+                                    cb = (filter(bgra, x, y, stride, cb, w) + data.get(r + 0)) & 0xFF;
                                     bgra.set(w++, cb);
+
+                                    cg = (filter(bgra, x, y, stride, cg, w) + data.get(r + 1)) & 0xFF;
+                                    bgra.set(w++, cg);
+
+                                    cr = (filter(bgra, x, y, stride, cr, w) + data.get(r + 2)) & 0xFF;
+                                    bgra.set(w++, cr);
+
+                                    ca = (filter(bgra, x, y, stride, ca, w) + data.get(r + 3)) & 0xFF;
                                     bgra.set(w++, ca);
 
                                     r += 4;
                                 }
                             else
                                 for( x in 0...width ) {
-                                    cb = (filter(bgra, x, y, stride, cb, w) + data.get(r + 2)) & 0xFF; 
-                                    cg = (filter(bgra, x, y, stride, cg, w) + data.get(r + 1)) & 0xFF;
-                                    cr = (filter(bgra, x, y, stride, cr, w) + data.get(r + 0)) & 0xFF;
-
-
-                                    bgra.set(w++, cr);
-                                    bgra.set(w++, cg);
+                                    cb = (filter(bgra, x, y, stride, cb, w) + data.get(r + 0)) & 0xFF; 
                                     bgra.set(w++, cb);
+
+                                    cg = (filter(bgra, x, y, stride, cg, w) + data.get(r + 1)) & 0xFF;
+                                    bgra.set(w++, cg);
+
+                                    cr = (filter(bgra, x, y, stride, cr, w) + data.get(r + 2)) & 0xFF;
+                                    bgra.set(w++, cr);
+                                    
                                     bgra.set(w++,getAlphaValue());
                                     r += 3;
                                 }
@@ -511,7 +533,7 @@ class PNG {
             return null;
 	    }
 
-        static inline function filter( data : #if flash10 format.tools.MemoryBytes #else haxe.io.Bytes #end, x, y, stride, prev, p, numChannels=4 ) {
+        static inline function filter( data : haxe.io.Bytes, x, y, stride, prev, p, numChannels=4 ) {
             var b = y == 0 ? 0 : data.get(p - stride);
             var c = x == 0 || y == 0  ? 0 : data.get(p - stride - numChannels);
             var k = prev + b - c;
