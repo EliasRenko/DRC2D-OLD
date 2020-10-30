@@ -3,16 +3,19 @@ package drc.data;
 import drc.display.Attribute;
 import drc.display.Program;
 import drc.display.Uniform;
+import drc.core.GL;
 
-typedef TextureData =
-{
+typedef TextureData = {
+
 	name:String,
 
-	format:String
+	format:String,
+
+	?location:GLUniformLocation
 }
 
-class Profile 
-{
+class Profile {
+	
 	//** Publics.
 	
 	public var attributes:Array<Attribute> = new Array<Attribute>();
@@ -33,25 +36,25 @@ class Profile
 	
 	/** @private **/ private var __name:String;
 	
-	public function new(name:String) 
-	{
+	public function new(name:String) {
+
 		__name = name;
 	}
 	
-	public function addAttribute(attribute:Attribute):Void
-	{
+	public function addAttribute(attribute:Attribute):Void {
+
 		attributes.push(attribute);
 	}
 	
-	public function addUniform(uniform:Uniform):Void
-	{
+	public function addUniform(uniform:Uniform):Void {
+
 		uniforms.push(uniform);
 	}
 	
 	//** Getters and setters.
 	
-	private function get_name():String
-	{
+	private function get_name():String {
+
 		return __name;
 	}
 }

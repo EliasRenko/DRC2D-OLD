@@ -2,7 +2,6 @@ package drc.display;
 
 import haxe.io.UInt8Array;
 import haxe.io.Bytes;
-import drc.buffers.Uint8Array;
 import drc.backend.native.data.Texture;
 import stb.TrueType;
 import haxe.io.Path;
@@ -23,19 +22,31 @@ class Charmap extends Tilemap
 	
 	public var variants:Array<UInt>;
 
+	public var size(get, null):Float;
+
 	// ** Privates.
-	
-	public function new(profile:Profile, font:String, ?sizes:Array<UInt>) 
-	{
+
+	private var __ascender:Float;
+
+	private var __descender:Float;
+
+	private var __size:Float = 32;
+
+	public function new(profile:Profile, font:String, ?sizes:Array<UInt>) {
+
+		// ** ---
+
+		var _tileset:Tileset = new Tileset();
+
 		var _extension:String = Path.extension(font);
 
 		var regions = new Array<Region>();
 
-		var _tileset:Tileset = new Tileset();
+		//var _tileset:Tileset = new Tileset();
 
 		if (sizes == null) {
 
-			sizes = [10, 20];
+			sizes = [20];
 		}
 
 		variants = sizes;
@@ -74,8 +85,8 @@ class Charmap extends Tilemap
 					
 					data[6] = Std.int(charData[count].xadvance);
 				
-					var region:Region =
-					{
+					var region:Region = {
+						
 						values: data
 					}
 
@@ -211,6 +222,96 @@ class Charmap extends Tilemap
 		var tileset = new Tileset(regions);
 		
 		super(profile, [Resources.loadFont('res/fonts/' + source)], tileset);
+	}
+
+	public function importMSDF():Void {
+		
+		var _tileset:Tileset = new Tileset();
+
+		var __data:Dynamic = Resources.loadText('cache/font.json');
+
+		var __fontData:Dynamic = Json.parse(__data);
+
+		__ascender = __fontData.ascender;
+
+		__descender = __fontData.descender;
+
+		__size = __fontData.size;
+
+		var __charData:Dynamic = __fontData.regions;
+
+		var __offset:Int = 32;
+
+		for (count in 0...__charData.length) {
+
+			var data:Array<Int> = new Array<Int>();
+			
+			data[0] = 0;
+			
+			data[1] = 0;
+			
+			data[2] = 0;
+			
+			data[3] = 0;
+			
+			data[4] = 0;
+			
+			data[5] = 0;
+			
+			data[6] = 0;
+
+			if (Reflect.hasField(__charData[count], "dimensions")) { // ** atlasBounds
+
+				var atlasBounds:Dynamic = __charData[count].dimensions;
+
+				data[0] = atlasBounds[0];
+			
+				data[1] = atlasBounds[1];
+
+				data[2] = atlasBounds[2];
+			
+				data[3] = atlasBounds[3];
+
+				//data[0] = atlasBounds.left;
+			
+				//data[1] = Std.int(__atlasData.height - atlasBounds.top);
+
+				//data[2] = Std.int(atlasBounds.right - atlasBounds.left);
+			
+				//data[3] = Std.int(__atlasData.height - atlasBounds.bottom) - data[1];
+			}
+		
+			var region:Region =
+			{
+				values: data
+			}
+
+			_tileset.regions[__offset] = region;
+
+			__offset ++;
+		}
+
+		//super(profile, [Resources.loadTexture('cache/font.png')], _tileset);
+
+		textureParams = {
+
+			magnification: 0x2601,
+
+			minification: 0x2601,
+
+			wrapX: 0x812F,
+
+			wrapY: 0x812F
+		}
+
+		return;
+	}
+
+	// ** Getters and setters.
+
+	private function get_size():Float {
+
+		return __size;
 	}
 }
 

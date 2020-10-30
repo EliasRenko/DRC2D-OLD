@@ -6,7 +6,8 @@ import stb.Image;
 import drc.utils.Color;
 import drc.data.Texture;
 //import drc.buffers.Uint8Array;
-import haxe.io.UInt8Array;
+//import haxe.io.UInt8Array;
+import drc.core.Buffers;
 
 interface Texture {
 
@@ -16,6 +17,7 @@ interface Texture {
 
     public var bytesPerPixel(get, null):Int;
 
+    public var powerOfTwo(get, null):Bool;
     
     public var glTexture:GLTexture;
 
@@ -37,7 +39,7 @@ interface Texture {
 
     /** Getters and setters. **/
 
-    private function get_bytes():UInt8Array;
+    private function get_powerOfTwo():Bool;
 
     private function get_height():Int;
 

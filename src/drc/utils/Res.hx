@@ -1,19 +1,17 @@
 package drc.utils;
 
-import haxe.io.ArrayBufferView;
-import haxe.io.UInt8Array;
-import haxe.io.Bytes;
-import drc.display.Program;
 import drc.core.GL;
-import drc.data.Texture;
-import drc.display.Uniform;
-import drc.display.Attribute;
-import drc.display.Vertex;
-import drc.display.AttributeFormat;
-import drc.data.Profile;
 import drc.core.Promise;
-import haxe.Json;
+import drc.data.Profile;
+import drc.data.Texture;
 import drc.debug.Log;
+import drc.display.Attribute;
+import drc.display.AttributeFormat;
+import drc.display.Program;
+import drc.display.Uniform;
+import drc.display.Vertex;
+import haxe.Json;
+import drc.core.Buffers;
 
 #if js
 
@@ -54,6 +52,20 @@ class Res {
         return _textResource.data;
     }
 
+    public function getTexture(name:String):Texture {
+
+        var _resource:__Resource = __resources.get(name);
+
+        if (_resource == null) {
+
+            return null;
+        }
+
+        var _textureResource:__TextureResource = cast(_resource, __TextureResource);
+
+        return _textureResource.data;
+    }
+
     public function getProfile(name:String):Profile {
 
         var _resource:__Resource = __resources.get(name);
@@ -63,9 +75,9 @@ class Res {
             return null;
         }
 
-        var _textResource:__ProfileResource = cast(_resource, __ProfileResource);
+        var _profileResource:__ProfileResource = cast(_resource, __ProfileResource);
 
-        return _textResource.data;
+        return _profileResource.data;
     }
 
     public function loadBytes(path:String, cache:Bool = true):Promise<UInt8Array> {
@@ -74,7 +86,7 @@ class Res {
 
             BackendAssets.loadBytes(path, function(status, response) {
 
-                if (status == 200) { 
+                if (status == 200 || status == 0) { 
 
                     if (cache) {
 
@@ -99,7 +111,7 @@ class Res {
             
             BackendAssets.loadText(path, function(status, response) {
 
-                if (status == 200) { 
+                if (status == 200 || status == 0) { 
 
                     if (cache) {
 
@@ -110,6 +122,8 @@ class Res {
                 }
                 else {
     
+                    trace(status);
+
                     reject();
                 }
             });
@@ -122,7 +136,7 @@ class Res {
 
             BackendAssets.loadTexture(path, function(status, response) {
 
-                if (status == 200) { 
+                if (status == 200 || status == 0) { 
     
                     if (cache) {
 
@@ -145,7 +159,7 @@ class Res {
             
             BackendAssets.loadText(path, function(status, response) {
 
-                if (status == 200) { 
+                if (status == 200 || status == 0) { 
 
                     var _rootData:Dynamic = Json.parse(response);
 
@@ -191,6 +205,10 @@ class Res {
             
                                 switch (_attributeData[i].format) {
             
+                                    case "float":
+                        
+                                        _attributeFormat = AttributeFormat.FLOAT;
+
                                     case "vec2":
                         
                                         _attributeFormat = AttributeFormat.VEC2;
@@ -328,8 +346,8 @@ class Res {
                         
                         var _location:Int = 0;
 
-                        for (i in 0..._profile.attributes.length) 
-                        {
+                        for (i in 0..._profile.attributes.length) {
+
                             GL.bindAttribLocation(_program.innerData, _location, _profile.attributes[i].name);
                             
                             _profile.attributes[i].assignLocation(_location);
@@ -358,9 +376,9 @@ class Res {
 
                         for (i in 0..._profile.uniforms.length) {
                             
-                            var location:Int = GL.getUniformLocation(_program.innerData, _profile.uniforms[i].name);
+                            var _location:GLUniformLocation = GL.getUniformLocation(_program.innerData, _profile.uniforms[i].name);
                 
-                            _profile.uniforms[i].assignLocation(location);
+                            _profile.uniforms[i].assignLocation(_location);
                             
                             #if debug // ------
                             
@@ -369,7 +387,11 @@ class Res {
 
                         for (i in 0..._profile.textures.length) {
 
-                            var _location:Int = GL.getUniformLocation(_program.innerData, _profile.textures[i].name);
+                            var _loc:GLUniformLocation = GL.getUniformLocation(_program.innerData, _profile.textures[i].name);
+
+                            _profile.textures[i].location = _loc;
+
+                            trace('Tex loc: ' + _loc);
                         }
                 
                         _profile.program = _program;

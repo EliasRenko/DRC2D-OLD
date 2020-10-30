@@ -95,6 +95,7 @@ class Promise<T> {
                 });
 
                 // ** On error.
+
             }
 
             //resolve(new Array<U>());
@@ -125,6 +126,10 @@ class Promise<T> {
         }
 
         return this;
+    }
+
+    public function onReject():Void {
+
     }
 
     public function then<U>(func:((T)->Void, ()->Void)->Void):Promise<T> {
@@ -174,6 +179,7 @@ class Promise<T> {
 
     private function __reject():Void {
 
+        trace('Rejected!');
     }
 
     // ** Getters and setters.

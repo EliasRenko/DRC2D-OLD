@@ -48,6 +48,8 @@ class Image extends Drawable {
 
 			height = textures[0].height;
 		}
+
+		//this.textures[0].generate(256, 256);
 			
 		// ** Set the UV.
 

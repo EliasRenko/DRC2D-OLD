@@ -20,16 +20,19 @@ import drc.types.GamepadEventType;
 import drc.types.WindowEventType;
 import drc.utils.Common;
 import drc.utils.Assets;
+import drc.core.EventDispacher;
 
 #if cpp
 
-class Runtime implements drc.core.Runtime
-{
+class Runtime implements drc.core.Runtime {
+
 	// ** Publics.
 
 	public var active(get, null):Bool;
 
 	public var assets(get, null):Assets;
+
+	public var event(get, null):EventDispacher<Float>;
 
 	public var input(get, null):Input;
 
@@ -47,13 +50,17 @@ class Runtime implements drc.core.Runtime
 
 	/** @private **/ private var __window:Window;
 
-	public function new()
-	{
+	/** @private **/ private var __event:EventDispacher<Float>;
+
+	public function new() {
+
 		Log.print(name);
+
+		__event = new EventDispacher();
 	}
 
-	public function init():Void
-	{
+	public function init():Void {
+
 		var _result:Int = 0;
 		
 		// ** Set SDL hints.
@@ -124,9 +131,6 @@ class Runtime implements drc.core.Runtime
 		__active = true;
 
 		var handle:HWND = getHWND();
-
-		trace(handle);
-		trace(RawPointer.addressOf(handle));
 	}
 
 	public function getHWND():HWND {
@@ -134,32 +138,46 @@ class Runtime implements drc.core.Runtime
 		return SDL.getHWND(__window.innerData);
 	}
 
-	public function release():Void
-	{
+	public function release():Void {
+
 		__active = false;
 		
 		SDL.quit();
 	}
 
-	public function pollEvents():Void
-	{
-		while (SDL.hasAnEvent())
-		{
+	public function requestLoopFrame():Void {
+		
+		while (active) {
+
+			__event.dispatch(0, 1);
+		}
+
+		#if cpp
+
+		Sys.exit(0);
+
+		#end
+	}
+
+	public function pollEvents():Void {
+
+		while (SDL.hasAnEvent()) {
+
 			var event = SDL.pollEvent();
 			
 			__handleInputEvent(event);
 			
 			__handleWindowEvent(event);
 			
-			if (event.type == SDL_QUIT)
-			{
+			if (event.type == SDL_QUIT) {
+
 				release();
 			}
 		}
 	}
 
-	public function present():Void
-	{
+	public function present():Void {
+
 		SDL.GL_SwapWindow(__window.innerData);
 	}
 
@@ -449,8 +467,8 @@ class Runtime implements drc.core.Runtime
 		}
 	}
 
-	private function __initVideo():Void
-	{
+	private function __initVideo():Void {
+
 		var _flags:SDLWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 		
 		__window = new Window();
@@ -459,8 +477,8 @@ class Runtime implements drc.core.Runtime
 		
 		Common.window = __window;
 		
-		if (__window == null)
-		{
+		if (__window == null) {
+
 			throw 'SDL failed to create a window: `${SDL.getError()}`';
 		}
 		
@@ -479,8 +497,8 @@ class Runtime implements drc.core.Runtime
 		
 		var gl = SDL.GL_CreateContext(__window.innerData);
 		
-		if (gl.isnull())
-		{
+		if (gl.isnull()) {
+
 			throw 'SDL failed to create a GL context: `${SDL.getError()}`';
 		}
 		
@@ -490,35 +508,41 @@ class Runtime implements drc.core.Runtime
 		
 		var _result = GLEW.init();
 		
-		if (_result != GLEW.OK)
-		{
+
+		if (_result != GLEW.OK) {
+
 			trace('runtime / sdl / failed to setup created render context, unable to recover / `${GLEW.error(_result)}`');
 		}
-		else
-		{
+		else {
+
 			trace('sdl / GLEW init / ok');
 		}
 	}
 
 	//** Getters and setters.
 
-	private function get_active():Bool
-	{
+	private function get_active():Bool {
+
 		return __active;
 	}
 
-	private function get_assets():Assets
-	{
+	private function get_assets():Assets {
+
 		return __assets;
 	}
 
-	private function get_input():Input
-	{
+	private function get_event():EventDispacher<Float> {
+
+		return __event;
+	}
+
+	private function get_input():Input {
+
 		return __input;
 	}
 
-	private function get_name():String
-	{
+	private function get_name():String {
+
 		return __name;
 	}
 }

@@ -1,5 +1,5 @@
 {
-	"name": "texture",
+	"name": "default",
 	
 	"attributes":[
 	
@@ -34,8 +34,6 @@
 	{"name": "diffuse", "format": "rgba"}
 	
 	],
-	
-	"vertexShader": "default.vert",
 
 	"fragmentShader": "default.frag"
 }

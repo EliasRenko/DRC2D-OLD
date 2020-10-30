@@ -1,5 +1,6 @@
 package drc.display;
 
+import drc.core.Buffers;
 import drc.math.Matrix;
 import drc.core.Context;
 import drc.display.Drawable;
@@ -7,7 +8,7 @@ import drc.data.Profile;
 import drc.data.Texture;
 import drc.utils.Common;
 import drc.core.GL in WebGL;
-import haxe.io.Float32Array;
+//import haxe.io.Float32Array;
 import drc.utils.Resources;
 
 class Stage extends Drawable {
@@ -54,10 +55,6 @@ class Stage extends Drawable {
 		__indicesToRender = 3;
 
 		matrix = matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
-
-		WebGL.enable(WebGL.DEPTH_TEST);
-
-		WebGL.enable(WebGL.BLEND);
 	}
 
 	public function resize(width:Int, height:Int) {
@@ -77,7 +74,7 @@ class Stage extends Drawable {
 
 		//__context.clear(0.3, 0, 0.2, 1);
 
-		__context.clear(0, 0, 0, 1);
+		__context.clear(0.3, 0, 0.2, 1);
 	}
 
 	public function present():Void {
@@ -116,6 +113,12 @@ class Stage extends Drawable {
 
 	private function __drawTriangles(drawable:Drawable, matrix:Matrix):Void {
 		
+		//WebGL.enable(WebGL.DEPTH_TEST);
+
+		//WebGL.depthFunc(WebGL.LESS);
+
+		WebGL.useProgram(drawable.profile.program.innerData);
+
 		__context.generateVertexBuffer();
 		
 		__context.loadVertexBuffer(drawable.vertices.innerData);
@@ -124,13 +127,17 @@ class Stage extends Drawable {
 		
 		__context.loadIndexBuffer(drawable.indices.innerData);
 		
-		WebGL.depthFunc(WebGL.LESS);
-
-		WebGL.useProgram(drawable.profile.program.innerData);
-		
 		var matrixLocation = WebGL.getUniformLocation(drawable.profile.program.innerData, "matrix");
 
-		WebGL.uniformMatrix4fv(matrixLocation, false, matrix.getData());
+		#if js
+
+		WebGL.uniformMatrix4fv(matrixLocation, false, matrix.getData().getData());
+
+		#else
+
+		WebGL.uniformMatrix4fv(matrixLocation, false, matrix);
+
+		#end
 
 		__context.generateVertexBuffer();
 		
@@ -145,22 +152,43 @@ class Stage extends Drawable {
 
 		offset = 1;
 
+		//WebGL.enable(WebGL.TEXTURE_2D);
+
 		for (i in 0...drawable.textures.length) {
+
+			var unit = 1;
+
+			WebGL.bindTexture(WebGL.TEXTURE_2D, drawable.textures[i].glTexture);
 
 			WebGL.activeTexture(WebGL.TEXTURE0);
 
-			WebGL.bindTexture(WebGL.TEXTURE_2D, drawable.textures[i].glTexture);
+			var loc = WebGL.getUniformLocation(drawable.profile.program.innerData, "diffuse");
+
+			WebGL.uniform1i(loc, 0);
 		}
 
-		__context.setSamplerState(drawable.textureParams);
+		//__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
 
-		__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
+		if (drawable.textures[0].powerOfTwo) {
+
+			//WebGL.generateMipmap(WebGL.TEXTURE_2D);
+		}
+		else {
+
+			//trace('NON PO2');
+
+			//__context.setSamplerState(drawable.textureParams);
+		}
+
+		//__context.setSamplerState(drawable.textureParams);
+
+		//WebGL.generateMipmap(WebGL.TEXTURE_2D);
 
 		__context.generateIndexBuffer();
 
 		__context.drawElements(0, drawable.__indicesToRender);
 
-		WebGL.bindTexture(WebGL.TEXTURE_2D, null);
+		//WebGL.bindTexture(WebGL.TEXTURE_2D, null);
 	}
 
 	// ** Getters and setters. ** //

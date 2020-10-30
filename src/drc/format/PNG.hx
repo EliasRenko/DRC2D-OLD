@@ -65,7 +65,7 @@ class PNG {
 
         var l = new List();
 
-        while( true ) {
+        while(true) {
 
             var c = readChunk(input);
             
@@ -82,8 +82,6 @@ class PNG {
         //** **/
 
         var header = getHeader(data);
-
-        trace('Color: ' + header.colbits);
     }
 
     public static function getHeader( d : List<Chunk> ) : Header {

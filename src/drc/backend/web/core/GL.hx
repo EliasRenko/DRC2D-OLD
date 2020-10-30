@@ -1,12 +1,22 @@
 package drc.backend.web.core;
 
+//import haxe.io.ArrayBufferView;
+//import haxe.io.Float32Array;
+//import haxe.io.Int32Array;
+
+//import drc.core.Buffers;
+
+import js.lib.ArrayBufferView;
+import js.lib.Float32Array;
+import js.lib.Int32Array;
+
 #if js
 
 import js.html.webgl.RenderingContext;
-import drc.buffers.ArrayBufferView;
-import drc.buffers.ArrayBuffer;
-import drc.buffers.Float32Array;
-import drc.buffers.Int32Array;
+//import drc.buffers.ArrayBufferView;
+//import drc.buffers.ArrayBuffer;
+//import drc.buffers.Float32Array;
+//import drc.buffers.Int32Array;
 
 typedef GLActiveInfo                = js.html.webgl.ActiveInfo;
 typedef GLBuffer                    = js.html.webgl.Buffer;
@@ -76,7 +86,7 @@ class GL {
         gl.blendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
 
     inline public static function bufferData(target:Int, data:ArrayBufferView, usage:Int):Void
-        gl.bufferData( target, data, usage );
+        gl.bufferData(target, data, usage);
 
     inline public static function bufferSubData(target:Int, offset:Int, data:ArrayBufferView):Void
         gl.bufferSubData(target, offset, data);

@@ -3,8 +3,8 @@ package drc.display;
 import drc.display.Tile;
 import drc.display.TextAlign;
 
-class Text extends Graphic
-{
+class Text extends Graphic {
+
 	//** Publics.
 	
 	public var align(get, set):TextAlign;
@@ -37,6 +37,8 @@ class Text extends Graphic
 	 */
 	public var text(get, set):String; //** Define metadata isVar.
 	
+	public var scale(get, set):Float;
+
 	/**
 	 * The space between letters.
 	 */
@@ -75,11 +77,15 @@ class Text extends Graphic
 
 	/** @private **/ private var __heading:UInt = 0;
 
-	public function new(parent:Charmap, value:String, heading:UInt, x:Float = 0, y:Float = 0) 
-	{
+	public function new(parent:Charmap, value:String, heading:UInt, x:Float = 0, y:Float = 0) {
+
 		super(x, y);
 
 		__heading = heading;
+
+		__scaleX = 1;
+
+		__scaleY = 1;
 
 		if (parent == null) {
 
@@ -278,7 +284,7 @@ class Text extends Graphic
 			
 			tile.x = __x;
 			
-			tile.y = __y;
+			tile.y += __y;
 			
 			tile.z = __z;
 			
@@ -286,7 +292,7 @@ class Text extends Graphic
 			
 			//trace(tile.id);
 
-			tile.offsetY = lineY + parent.tileset.regions[tile.id].values[5];
+			tile.offsetY = lineY + (parent.tileset.regions[tile.id].values[5]);
 			//tile.offsetY = __y + lineY;
 			
 			var next:UInt = text.charCodeAt(i + 1);
@@ -328,7 +334,7 @@ class Text extends Graphic
 				//track = 0;
 			}
 			
-			lineX += tile.width + track;
+			lineX += (tile.width * __scaleX) + track;
 		}
 		
 		if (!__wordwrap)
@@ -465,13 +471,13 @@ class Text extends Graphic
 			
 			if (i > __characters.length - 1)
 			{
-				char = new Character(parent, id + (__heading * 100));
+				char = new Character(parent, id);
 				
 				char.char = __text.charAt(i);
 
-				char.scaleX = scaleX;
+				//char.scaleX = __scaleX;
 
-				char.scaleY = scaleY;
+				//char.scaleY = __scaleY;
 
 				if (__active) {
 
@@ -480,13 +486,19 @@ class Text extends Graphic
 
 				__characters.push(char);
 			}
-			else 
-			{
+			else {
+
 				char = __characters[i];
 				
-				char.id = id + (__heading * 100);
+				char.id = id;
 			}
-			
+
+			char.scaleX = __scaleX;
+
+			char.scaleY = __scaleY;
+
+			//char.setAttribute('s', scaleX);
+
 			char.visible = __visible;
 			
 			track = 0;
@@ -630,6 +642,22 @@ class Text extends Graphic
 		return __parent;
 	}
 	
+	private function get_scale():Float {
+		
+		return __scaleX;
+	}
+
+	private function set_scale(value:Float):Float {
+
+		__scaleX = value / parent.size;
+
+		__scaleY = value / parent.size;
+
+		text = __text;
+
+		return __scaleX;
+	}
+
 	override private function set_visible(value:Bool):Bool
 	{
 		for (i in 0...__characters.length)
@@ -699,5 +727,28 @@ private class Character extends Tile {
 	public function new(parent:Charmap, id:Int) {
 
 		super(parent, id);
+	}
+
+	override function set_id(value:UInt):UInt {
+
+		super.set_id(value);
+
+		if (value == 0) return value;
+
+		var rect:Region = parentTilemap.tileset.regions[value];
+
+		//y = rect.values[5];
+
+		return value;
+	}
+
+	override function get_width():Float {
+
+		return __width;
+	}
+
+	override function get_height():Float {
+
+		return __height;
 	}
 }

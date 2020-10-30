@@ -24,7 +24,7 @@ class Tileset {
 
     public function addRegion(region:Region, ?name:String):Void {
 
-        var index:Int = regions.push(region);
+        var index:Int = regions.push(region) - 1;
 
         if (name == null) return;
 

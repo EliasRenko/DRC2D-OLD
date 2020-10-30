@@ -15,8 +15,7 @@ import drc.utils.Resources;
 
 #end
 
-class App
-{
+class App {
 
 	// ** Publics.
 
@@ -47,8 +46,8 @@ class App
 
 	/** @private **/ private var __promise:Promise<Dynamic>;
 
-	public function new()
-	{
+	public function new() {
+
 		#if cpp
 		
 		__runtime = new drc.backend.native.core.Runtime();
@@ -71,22 +70,27 @@ class App
 		
 		Common.context = __context;
 		
-		__stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
+		//__stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
 
 		__resources = new Res();
 
 		Common.res = __resources;
 
-		Common.stage = stage;
+		//Common.stage = stage;
 
-		Common.window.onEvent.add(__onWindowEvent, WindowEventType.RESIZED);
+		//Common.window.onEvent.add(__onWindowEvent, WindowEventType.RESIZED);
 
 		preload();
 	}
 
 	public function preload():Void {
 
-		var _preloads:Array<Promise<Dynamic>> = [__resources.loadProfile('res/profiles/default.json')];
+		var _preloads:Array<Promise<Dynamic>> = 
+		[
+			__resources.loadProfile('res/profiles/texture.json'),
+			__resources.loadProfile('res/profiles/default.json'),
+			__resources.loadTexture('res/graphics/grid_bw.png')
+		];
 
 		__promise = Promise.all(_preloads);
 	}
@@ -95,42 +99,72 @@ class App
 
 		__promise.onComplete(function(result:Array<String>, type:Int) {
 			
-			//addState(new FontEditor());
+			__stage = new Stage(Common.res.getProfile('res/profiles/texture.json'));
 
-			loop();
+			Common.stage = stage;
+
+			ready();
+
+			__runtime.event.add(loop, 1);
+
+			__runtime.requestLoopFrame();
 		});
 	}
 
-	public function loop():Void {
+	public function ready():Void {}
+
+	public function loop(value:Float, type:UInt):Void {
 
 		// ** While runtime is active...
 
-		while (runtime.active) {
-
-			__runtime.pollEvents();
-			
-			update();
-			
-			stage.setToDraw();
-			
-			render();
-			
-			__context.setRenderToBackbuffer();
-			
-			__context.clear(0, 1, 0, 1);
-			
-			stage.present();
-			
-			__runtime.present();
-			
-			__runtime.input.postUpdate();
-		}
+		#if js 
 		
-		#if cpp
+		__runtime.pollEvents();
+			
+		update();
+		
+		stage.setToDraw();
+		
+		render();
+		
+		__context.setRenderToBackbuffer();
+		
+		__context.clear(0, 1, 0, 1);
+		
+		stage.present();
+		
+		__runtime.present();
+		
+		//__runtime.input.postUpdate();
 
-		Sys.exit(0);
+		#else
+
+		// ** C++
+
+		__runtime.pollEvents();
+			
+		update();
+		
+		stage.setToDraw();
+		
+		render();
+		
+		__context.setRenderToBackbuffer();
+		
+		__context.clear(0, 1, 0, 1);
+		
+		stage.present();
+		
+		__runtime.present();
+		
+		__runtime.input.postUpdate();
 
 		#end
+	}
+
+	public function loopNew(value:Float, type:UInt):Void {
+
+		__runtime.pollEvents();
 	}
 
 	public function addState(state:State):State {
@@ -159,8 +193,8 @@ class App
 
 		// ** For each state...
 
-		for (i in 0...states.count)
-		{
+		for (i in 0...states.count) {
+
 			// ** Render.
 
 			states.members[i].render();
@@ -171,8 +205,8 @@ class App
 
 		// ** For each state...
 
-		for (i in 0...states.count)
-		{
+		for (i in 0...states.count) {
+
 			// ** Update.
 
 			states.members[i].update();

@@ -1,18 +1,14 @@
 package drc.core;
 
-import haxe.io.Int32Array;
-import haxe.io.Float32Array;
+//import haxe.io.Int32Array;
+//import haxe.io.Float32Array;
 //import haxe.io.UInt8Array;
-import haxe.io.UInt8Array;
+
+import drc.core.Buffers;
 import drc.display.Drawable.TextureParameters;
 import drc.data.Texture;
 import drc.display.Uniform;
 import drc.core.GL;
-//import drc.buffers.Float32Array;
-//import drc.buffers.Int32Array;
-import drc.buffers.Uint8Array;
-
-
 
 class Context 
 {
@@ -95,22 +91,26 @@ class Context
 			return;
 		}
 		
+		GL.blendFunc(GL.ONE, GL.ONE_MINUS_SRC_ALPHA);
+
 		//GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
-		GL.blendFunc(source, dest);
+		//GL.blendFunc(source, dest);
 
-		//GL.blendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ONE, GL.ZERO);
+		//GL.blendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ONE, GL.ONE_MINUS_SRC_ALPHA);
 	}
 
 	public function setSamplerState(params:TextureParameters):Void {
 
-		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, params.wrapX);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
 		
-		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, params.wrapY);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
 
-		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, params.magnification);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
 
-		GL.texParameteri(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, params.minification);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR);
+
+		//GL.texParameteri(GL.TEXTURE_2D, GL.GENERATE_MIPMAP, GL.FALSE);
 	}
 
 	public function setRenderToBackbuffer():Void {
@@ -142,12 +142,25 @@ class Context
 		GL.bindBuffer(GL.ARRAY_BUFFER, __glVertexBuffer);
 	}
 	
+	#if js
+
+	public function loadIndexBuffer(data:Array<UInt>):Void {
+
+		GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, Int32Array.fromArray(data).getData(), GL.STATIC_DRAW);
+		
+		GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, null);
+	}
+
+	#else
+
 	public function loadIndexBuffer(data:Array<UInt>):Void {
 
 		GL.bufferData(GL.ELEMENT_ARRAY_BUFFER, Int32Array.fromArray(data).view, GL.STATIC_DRAW);
 		
 		GL.bindBuffer(GL.ELEMENT_ARRAY_BUFFER, null);
 	}
+
+	#end
 
 	public function loadTexture(width:Int, height:Int, comp:Int, data:UInt8Array):Void {
 		
@@ -175,21 +188,42 @@ class Context
 
 			default:
 
-			_format = GL.RGBA;
+			_format = GL.RGB;
 		}
 
+		#if js
+
+		GL.texImage2D(GL.TEXTURE_2D, 0, _format, width, height, 0, _format, GL.UNSIGNED_BYTE, data.getData());
+
+		#else
+
 		GL.texImage2D(GL.TEXTURE_2D, 0, _format, width, height, 0, _format, GL.UNSIGNED_BYTE, data.view);
+
+		#end
 
 		GL.bindTexture(GL.TEXTURE_2D, null);
 	}
 	
+	#if js
+
+	public function loadVertexBuffer(data:Array<Float>):Void {
+
+		GL.bufferData(GL.ARRAY_BUFFER, Float32Array.fromArray(data).getData(), GL.STATIC_DRAW);
+		
+		GL.bindBuffer(GL.ARRAY_BUFFER, null);
+	}
+
+	#else
+
 	public function loadVertexBuffer(data:Array<Float>):Void {
 
 		GL.bufferData(GL.ARRAY_BUFFER, Float32Array.fromArray(data).view, GL.STATIC_DRAW);
 		
 		GL.bindBuffer(GL.ARRAY_BUFFER, null);
 	}
-	
+
+	#end
+
 	public function setAttributePointer(index:Int, size:Int, normalized:Bool, stride:Int, offset:Int):Void {
 
 		GL.enableVertexAttribArray(index);

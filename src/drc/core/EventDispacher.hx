@@ -1,7 +1,7 @@
 package drc.core;
 
-typedef Listener<T> =
-{
+typedef Listener<T> = {
+	
 	var func:T -> Int -> Void;
 	
 	var type:UInt;
@@ -9,8 +9,8 @@ typedef Listener<T> =
 	var priority:UInt;
 }
 
-class EventDispacher<T>
-{
+class EventDispacher<T> {
+	
 	// ** Publics.
 	
 	public var active:Bool = true;
@@ -23,8 +23,8 @@ class EventDispacher<T>
 	
 	public function add(listener:T -> UInt -> Void, type:UInt = 0, priority:UInt = 0):Void {
 
-		var eventListener:Listener<T> = 
-		{
+		var eventListener:Listener<T> = {
+
 			func: listener,
 
 			type: type,

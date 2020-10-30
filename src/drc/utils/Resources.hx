@@ -1,7 +1,6 @@
 package drc.utils;
 
 import haxe.io.UInt8Array;
-import drc.buffers.Uint8Array;
 #if cpp
 
 import sys.io.File;
@@ -291,6 +290,10 @@ class Resources
 				
 				switch (attributeData[count].format) 
 				{
+					case "float":
+						
+						f = AttributeFormat.FLOAT;
+
 					case "vec2":
 						
 						f = AttributeFormat.VEC2;

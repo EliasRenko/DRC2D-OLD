@@ -1,12 +1,14 @@
 package drc.backend.native.utils;
 
+import haxe.io.BytesInput;
+import haxe.io.BufferInput;
+import haxe.io.Input;
 import sdl.RWops;
 import drc.core.Promise;
 import drc.data.Profile;
 import haxe.Json;
 import haxe.io.UInt8Array;
 import haxe.io.Bytes;
-import drc.buffers.Uint8Array;
 import sdl.SDL;
 import sys.io.File;
 import drc.format.PNG;
@@ -80,9 +82,15 @@ class Resources {
 
     public static function loadTexture(path:String, func:(Int, Dynamic)->Void):Void {
         
-        var input = File.read(SDL.getBasePath() + path, true);
+        //var input:FileInput = File.read(SDL.getBasePath() + path, true);
 
-        var png:PNG = new PNG(input);
+        var _rawBytes = File.getBytes(SDL.getBasePath() + path);
+
+        var i:Input = new BytesInput(_rawBytes);
+
+        var png:PNG = new PNG(i);
+
+        //var png:PNG = new PNG(input);
 
         var _bytes:Bytes = png.extract();
 

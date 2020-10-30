@@ -28,32 +28,32 @@ class Uniform {
 	
 	/** @private */ private var __location:GLUniformLocation;
 	
-	public function new(name:String, format:UniformFormat) 
-	{
+	public function new(name:String, format:UniformFormat) {
+
 		__name = name;
 		
 		__format = format;
 	}
 	
-	public function assignLocation(location:Int):Void
-	{
+	public function assignLocation(location:GLUniformLocation):Void {
+
 		__location = location;
 	}
 	
 	//** Getters and setters.
 	
-	private function get_name():String
-	{
+	private function get_name():String {
+
 		return __name;
 	}
 	
-	private function get_format():UniformFormat
-	{
+	private function get_format():UniformFormat {
+
 		return __format;
 	}
 	
-	private function get_location():GLUniformLocation
-	{
+	private function get_location():GLUniformLocation {
+
 		return __location;
 	}
 }

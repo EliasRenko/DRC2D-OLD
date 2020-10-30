@@ -15,7 +15,5 @@ class EntryPoint {
 		// ** Run the app.
 
 		_app.run();
-
-		Sys.sleep(10000);
 	}
 }

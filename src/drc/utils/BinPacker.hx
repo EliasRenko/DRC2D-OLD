@@ -28,12 +28,18 @@ class BinPacker {
     
 	public var freeRectangles(default, null):Array<Rect> = new Array<Rect>();
 
-    public function new(width:Int = 0, height:Int = 0) {
+	// ** Privates.
+
+	private var __rotation:Bool;
+
+    public function new(width:Int = 0, height:Int = 0, rotation:Bool = true) {
 
         binWidth = width;
 
 		binHeight = height;
 		
+		__rotation = rotation;
+
         var n = new Rect(0, 0, width, height);
         
 		freeRectangles.push(n);
@@ -183,7 +189,7 @@ class BinPacker {
 
                 break;
             }
-            else if (height == freeRectangles[i].width && width == freeRectangles[i].height) {
+            else if (height == freeRectangles[i].width && width == freeRectangles[i].height && __rotation) {
 
                 bestNode.x = freeRectangles[i].x;
 
@@ -220,7 +226,7 @@ class BinPacker {
 					nodeIndex = i;
 				}
             }
-            else if (height <= freeRectangles[i].width && width <= freeRectangles[i].height) {
+            else if (height <= freeRectangles[i].width && width <= freeRectangles[i].height && __rotation) {
 
                 var score = scoreByHeuristic(height, width, freeRectangles[i], rectChoice);
 

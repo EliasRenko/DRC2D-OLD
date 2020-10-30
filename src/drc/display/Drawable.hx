@@ -8,15 +8,15 @@ import drc.data.Texture;
 import drc.math.Matrix;
 import drc.display.Shading;
 
-typedef BlendFactors = 
-{
+typedef BlendFactors = {
+	
 	source:Int,
 
 	destination:Int
 }
 
-typedef TextureParameters = 
-{
+typedef TextureParameters = {
+
 	magnification:Int,
 
 	minification:Int,
@@ -68,6 +68,8 @@ class Drawable extends Graphic
 	/** @private **/ private var __state:State;
 
 	public function new(profile:Profile) {
+
+		if (profile == null) throw 'Profile cannot be null';
 
 		super(0, 0);
 		

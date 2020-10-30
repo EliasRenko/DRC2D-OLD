@@ -1,7 +1,7 @@
 package drc.objects;
 
 import drc.math.Vector4;
-import drc.buffers.Float32Array;
+import haxe.io.Float32Array;
 import drc.math.Matrix;
 import drc.utils.Common;
 

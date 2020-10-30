@@ -2,9 +2,10 @@ package drc.backend.native.data;
 
 import drc.utils.Color;
 import drc.math.Rectangle;
-import haxe.io.Bytes;
-import haxe.io.UInt8Array;
+//import haxe.io.Bytes;
+//import haxe.io.UInt8Array;
 //import drc.buffers.Uint8Array;
+import drc.core.Buffers;
 import stb.Image;
 import drc.utils.Common;
 import drc.core.GL;
@@ -50,9 +51,12 @@ class Texture implements drc.data.Texture {
             return;
         }
 
+        
+        //GL.pixelStorei(GL.UNPACK_ALIGNMENT, 1);
+
         upload(data, bytesPerPixel, width, height);
 
-        //WebGL.pixelStorei(WebGL.UNPACK_ALIGNMENT, 1);
+        //generate(width, height);
     }
 
     public function clone():Texture {
@@ -62,7 +66,7 @@ class Texture implements drc.data.Texture {
 
     public function generate(width:Int, height:Int):Void {
 
-        __bytesPerPixel = 4;
+        __bytesPerPixel = 3;
 
         __width = width;
 
@@ -75,22 +79,46 @@ class Texture implements drc.data.Texture {
 
         var dim = __width * __height;
 
-        var _bytes = new UInt8Array(dim * 4);
+        var _bytes = new UInt8Array(dim * __bytesPerPixel);
+
+        //var _bytes = haxe.io.Bytes.alloc(dim * __bytesPerPixel);
 
         for (i in 0...dim) {
 
-            var pos = 4 * i;
+            var pos = __bytesPerPixel * i;
 
-            _bytes[pos] = 0;
+            _bytes[pos] = 250;
 
-            _bytes[pos + 1] = 0;
+            _bytes[pos + 1] = 250;
 
-            _bytes[pos + 2] = 0;
+            _bytes[pos + 2] = 250;
 
-            _bytes[pos + 3] = 0;
+            //_bytes.set(pos, 250);
+            //_bytes.set(pos + 1, 250);
+            //_bytes.set(pos + 2, 250);
+
+            
+
+            //_bytes[pos + 3] = 1;
         }
 
-        bytes = _bytes;
+        //bytes = _bytes;
+
+        //GL.bindTexture(GL.TEXTURE_2D, glTexture);
+
+        //glTexture = Common.context.generateTexture();
+
+        //Common.context.loadTexture(__width, __height, __bytesPerPixel, _bytes);
+
+        #if js
+
+        upload(_bytes, __bytesPerPixel, width, height);
+
+        #else
+
+        upload(UInt8Array.fromBytes(_bytes), __bytesPerPixel, width, height);
+
+        #end
     }
 
     public function create(width:Int, height:Int) {
@@ -108,6 +136,8 @@ class Texture implements drc.data.Texture {
 
         glTexture = Common.context.generateTexture();
 
+        Common.context.setSamplerState(null);
+
         Common.context.loadTexture(__width, __height, __bytesPerPixel, null);
     }
 
@@ -116,6 +146,8 @@ class Texture implements drc.data.Texture {
         if (bytes == null) return;
 
         var pixels:UInt8Array = new UInt8Array((width * height) * sourceTexture.bytesPerPixel);
+
+        var channels = sourceTexture.bytesPerPixel;
 
         var count:Int = (width * height) * sourceTexture.bytesPerPixel;
 
@@ -139,9 +171,12 @@ class Texture implements drc.data.Texture {
                 bytes[_pos] = pixels[_j];
                 bytes[_pos + 1] = pixels[_j + 1];
                 bytes[_pos + 2] = pixels[_j + 2];
-                bytes[_pos + 3] = 255;
 
-                _j += 4;
+                if (channels > 3) bytes[_pos + 3] = pixels[_j + 3];
+                else bytes[_pos + 3] = 255;
+
+
+                _j += channels;
 
                 _w ++;
             }
@@ -296,15 +331,12 @@ class Texture implements drc.data.Texture {
 
         glTexture = Common.context.generateTexture();
 
+        Common.context.setSamplerState(null);
+
         Common.context.loadTexture(__width, __height, __bytesPerPixel, bytes);
     }
 
     /** Getters and setters. **/
-
-    private function get_bytes():UInt8Array {
-        
-        return null;
-    }
 
     private function get_bytesPerPixel():Int {
 
@@ -316,7 +348,7 @@ class Texture implements drc.data.Texture {
         return __dirty;
     }
 
-    private function get_height():Int {
+    public function get_height():Int {
         
         return __height;
     }
@@ -331,7 +363,7 @@ class Texture implements drc.data.Texture {
         return __transparent;
     }
     
-    private function get_width():Int {
+    public function get_width():Int {
         
         return __width;
     }

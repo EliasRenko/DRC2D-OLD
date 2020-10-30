@@ -29,7 +29,7 @@ class HTTPRequest {
         __request.abort();
     }
 
-    public function load(func:(Int, Dynamic)->Void):Void {
+    public function load(func:(Int, Dynamic)->Void, type:XMLHttpRequestResponseType):Void {
 
         __request = new XMLHttpRequest();
 
@@ -37,7 +37,7 @@ class HTTPRequest {
 
         __request.overrideMimeType('text/plain; charset=x-user-defined');
 
-        __request.responseType = XMLHttpRequestResponseType.ARRAYBUFFER;
+        __request.responseType = type;
 
         __request.onload = function(data) {
 
