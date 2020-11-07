@@ -12,7 +12,7 @@ import haxe.io.Bytes;
 import sdl.SDL;
 import sys.io.File;
 import drc.format.PNG;
-import drc.backend.native.data.Texture;
+import drc.data.Texture;
 
 typedef TextureData = {
 

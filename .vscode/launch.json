@@ -12,7 +12,7 @@
 
             "preLaunchTask": "Resources",
             
-            "program": "${workspaceFolder}/bin/windows.debug/Main-debug.exe"
+            "program": "${workspaceFolder}/bin/windows.debug/App-debug.exe"
         },
         {
             "name": "Run",
@@ -23,7 +23,7 @@
             
             "preLaunchTask": "Resources",
 
-            "program": "${workspaceFolder}/bin/windows/Main.exe"
+            "program": "${workspaceFolder}/bin/windows/App.exe"
         }
     ]
 }

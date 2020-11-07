@@ -8,8 +8,6 @@ import drc.data.Profile;
 import drc.data.Texture;
 import drc.utils.Common;
 import drc.core.GL in WebGL;
-//import haxe.io.Float32Array;
-import drc.utils.Resources;
 
 class Stage extends Drawable {
 
@@ -23,8 +21,8 @@ class Stage extends Drawable {
 
 	/** @private **/ private var __context:Context;
 
-	public function new(profile:Profile) 
-	{
+	public function new(profile:Profile) {
+
 		super(profile);
 		
 		__context = Common.context;
@@ -37,7 +35,7 @@ class Stage extends Drawable {
 
 		textures = new Array<Texture>();
 
-		textures[0] = new drc.backend.native.data.Texture();
+		textures[0] = new Texture();
 
 		textures[0].create(640, 480);
 		
@@ -167,7 +165,7 @@ class Stage extends Drawable {
 			WebGL.uniform1i(loc, 0);
 		}
 
-		//__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
+		__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
 
 		if (drawable.textures[0].powerOfTwo) {
 

@@ -7,7 +7,6 @@ import drc.system.Window;
 import drc.types.WindowEventType;
 import drc.utils.Common;
 import drc.utils.Res;
-import drc.utils.Resources;
 
 #if cpp
 
@@ -257,5 +256,20 @@ class App {
 	private function get_stage():Stage {
 
 		return __stage;
+	}
+
+	// **
+
+	public static function main() {
+
+		var _appRef = Type.resolveClass("Main");
+
+		var _app:App = Type.createInstance(_appRef, []);
+
+		if (_app == null) throw 'Main instance is null.';
+
+		// ** Run the app.
+
+		_app.run();
 	}
 }

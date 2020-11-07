@@ -57,7 +57,7 @@ class Resources {
 
             var header = PNG.getHeader(png.data);
         
-            var _texture:Texture = new drc.backend.native.data.Texture(UInt8Array.fromBytes(_bytes), 4, header.width, header.height);
+            var _texture:Texture = new Texture(UInt8Array.fromBytes(_bytes), 4, header.width, header.height);
 
             func(status, _texture);
 

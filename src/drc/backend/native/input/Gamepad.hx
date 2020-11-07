@@ -2,15 +2,26 @@ package drc.backend.native.input;
 
 import haxe.ds.Vector;
 import drc.input.Device;
-import sdl.GameController;
-import sdl.Joystick;
+//import sdl.Joystick;
+//import sdl.SDL;
+//import sdl.Haptic;
+
+#if js
+
+typedef GamepadData = js.html.Gamepad;
+
+#elseif cpp
+
 import sdl.SDL;
-import sdl.Haptic;
+
+typedef GamepadData = sdl.Joystick;
+
+#end
 
 #if cpp
 
-class Gamepad extends Device implements drc.input.Gamepad
-{
+class Gamepad extends Device implements drc.input.Gamepad {
+	
 	//** Publics.
 	
 	public var active(get, null):Bool;
@@ -27,10 +38,10 @@ class Gamepad extends Device implements drc.input.Gamepad
 	
 	/** @private **/ private var __index:UInt;
 	
-	/** @private **/ private var __sdlJoystick:Joystick;
+	/** @private **/ private var __sdlJoystick:GamepadData;
 	
-	public function new(index:UInt) 
-	{
+	public function new(index:UInt) {
+
 		__index = index;
 		
 		__checkControls = new Vector(15);
@@ -50,7 +61,7 @@ class Gamepad extends Device implements drc.input.Gamepad
 		
 	}
 	
-	public function open(joystick:Joystick):Int
+	public function open(joystick:GamepadData):Int
 	{
 		__sdlJoystick = joystick;
 		
@@ -75,8 +86,8 @@ class Gamepad extends Device implements drc.input.Gamepad
 		__releaseControls[__releaseCount ++] = control;
 	}
 	
-	public function close():Void
-	{
+	public function close():Void {
+		
 		SDL.joystickClose(__sdlJoystick);
 	}
 	

@@ -1,26 +1,21 @@
 package drc.backend.native.core;
 
-import cpp.RawPointer;
-import sdl.SysWM.HWND;
-import cpp.Int64;
-import cpp.Pointer;
-import sdl.SysWM.SysWMinfo;
+import drc.backend.native.input.Gamepad;
 import drc.backend.native.system.Input;
 import drc.backend.native.system.Window;
 import drc.core.EventDispacher;
+import drc.core.EventDispacher;
 import drc.core.Runtime;
 import drc.debug.Log;
+import drc.types.GamepadEvent;
+import drc.types.GamepadEventType;
+import drc.types.WindowEventType;
+import drc.utils.Common;
 import glew.GLEW;
 import sdl.Event;
 import sdl.GameController;
 import sdl.Joystick;
 import sdl.SDL;
-import drc.types.GamepadEvent;
-import drc.types.GamepadEventType;
-import drc.types.WindowEventType;
-import drc.utils.Common;
-import drc.utils.Assets;
-import drc.core.EventDispacher;
 
 #if cpp
 
@@ -29,8 +24,6 @@ class Runtime implements drc.core.Runtime {
 	// ** Publics.
 
 	public var active(get, null):Bool;
-
-	public var assets(get, null):Assets;
 
 	public var event(get, null):EventDispacher<Float>;
 
@@ -42,7 +35,7 @@ class Runtime implements drc.core.Runtime {
 
 	/** @private **/ private var __active:Bool;
 
-	/** @private **/ private var __assets:Assets;
+	/** @private **/ private var __gameControllers:Map<UInt, NativeGamepad>;
 
 	/** @private **/ private var __input:Input;
 
@@ -119,23 +112,18 @@ class Runtime implements drc.core.Runtime {
 		}
 		
 		#end
-		
-		__assets = new Assets();
 
-		Common.assets = __assets;
+		// ** Input.
 
 		__input = new Input();
 		
 		Common.input = __input;
 		
+		// ** GameControllers.
+
+		__gameControllers = new Map<UInt, NativeGamepad>();
+
 		__active = true;
-
-		var handle:HWND = getHWND();
-	}
-
-	public function getHWND():HWND {
-
-		return SDL.getHWND(__window.innerData);
 	}
 
 	public function release():Void {
@@ -157,6 +145,10 @@ class Runtime implements drc.core.Runtime {
 		Sys.exit(0);
 
 		#end
+	}
+
+	public function getGamepad(index:UInt):Void {
+
 	}
 
 	public function pollEvents():Void {
@@ -181,66 +173,16 @@ class Runtime implements drc.core.Runtime {
 		SDL.GL_SwapWindow(__window.innerData);
 	}
 
-	private function __handleInputEvent(event:Event):Void
-	{
+	private function __handleInputEvent(event:Event):Void {
+
 		var _eventType:GamepadEventType = GamepadEventType.UNKNOWN;
 		
-		switch (event.type)
-		{
-			case SDL_JOYDEVICEADDED:
-				
-				if (!SDL.isGameController(event.jdevice.which))
-				{
-					var gamepadEvent:GamepadEvent =
-					{
-						type: GamepadEventType.ADDED,
-						
-						timestamp: event.window.timestamp,
-						
-						index: event.cdevice.which,
-						
-						data1: 0,
-						
-						data2: 0
-					}
-					
-					var joystick:Joystick = SDL.joystickOpen(event.jdevice.which);
-					
-					__input.onGamepadConnected(event.jdevice.which, joystick);
-				}
-				
-			case SDL_JOYDEVICEREMOVED:
-				
-				var gamepadEvent:GamepadEvent =
-				{
-					type: GamepadEventType.ADDED,
-					
-					timestamp: event.window.timestamp,
-					
-					index: event.cdevice.which,
-					
-					data1: 0,
-					
-					data2: 0
-				}
-				
-			case SDL_JOYBUTTONDOWN:
-				
-				_eventType = GamepadEventType.PRESSED;
-				
-				//trace(event.jbutton.which + " - " + event.jbutton.button);
-				//__input.onGamepadButtonDown(event.jbutton.which, event.jbutton.button);
-				
-			case SDL_JOYBUTTONUP:
-				
-				_eventType = GamepadEventType.RELEASED;
-				
-				//__input.onGamepadButtonUp(event.jbutton.which, event.jbutton.button);
+		switch (event.type) {
 				
 			case SDL_CONTROLLERDEVICEADDED:
 				
-				var gamepadEvent:GamepadEvent =
-				{
+				var gamepadEvent:GamepadEvent = {
+
 					type: GamepadEventType.ADDED,
 					
 					timestamp: event.window.timestamp,
@@ -252,16 +194,22 @@ class Runtime implements drc.core.Runtime {
 					data2: 0
 				}
 				
-				var gamepad:GameController = SDL.gameControllerOpen(event.cdevice.which);
-				
-				__input.onGamepadConnected(event.cdevice.which, SDL.gameControllerGetJoystick(gamepad));
+				var _gamepad:GameController = SDL.gameControllerOpen(event.cdevice.which);
+
+				__input.onGamepadConnected(event.cdevice.which, SDL.gameControllerGetJoystick(_gamepad));
 				
 				__input.onGamepadEvent(gamepadEvent);
+
+				// ** 
+
+
+
+				//__gameControllers.set(SDL.joystickInstanceID(SDL.gameControllerGetJoystick(_gamepad)), )
 				
 			case SDL_CONTROLLERDEVICEREMOVED:
 				
-				var gamepadEvent:GamepadEvent =
-				{
+				var gamepadEvent:GamepadEvent = {
+
 					type: GamepadEventType.REMOVED,
 					
 					timestamp: event.window.timestamp,
@@ -276,10 +224,12 @@ class Runtime implements drc.core.Runtime {
 				__input.onGamepadDisconnected(event.cdevice.which);
 				
 				__input.onGamepadEvent(gamepadEvent);
+
+				// ** 
 				
 			case SDL_CONTROLLERAXISMOTION:
 				
-				var _val:Float = (event.caxis.value+32768) / (32767 + 32768);
+				var _val:Float = (event.caxis.value + 32768) / (32767 + 32768);
 				
 				var _normalized_val = ( -0.5 + _val) * 2.0;
 				
@@ -287,8 +237,8 @@ class Runtime implements drc.core.Runtime {
 				
 			case SDL_CONTROLLERBUTTONDOWN:
 				
-				var gamepadEvent:GamepadEvent =
-				{
+				var gamepadEvent:GamepadEvent = {
+
 					type: GamepadEventType.PRESSED,
 					
 					timestamp: event.window.timestamp,
@@ -305,11 +255,17 @@ class Runtime implements drc.core.Runtime {
 				__input.onGamepadEvent(gamepadEvent);
 				
 				//trace(event.cbutton.which + " - " + event.cbutton.button);
+
+				// ** 
+
+				//trace("Button press C ID: " + event.cdevice.which);
+
+				//__joysticks[event.cdevice.which].onButtonPress(event.cbutton.button);
 				
 			case SDL_CONTROLLERBUTTONUP:
 				
-				var gamepadEvent:GamepadEvent =
-				{
+				var gamepadEvent:GamepadEvent = {
+
 					type: GamepadEventType.RELEASED,
 					
 					timestamp: event.window.timestamp,
@@ -324,6 +280,10 @@ class Runtime implements drc.core.Runtime {
 				__input.onGamepadButtonUp(event.cbutton.which, event.cbutton.button);
 				
 				__input.onGamepadEvent(gamepadEvent);
+
+				// ** 
+
+				//__joysticks[event.cdevice.which].onButtonRelease(event.cbutton.button);
 				
 			case SDL_CONTROLLERDEVICEREMAPPED:
 				
@@ -367,18 +327,18 @@ class Runtime implements drc.core.Runtime {
 		}
 	}
 
-	private function __handleWindowEvent(event:Event):Void
-	{
+	private function __handleWindowEvent(event:Event):Void {
+
 		var data1:Int = event.window.data1;
 		
 		var data2:Int = event.window.data2;
 		
-		if (event.type == SDL_WINDOWEVENT)
-		{
+		if (event.type == SDL_WINDOWEVENT) {
+
 			var type:WindowEventType = 0;
 			
-			switch (event.window.event)
-			{
+			switch (event.window.event) {
+
 				case SDL_WINDOWEVENT_SHOWN:
 					
 					type = WindowEventType.SHOWN;
@@ -452,8 +412,8 @@ class Runtime implements drc.core.Runtime {
 				default:
 			}
 			
-			var windowEvent:drc.types.WindowEvent =
-			{
+			var windowEvent:drc.types.WindowEvent = {
+
 				type : type,
 				
 				timestamp : event.window.timestamp,
@@ -526,11 +486,6 @@ class Runtime implements drc.core.Runtime {
 		return __active;
 	}
 
-	private function get_assets():Assets {
-
-		return __assets;
-	}
-
 	private function get_event():EventDispacher<Float> {
 
 		return __event;
@@ -544,6 +499,25 @@ class Runtime implements drc.core.Runtime {
 	private function get_name():String {
 
 		return __name;
+	}
+}
+
+private class NativeGamepad extends Gamepad {
+
+	// ** Privates.
+
+	private var __innerData:sdl.Joystick;
+
+	public function new(index:UInt) {
+
+		super(index);
+	}
+
+	override function open(joystick:drc.backend.native.input.Gamepad.GamepadData):Int {
+
+		__innerData = joystick;
+
+		return id;
 	}
 }
 

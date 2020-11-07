@@ -6,8 +6,6 @@ import drc.backend.web.core.GL;
 import drc.core.EventDispacher;
 import drc.utils.Common;
 
-#if js
-
 class Runtime implements drc.core.Runtime {
 
     // ** Publics.
@@ -22,15 +20,13 @@ class Runtime implements drc.core.Runtime {
 
     // ** Privates.
 
-    private var __active:Bool;
+    /** @private **/ private var __active:Bool;
 
-    private var __input:Input;
+    /** @private **/ private var __input:Input;
 
-    private var __name:String;
+    /** @private **/ private var __name:String = 'Web';
 
-    private var __window:drc.backend.web.system.Window;
-
-    //private var __window:js.html.CanvasElement;
+    /** @private **/ private var __window:drc.backend.web.system.Window;
 
     /** @private **/ private var __event:EventDispacher<Float>;
 
@@ -39,11 +35,23 @@ class Runtime implements drc.core.Runtime {
         __active = true;
 
         __event = new EventDispacher();
+
+        // ** __gamepads.
     }
 
     public function init():Void {
 
         __initVideo();
+
+        __window.innerData.addEventListener("gamepadconnected", function(event:{ gamepad:js.html.Gamepad }) {
+
+            trace('Gamepad connected!');
+        });
+
+        __window.innerData.addEventListener("gamepaddisconnected", function(event) {
+
+            
+        });
     }
 
     public function release():Void {}
@@ -95,6 +103,10 @@ class Runtime implements drc.core.Runtime {
         js.Browser.window.requestAnimationFrame(__loop);
     }
 
+    public function getGamepad(index:UInt):Void {
+        
+    }
+
     // ** Getters and setters.
 
     private function get_active():Bool {
@@ -117,5 +129,3 @@ class Runtime implements drc.core.Runtime {
         return __name;
     }
 }
-
-#end

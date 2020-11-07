@@ -2,8 +2,8 @@ package drc.input;
 
 import haxe.ds.Vector;
 
-class Device 
-{
+class Device {
+
 	//** Privates.
 	
 	/** @private */ private var __controlsCount:Int;
@@ -21,27 +21,27 @@ class Device
 	/** @private */ private var __releaseControls:Array<Int>;
 	
 	
-	public function check(control:Int):Bool
-	{
+	public function check(control:Int):Bool{
+
 		return control < 0 ? __checkCount > 0 : __checkControls[control];
 	}
 	
-	public function pressed(control:Int):Bool
-	{
+	public function pressed(control:Int):Bool {
+
 		return control < 0 ? __pressCount > 0 : __pressControls.indexOf(control) >= 0;
 	}
 	
-	public function released(control:Int):Bool
-	{
+	public function released(control:Int):Bool {
+
 		return control < 0 ? __releaseCount > 0 : __releaseControls.indexOf(control) >= 0;
 	}
 	
-	private function __indexOf(vector:Array<Int>, index:Int):Int
-	{
-		for (i in 0...vector.length) 
-		{
-			if (vector[i] == index)
-			{
+	private function __indexOf(vector:Array<Int>, index:Int):Int {
+
+		for (i in 0...vector.length) {
+
+			if (vector[i] == index) {
+
 				return i;
 			}
 		}
@@ -49,19 +49,19 @@ class Device
 		return -1;
 	}
 	
-	public function postUpdate():Void
-	{
+	public function postUpdate():Void {
+
 		// ** Clear every pressed control for the next frame.
 		
-		while (__pressCount > 0) 
-		{
+		while (__pressCount > 0) {
+
 			__pressControls[-- __pressCount] = -1;
 		}
 		
 		// ** Clear every released control for the next frame.
 		
-		while (__releaseCount > 0) 
-		{
+		while (__releaseCount > 0) {
+			
 			__releaseControls[-- __releaseCount] = -1;
 		}
 	}

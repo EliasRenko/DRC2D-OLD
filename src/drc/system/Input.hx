@@ -7,8 +7,8 @@ import drc.input.Mouse;
 import drc.types.GamepadEvent;
 import drc.types.TextEvent;
 
-interface Input 
-{
+interface Input {
+	
 	//** Publics.
 	
 	public var gamepadEvent:EventDispacher<GamepadEvent>;

@@ -23,6 +23,8 @@ interface Runtime {
 	public function init():Void;
 	
 	public function release():Void;
+
+	public function getGamepad(index:UInt):Void;
 	
 	public function pollEvents():Void;
 	
