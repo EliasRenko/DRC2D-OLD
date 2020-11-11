@@ -1,37 +1,149 @@
 package drc.system;
 
 import drc.input.Keyboard;
+import drc.core.Runtime;
+import drc.types.GamepadEvent;
 import drc.core.EventDispacher;
 import drc.input.Gamepad;
-import drc.input.Mouse;
-import drc.types.GamepadEvent;
-import drc.types.TextEvent;
+import drc.types.GamepadInputEvent;
 
-interface Input {
-	
-	//** Publics.
-	
-	public var gamepadEvent:EventDispacher<GamepadEvent>;
+class Input {
 
-	public var textEvent:EventDispacher<TextEvent>;
-	
-	public var keyboard(get, null):Keyboard;
-	
-	public var mouse(get, null):Mouse;
-	
-	//** Methods.
-	
-	public function getGamepad(index:UInt):Gamepad;
-	
-	public function postUpdate():Void;
+    // ** Publics.
 
-	public function beginTextInput():Void;
+    public var event:EventDispacher<GamepadEvent>;
 
-	public function endTextInput():Void;
-	
-	//** Getters and setters.
-	
-	private function get_keyboard():Keyboard;
-	
-	private function get_mouse():Mouse;
+    public var gamepads(get, null):Gamepads;
+
+    public var keyboard(get, null):Keyboard;
+
+    // ** Privates.
+
+    private var __gamepads:Gamepads;
+
+    private var __keyboard:Keyboard;
+
+    public function new(runtime:Runtime) {
+
+        __keyboard = runtime.keyboard;
+
+        event = new EventDispacher<GamepadEvent>();
+
+        event.add(__onGamepadAdd, 1);
+
+        event.add(__onGamepadRemove, 2);
+
+        //event.add(__onGamepadButtonDown, 2);
+
+        //event.add(__onGamepadButtonUp, 3);
+
+        __gamepads = new Gamepads(4);
+    }
+
+    public function postUpdate():Void {
+        
+    }
+
+    private function __onGamepadAdd(event:GamepadEvent, type:UInt):Void {
+        
+        __gamepads[event.index].open(event.gamepad);
+    }
+
+    private function __onGamepadRemove(event:GamepadEvent, type:UInt):Void {
+        
+        __gamepads[event.index].close();
+    }
+
+    // ** Getters and setters.
+
+    private function get_gamepads():Gamepads {
+        
+        return __gamepads;
+    }
+
+    private function get_keyboard():Keyboard {
+        
+        return __keyboard;
+    }
+}
+
+private abstract Gamepads(Array<GamepadHandler>) {
+
+    public inline function new(count:UInt) {
+        
+        this = new Array<GamepadHandler>();
+
+        for (i in 0...4) {
+
+            this[i] = new GamepadHandler(i);
+        }
+    }
+
+    // ** Getters and setters.
+
+    @:dox(hide)
+    @:noCompletion
+    @:arrayAccess
+    public function get(index:Int):GamepadHandler {
+
+        return this[index];
+    }
+    
+    @:dox(hide)
+    @:noCompletion
+    @:arrayAccess
+    public function set(index:Int, value:GamepadHandler):GamepadHandler {
+
+        this[index] = value;
+        
+        return value;
+    }
+}
+
+private class GamepadHandler {
+
+    // ** Privates.
+
+    private var __index:UInt;
+
+    private var __gamepad:Gamepad;
+
+    public function new(index:UInt) {
+
+        __index = index;
+    }
+
+    public function open(gamepad:Gamepad):Void {
+        
+        __gamepad = gamepad;
+
+        __gamepad.add(__onButtonDown, 1);
+
+        __gamepad.add(__onButtonUp, 2);
+
+        __gamepad.add(__onAxisMotion, 3);
+    }
+
+    public function close():Void {
+        
+        __gamepad.remove(__onButtonDown);
+
+        __gamepad.remove(__onButtonUp);
+
+        __gamepad.remove(__onAxisMotion);
+
+        __gamepad.close();
+    }
+
+    private function __onAxisMotion(event:GamepadInputEvent, type:UInt):Void {
+        
+    }
+
+    private function __onButtonDown(event:GamepadInputEvent, type:UInt):Void {
+        
+    }
+
+    private function __onButtonUp(event:GamepadInputEvent, type:UInt):Void {
+        
+    }
 }

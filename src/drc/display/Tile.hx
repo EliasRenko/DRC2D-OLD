@@ -14,7 +14,7 @@ class Tile extends Graphic {
 
     // ** Privates.
 
-    private var __id:Null<UInt>;
+    /** @private **/ private var __id:Null<UInt>;
 
     /** @private **/ private var __parentTilemap:Tilemap;
 
@@ -22,8 +22,8 @@ class Tile extends Graphic {
 
         super(x, y);
 
-        if (parent != null)
-        {
+        if (parent != null) {
+
             parentTilemap = parent;
         }
        
@@ -40,22 +40,22 @@ class Tile extends Graphic {
         __add();
     }
 
-    override function __add():Void 
-    {
+    override function __add():Void {
+
         //** Add itself to the parent tilemap.
         
         __parentTilemap.addTile(this);
     }
         
-    public function centerOrigin():Void
-    {
+    public function centerOrigin():Void {
+
         originX = __width / 2;
         
         originY = __height / 2;
     }
 
-    override function __remove():Void 
-    {
+    override function __remove():Void {
+
         //** Remove itself from the parent tilemap.
         
         __parentTilemap.removeTile(this);
@@ -111,15 +111,15 @@ class Tile extends Graphic {
 
 		#if debug // ------
 		
-		if (!parentTilemap.shadings.exists(name))
-		{
+		if (!parentTilemap.shadings.exists(name)) {
+
 			throw "Attribute: " + name + " does not exist.";
 		}
 		
 		#end // ------
 		
-		for (i in 0...4) 
-		{
+		for (i in 0...4) {
+
 			vertices.innerData[parentTilemap.shadings[name].positions[i]] = value;
 		}
 	}
@@ -137,8 +137,8 @@ class Tile extends Graphic {
 
         __id = value;
 
-        if (parentTilemap == null)
-        {
+        if (parentTilemap == null) {
+
             //** Get the name of the class.
             
             var className = Type.getClassName(Type.getClass(this));
@@ -154,8 +154,8 @@ class Tile extends Graphic {
 
         var rect:Region = parentTilemap.tileset.regions[value];
 
-        if (rect == null)
-        {
+        if (rect == null) {
+
             rect = parentTilemap.tileset.regions[64];
         }
 
@@ -180,37 +180,37 @@ class Tile extends Graphic {
         return __id;
     }
 
-    private function get_parentTilemap():Tilemap
-        {
-            //** Return.
+    private function get_parentTilemap():Tilemap {
+
+        //** Return.
+        
+        return __parentTilemap;
+    }
+        
+    private function set_parentTilemap(tilemap:Tilemap):Tilemap {
+
+        var active:Bool = __active;
+        
+        if (__parentTilemap != null) {
+
+            __parentTilemap.removeTile(this);
             
-            return __parentTilemap;
+            vertices.dispose();
+        }
+
+        vertices.insert(tilemap.profile.dataPerVertex * 4);
+        
+        __parentTilemap = tilemap;
+        
+        id = __id;
+        
+        if (active) {
+            
+            __add();
         }
         
-        private function set_parentTilemap(tilemap:Tilemap):Tilemap
-        {
-            var active:Bool = __active;
-            
-            if (__parentTilemap != null)
-            {
-                __parentTilemap.removeTile(this);
-                
-                vertices.dispose();
-            }
-
-            vertices.insert(tilemap.profile.dataPerVertex * 4);
-            
-            __parentTilemap = tilemap;
-            
-            id = __id;
-            
-            if (active)
-            {
-                __add();
-            }
-            
-            //** Return.
-            
-            return __parentTilemap;
-        }
+        //** Return.
+        
+        return __parentTilemap;
+    }
 }

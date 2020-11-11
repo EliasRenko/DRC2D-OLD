@@ -20,7 +20,7 @@ typedef GamepadData = sdl.Joystick;
 
 #if cpp
 
-class Gamepad extends Device implements drc.input.Gamepad {
+class Gamepad extends Device {
 	
 	//** Publics.
 	
@@ -51,13 +51,11 @@ class Gamepad extends Device implements drc.input.Gamepad {
 		__releaseControls = new Array<Int>();
 	}
 	
-	public function init():Void
-	{
+	public function init():Void {
 		
 	}
 	
-	public function release():Void
-	{
+	public function release():Void {
 		
 	}
 	
@@ -68,8 +66,8 @@ class Gamepad extends Device implements drc.input.Gamepad {
 		return id;
 	}
 	
-	public function onButtonPress(control:Int):Void
-	{
+	public function onButtonPress(control:Int):Void {
+
 		__checkControls[control] = true;
 		
 		__checkCount ++;
@@ -77,8 +75,8 @@ class Gamepad extends Device implements drc.input.Gamepad {
 		__pressControls[__pressCount ++] = control;
 	}
 	
-	public function onButtonRelease(control:Int):Void
-	{
+	public function onButtonRelease(control:Int):Void {
+
 		__checkControls[control] = false;
 		
 		__checkCount --;

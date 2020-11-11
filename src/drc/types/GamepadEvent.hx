@@ -1,14 +1,12 @@
 package drc.types;
 
-typedef GamepadEvent =
-{
-	var type:GamepadEventType;
-	
+import drc.input.Gamepad;
+
+typedef GamepadEvent = {
+
 	var timestamp:Float;
-	
+
+	var gamepad:Gamepad;
+
 	var index:UInt;
-	
-	var ?data1:Int;
-	
-	var ?data2:Int;
 }

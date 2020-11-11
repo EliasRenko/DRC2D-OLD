@@ -1,7 +1,7 @@
 package drc.data;
 
-class VertexData 
-{
+class VertexData {
+
 	//** Publics.
 	
 	/**
@@ -25,12 +25,12 @@ class VertexData
 	 * 
 	 * @param	data: The data to be uploaded.
 	 */
-	public function new(?data:Array<Float>) 
-	{
+	public function new(?data:Array<Float>) {
+
 		//** Check if the data is null.
 		
-		if (data != null)
-		{
+		if (data != null) {
+
 			//** Upload the data.
 			
 			upload(data);
@@ -44,18 +44,18 @@ class VertexData
 	 * 
 	 * @return The new lenght of the list.
 	 */
-	public function add(value:Float):Int
-	{
+	public function add(value:Float):Int {
+
 		return innerData.push(value);
 	}
 	
 	/**
 	 * Dispose of the inner data of the list.
 	 */
-	public function dispose():Void
-	{
-		for (vertex in 0...innerData.length)
-		{
+	public function dispose():Void {
+
+		for (vertex in 0...innerData.length) {
+
 			innerData.pop();
 		}
 	}
@@ -66,10 +66,10 @@ class VertexData
 	 * @param	count The amount of data to be uploaded.
 	 * @param	value The default value to be uploaded.
 	 */
-	public function insert(count:UInt, value:Float = 1):Void
-	{
-		for (i in 0...count)
-		{
+	public function insert(count:UInt, value:Float = 1):Void {
+
+		for (i in 0...count) {
+
 			innerData.push(value);
 		}
 	}
@@ -79,10 +79,10 @@ class VertexData
 	 * 
 	 * @param	count
 	 */
-	public function pop(count:UInt):Void
-	{
-		for (i in 0...count)
-		{
+	public function pop(count:UInt):Void {
+
+		for (i in 0...count) {
+
 			innerData.pop();
 		}
 	}
@@ -94,8 +94,8 @@ class VertexData
 	 * 
 	 * @return	Float The selected value.
 	 */
-	public function resolve(index:Int):Float
-	{
+	public function resolve(index:Int):Float {
+
 		return innerData[index];
 	}
 	
@@ -104,15 +104,15 @@ class VertexData
 	 * 
 	 * @param	data The index data to be uploaded.
 	 */
-	public function upload(data:Array<Float>):Void
-	{
+	public function upload(data:Array<Float>):Void {
+
 		innerData = data;
 	}
 	
 	//** Getters and setters.
 	
-	private function get_count():Int
-	{
+	private function get_count():Int {
+		
 		return Std.int(innerData.length / __dataPerVertex);
 	}
 }

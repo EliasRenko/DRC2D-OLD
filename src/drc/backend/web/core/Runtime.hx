@@ -5,6 +5,7 @@ import drc.system.Input;
 import drc.backend.web.core.GL;
 import drc.core.EventDispacher;
 import drc.utils.Common;
+import drc.input.Keyboard;
 
 class Runtime implements drc.core.Runtime {
 
@@ -18,6 +19,8 @@ class Runtime implements drc.core.Runtime {
 
     public var name(get, null):String;
 
+    public var keyboard(get, null):Keyboard;
+
     // ** Privates.
 
     /** @private **/ private var __active:Bool;
@@ -29,6 +32,8 @@ class Runtime implements drc.core.Runtime {
     /** @private **/ private var __window:drc.backend.web.system.Window;
 
     /** @private **/ private var __event:EventDispacher<Float>;
+
+    /** @private **/ private var __keyboard:BackendKeyboard;
 
     public function new() {
 
@@ -43,7 +48,19 @@ class Runtime implements drc.core.Runtime {
 
         __initVideo();
 
-        __window.innerData.addEventListener("gamepadconnected", function(event:{ gamepad:js.html.Gamepad }) {
+        __keyboard = new BackendKeyboard();
+
+        if (js.Browser.navigator.getGamepads != null) {
+
+            trace('getGamepads is true');
+        }
+
+        if (untyped js.Browser.navigator.webkitGetGamepads != null) {
+
+            trace('webkit getGamepads is true');
+        }
+
+        __window.innerData.addEventListener("gamepadconnected", function(gamepad:js.html.Gamepad) {
 
             trace('Gamepad connected!');
         });
@@ -51,6 +68,15 @@ class Runtime implements drc.core.Runtime {
         __window.innerData.addEventListener("gamepaddisconnected", function(event) {
 
             
+        });
+
+        js.Browser.document.addEventListener('keydown', function(keyboardEvent:js.html.KeyboardEvent) {
+
+            __keyboard.dispatch(keyboardEvent.keyCode, 1);
+        });
+
+        js.Browser.document.addEventListener('keyup', function(keyboardEvent:js.html.KeyboardEvent) {
+
         });
     }
 
@@ -98,6 +124,12 @@ class Runtime implements drc.core.Runtime {
 
     private function __loop(timestamp:Float):Void {
 
+        // ** Gamepads poll.
+
+
+
+        // **
+
         __event.dispatch(0, 1);
 
         js.Browser.window.requestAnimationFrame(__loop);
@@ -127,5 +159,18 @@ class Runtime implements drc.core.Runtime {
     private function get_name():String {
         
         return __name;
+    }
+
+    private function get_keyboard():Keyboard {
+		
+		return __keyboard;
+	}
+}
+
+private class BackendKeyboard extends Keyboard {
+
+    public function new() {
+        
+        super();
     }
 }

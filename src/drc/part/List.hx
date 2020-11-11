@@ -2,9 +2,9 @@ package drc.part;
 
 import drc.part.Object;
 
-class List<T:Object>
-{
-	//** Publics.
+class List<T:Object> {
+	
+	// ** Publics.
 	
 	/**
 	 * The maximum capacity of this group. Default is 0, meaning no max capacity.
@@ -21,24 +21,24 @@ class List<T:Object>
 	 */
 	public var members:Array<T>;
 	
-	//** Privates.
+	// ** Privates.
 	
 	private var __capacity:Int = 0;
 	
-	public function new(?lenght:Int, ?fixed:Bool) 
-	{
-		if (lenght > 0)
-		{
+	public function new(?lenght:Int, ?fixed:Bool) {
+
+		if (lenght > 0) {
+
 			fixed = true;
 		}
 		
-		//** Create a new members vector.
+		// ** Create a new members vector.
 		
 		members = new Array<T>();
 	}
 	
-	public function add(object:T):T
-	{
+	public function add(object:T):T {
+
 		//** Check if the group is fixed...
 		
 		// if (members.fixed)
@@ -50,8 +50,8 @@ class List<T:Object>
 		
 		//** If the object is already active...
 		
-		if (@:privateAccess object.__active)
-		{
+		if (@:privateAccess object.__active) {
+
 			//trace("Already active");
 			
 			//** Return.
@@ -61,8 +61,8 @@ class List<T:Object>
 		
 		//** Check if the group is full...
 		
-		if (__capacity > 0 && count >= __capacity)
-		{
+		if (__capacity > 0 && count >= __capacity) {
+
 			trace("Bigger");
 			
 			//** Return.
@@ -94,12 +94,12 @@ class List<T:Object>
 	 * @param	object
 	 * @return
 	 */
-	public function addAt(index:Int, object:T):T
-	{
+	public function addAt(index:Int, object:T):T {
+
 		//** If the object is already active...
 		
-		if (@:privateAccess object.__active)
-		{
+		if (@:privateAccess object.__active) {
+
 			trace("Already active");
 			
 			//** Return.
@@ -109,14 +109,14 @@ class List<T:Object>
 		
 		//** If the index id bigger than the lenght...
 		
-		if (index - 1 > members.length)
-		{
+		if (index - 1 > members.length) {
+
 			trace("Bigger");
 			
 			//** Check if the group is full...
 			
-			if (__capacity > 0 && count >= __capacity)
-			{
+			if (__capacity > 0 && count >= __capacity) {
+
 				//** Return.
 				
 				return object;
@@ -152,24 +152,24 @@ class List<T:Object>
 		}
 	}
 	
-	public function getMember(index:Int):T
-	{
+	public function getMember(index:Int):T {
+
 		//** Return.
 		
 		return members[index];
 	}
 	
-	public function remove(object:T):Void
-	{
+	public function remove(object:T):Void {
+
 		//** Call remove at method.
 		
 		@:privateAccess removeAt(object.__index); //** Define metadata: privateAccess.
 	}
 	
-	public function removeAt(index:Int):Void
-	{
-		if (index == -1)
-		{
+	public function removeAt(index:Int):Void {
+
+		if (index == -1) {
+
 			//trace(index);
 			
 			return;
@@ -185,8 +185,8 @@ class List<T:Object>
 		
 		//** If index is lesser than the lenght of the members... 
 		
-		if (index < members.length - 1)
-		{
+		if (index < members.length - 1) {
+
 			//** Assign the last object on the list to the index.
 			
 			members[index] = members[members.length - 1];
@@ -201,17 +201,17 @@ class List<T:Object>
 		members.pop();
 	}
 	
-	public function pop():Void
-	{
+	public function pop():Void {
+
 		removeAt(count - 1);
 	}
 	
-	public function forEach(func:T -> Void):Void
-	{
-		for (i in 0...count) 
-		{
-			if (members[i] == null)
-			{
+	public function forEach(func:T -> Void):Void {
+
+		for (i in 0...count) {
+
+			if (members[i] == null) {
+
 				continue;
 			}
 			
@@ -221,18 +221,18 @@ class List<T:Object>
 	
 	//** Getters and Setters.
 	
-	private function get_count():Int
-	{
+	private function get_count():Int {
+
 		return members.length;
 	}
 	
-	private function get_capacity():Int
-	{
+	private function get_capacity():Int {
+
 		return __capacity;
 	}
 	
-	private function set_capacity(value:Int):Int
-	{
+	private function set_capacity(value:Int):Int {
+
 		return __capacity = value;
 	}
 }

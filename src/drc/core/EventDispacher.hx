@@ -14,6 +14,8 @@ class EventDispacher<T> {
 	// ** Publics.
 	
 	public var active:Bool = true;
+
+	public var count(get, null):Int;
 	
 	// ** Privates.
 	
@@ -71,12 +73,31 @@ class EventDispacher<T> {
 	
 	public function remove(listener:T -> UInt -> Void):Void {
 
-		for (i in 0...__listeners.length) {
+		// for (i in 0...__listeners.length) {
+
+		// 	if (Reflect.compareMethods(__listeners[i].func, listener)) {
+
+		// 		__listeners.splice(i, 1);
+		// 	}
+		// }
+
+		var i:Int = __listeners.length - 1;
+
+		while (i > -1) {
 
 			if (Reflect.compareMethods(__listeners[i].func, listener)) {
 
 				__listeners.splice(i, 1);
 			}
+
+			i --;
 		}
+	}
+
+	// ** Getters and setters.
+
+	private function get_count():Int {
+		
+		return __listeners.length;
 	}
 }

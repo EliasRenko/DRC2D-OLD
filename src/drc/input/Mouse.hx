@@ -1,43 +1,24 @@
 package drc.input;
 
-interface Mouse {
+import drc.core.EventDispacher;
 
-	// ** Publics.
-	
-	public var active(get, null):Bool;
-	
-	public var doubleClick(get, null):Bool;
-	
-	public var hasMoved(get, null):Bool;
+class Mouse extends EventDispacher<UInt> {
 
-	public var x(get, null):Int;
+    public function new() {
+        
+        super();
 
-	public var y(get, null):Int;
+        add(__onButtonDown, 0);
 
-	// ** Privates.
-	
-	/** @private **/ private var __active:Bool;
+        add(__onButtonUp, 1);
+    }
 
-	/** @private **/ private var __hasMoved:Bool;
-	
-	public function check(control:Int):Bool;
-	
-	public function pressed(control:Int):Bool;
-	
-	public function released(control:Int):Bool;
-	
-	public function showCursor(value:Bool):Void;
+    private function __onButtonDown(num:UInt, type:UInt) {
+        
 
-	// ** Getters and setters.
-	
-	private function get_active():Bool;
-	
-	private function get_doubleClick():Bool;
+    }
 
-	private function get_hasMoved():Bool;
-
-	private function get_x():Int;
-
-	private function get_y():Int;
+    private function __onButtonUp(num:UInt, type:UInt) {
+        
+    }
 }
-

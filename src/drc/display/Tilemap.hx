@@ -46,15 +46,13 @@ class Tilemap extends Drawable {
 
 			this.tileset = new Tileset();
 		}
-		else
-		{
+		else {
+
 			this.tileset = tileset;
 		}
 	}
 	
 	public function addTile(tile:Tile):Tile {
-
-		//trace('ID: ' + tile.id);
 
 		if (tiles.add(tile) == null) {
 			
@@ -70,65 +68,65 @@ class Tilemap extends Drawable {
 		return tile;
 	}
 
-	public function getTile(index:Int):Tile
-		{
-			return tiles.getMember(index);
-		}
-		
-		public function insert(tile:Tile):Tile
-		{
-			return tiles.insert(tile);
-		}
-		
-		public function restore(tile:Tile):Tile
-		{
-			var _tile:Tile = tiles.restore(tile);
+	public function getTile(index:Int):Tile {
 
-			if (_tile == null) return null;
-			
-			__updateIndices();
-
-			return _tile;
-		}
+		return tiles.getMember(index);
+	}
 		
-		public function restoreAt(index:Int):Tile
-		{
-			var _tile:Tile = tiles.restoreAt(index);
+	public function insert(tile:Tile):Tile {
 
-			if (_tile == null) return null;
-			
-			__updateIndices();
+		return tiles.insert(tile);
+	}
+		
+	public function restore(tile:Tile):Tile {
 
-			return _tile;
-		}
+		var _tile:Tile = tiles.restore(tile);
+
+		if (_tile == null) return null;
 		
-		public function recycle(tile:Tile):Bool
-		{
-			if (tiles.recycle(tile))
-			{
-				indices.pop(6);
-				
-				return true;
-			}
-			
-			return false;
-		}
+		__updateIndices();
+
+		return _tile;
+	}
 		
-		public function removeTile(tile:Tile):Void
-		{
-			//trace(tile.index);
-			
-			tiles.remove(tile);
-			
+	public function restoreAt(index:Int):Tile {
+
+		var _tile:Tile = tiles.restoreAt(index);
+
+		if (_tile == null) return null;
+		
+		__updateIndices();
+
+		return _tile;
+	}
+		
+	public function recycle(tile:Tile):Bool {
+
+		if (tiles.recycle(tile)) {
+
 			indices.pop(6);
+			
+			return true;
 		}
 		
-		public function removeTileAt(index:Int):Void
-		{
-			tiles.removeAt(index);
-			
-			indices.pop(6);
-		}
+		return false;
+	}
+		
+	public function removeTile(tile:Tile):Void {
+
+		//trace(tile.index);
+		
+		tiles.remove(tile);
+		
+		indices.pop(6);
+	}
+	
+	public function removeTileAt(index:Int):Void {
+
+		tiles.removeAt(index);
+		
+		indices.pop(6);
+	}
 
 	override public function render():Void {
 		
@@ -147,8 +145,8 @@ class Tilemap extends Drawable {
 
 			tile.render();
 
-			for (vertexData in 0...tile.vertices.innerData.length)
-			{
+			for (vertexData in 0...tile.vertices.innerData.length) {
+				
 				// ** Push the vertex data in the tilemap.
 				
 				vertices.innerData[__activeVertices] = tile.vertices.innerData[vertexData];

@@ -2,8 +2,8 @@ package drc.part;
 
 import drc.part.Object;
 
-class RecycleList<T:Object> extends List<T>
-{
+class RecycleList<T:Object> extends List<T> {
+
 	//** Publics.
 	
 	/**
@@ -20,8 +20,8 @@ class RecycleList<T:Object> extends List<T>
 	
 	/** @private */ private var __passiveMembers:Array<T>;
 	
-	public function new(?lenght:Int, ?fixed:Bool) 
-	{
+	public function new(?lenght:Int, ?fixed:Bool) {
+
 		super(lenght, fixed);
 		
 		//** Create a new passive members vector.
@@ -29,12 +29,12 @@ class RecycleList<T:Object> extends List<T>
 		__passiveMembers = new Array<T>();
 	}
 	
-	public function insert(object:T):T
-	{
+	public function insert(object:T):T {
+
 		//** If object is active...
 		
-		if (@:privateAccess object.__active) //** Define metadata: privateAccess.
-		{
+		if (@:privateAccess object.__active) { //** Define metadata: privateAccess.
+
 			return null;
 		}
 		
@@ -47,8 +47,8 @@ class RecycleList<T:Object> extends List<T>
 		return object;
 	}
 	
-	public function restore(object:T):T
-	{
+	public function restore(object:T):T {
+
 		if (object == null) {
 
 			if (passiveCount == 0) return null;
@@ -61,12 +61,12 @@ class RecycleList<T:Object> extends List<T>
 		return restoreAt(@:privateAccess object.__passiveIndex); //** Define metadata: privateAccess.
 	}
 	
-	public function restoreAt(index:Int):T
-	{
+	public function restoreAt(index:Int):T {
+
 		//** If the object is active...
 		
-		if (index == -1)
-		{
+		if (index == -1) {
+
 			//** Return.
 			
 			return null;
@@ -82,8 +82,8 @@ class RecycleList<T:Object> extends List<T>
 		
 		//** If index is lesser than the lenght of the members... 
 		
-		if (index < __passiveMembers.length - 1)
-		{
+		if (index < __passiveMembers.length - 1) {
+
 			//** Assign the last object on the list to the index.
 			
 			__passiveMembers[index] = __passiveMembers[members.length - 1];
@@ -102,10 +102,10 @@ class RecycleList<T:Object> extends List<T>
 		return _object;
 	}
 	
-	public function recycle(object:T):Bool
-	{
-		if (@:privateAccess object.__active) //** Define metadata: privateAccess.
-		{
+	public function recycle(object:T):Bool {
+
+		if (@:privateAccess object.__active) { //** Define metadata: privateAccess.
+
 			@:privateAccess object.__active = false; //** Define metadata: privateAccess.
 			
 			@:privateAccess object.__passiveIndex = __passiveMembers.push(object) - 1; //** Define metadata: privateAccess.
@@ -118,19 +118,19 @@ class RecycleList<T:Object> extends List<T>
 		return false;
 	}
 	
-	override public function removeAt(index:Int):Void 
-	{
+	override public function removeAt(index:Int):Void {
+
 		super.removeAt(index);
 	}
 	
-	override public function forEach(func:T -> Void):Void
-	{
+	override public function forEach(func:T -> Void):Void {
+
 		super.forEach(func);
 		
-		for (i in 0...passiveCount) 
-		{
-			if (members[i] == null)
-			{
+		for (i in 0...passiveCount) {
+
+			if (members[i] == null) {
+
 				continue;
 			}
 			
@@ -138,17 +138,17 @@ class RecycleList<T:Object> extends List<T>
 		}
 	}
 	
-	public function forEachActive(func:T -> Void):Void
-	{
+	public function forEachActive(func:T -> Void):Void {
+
 		super.forEach(func);
 	}
 	
-	public function forEachPassive(func:T -> Void):Void
-	{
-		for (i in 0...passiveCount) 
-		{
-			if (members[i] == null)
-			{
+	public function forEachPassive(func:T -> Void):Void {
+
+		for (i in 0...passiveCount) {
+
+			if (members[i] == null) {
+
 				continue;
 			}
 			
@@ -158,18 +158,18 @@ class RecycleList<T:Object> extends List<T>
 	
 	//** Getters and Setters.
 	
-	private function get_activeCount():Int
-	{
+	private function get_activeCount():Int {
+
 		return members.length;
 	}
 	
-	override private function get_count():Int
-	{
+	override private function get_count():Int {
+
 		return members.length + __passiveMembers.length;
 	}
 	
-	private function get_passiveCount():Int
-	{
+	private function get_passiveCount():Int {
+		
 		return __passiveMembers.length;
 	}
 }

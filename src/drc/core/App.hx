@@ -156,7 +156,7 @@ class App {
 		
 		__runtime.present();
 		
-		__runtime.input.postUpdate();
+		//__runtime.input.postUpdate();
 
 		#end
 	}

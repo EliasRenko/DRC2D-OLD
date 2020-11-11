@@ -1,7 +1,10 @@
 package drc.backend.native.core;
 
 import drc.backend.native.input.Gamepad;
-import drc.backend.native.system.Input;
+import drc.system.Input;
+import drc.input.Gamepad;
+import drc.input.Mouse;
+import drc.input.Keyboard;
 import drc.backend.native.system.Window;
 import drc.core.EventDispacher;
 import drc.core.EventDispacher;
@@ -10,6 +13,7 @@ import drc.debug.Log;
 import drc.types.GamepadEvent;
 import drc.types.GamepadEventType;
 import drc.types.WindowEventType;
+import drc.types.GamepadInputEvent;
 import drc.utils.Common;
 import glew.GLEW;
 import sdl.Event;
@@ -27,23 +31,27 @@ class Runtime implements drc.core.Runtime {
 
 	public var event(get, null):EventDispacher<Float>;
 
-	public var input(get, null):Input;
-
 	public var name(get, null):String;
+
+	public var keyboard(get, null):Keyboard;
 
 	// ** Privates.
 
 	/** @private **/ private var __active:Bool;
 
-	/** @private **/ private var __gameControllers:Map<UInt, NativeGamepad>;
-
-	/** @private **/ private var __input:Input;
+	/** @private **/ private var __gameControllers:Map<UInt, GameControllerDevice>;
 
 	/** @private **/ private var __name:String = 'Native';
 
 	/** @private **/ private var __window:Window;
 
 	/** @private **/ private var __event:EventDispacher<Float>;
+
+	private var __input:Input;
+
+	private var __mouse:Mouse;
+
+	private var __keyboard:BackendKeyboard;
 
 	public function new() {
 
@@ -98,6 +106,8 @@ class Runtime implements drc.core.Runtime {
 		
 		// ** Init SDL controllers.
 		
+		__gameControllers = new Map<UInt, GameControllerDevice>();
+
 		_result = SDL.initSubSystem(SDL_INIT_GAMECONTROLLER | SDL_INIT_JOYSTICK);
 		
 		#if debug
@@ -115,13 +125,19 @@ class Runtime implements drc.core.Runtime {
 
 		// ** Input.
 
-		__input = new Input();
+		//__input = new Input();
 		
-		Common.input = __input;
+		//Common.input = __input;
 		
 		// ** GameControllers.
 
-		__gameControllers = new Map<UInt, NativeGamepad>();
+		__input = new Input(this);
+
+		Common.input = __input;
+
+		__mouse = new Mouse();
+
+		__keyboard = new BackendKeyboard();
 
 		__active = true;
 	}
@@ -181,51 +197,56 @@ class Runtime implements drc.core.Runtime {
 				
 			case SDL_CONTROLLERDEVICEADDED:
 				
-				var gamepadEvent:GamepadEvent = {
+				// var _gamepad:GameController = SDL.gameControllerOpen(event.cdevice.which);
 
-					type: GamepadEventType.ADDED,
-					
-					timestamp: event.window.timestamp,
-					
-					index: event.cdevice.which,
-					
-					data1: 0,
-					
-					data2: 0
-				}
+				// __input.onGamepadConnected(event.cdevice.which, SDL.gameControllerGetJoystick(_gamepad));
 				
-				var _gamepad:GameController = SDL.gameControllerOpen(event.cdevice.which);
-
-				__input.onGamepadConnected(event.cdevice.which, SDL.gameControllerGetJoystick(_gamepad));
-				
-				__input.onGamepadEvent(gamepadEvent);
+				// __input.onGamepadEvent(gamepadEvent);
 
 				// ** 
 
+				var _gamepad:GameController = SDL.gameControllerOpen(event.cdevice.which);
 
+				var _gameController = new GameControllerDevice(event.cdevice.which, SDL.gameControllerGetJoystick(_gamepad));
+
+				__gameControllers.set(_gameController.id, _gameController);
+
+				trace('ID = ' + _gameController.id);
+
+
+				var gamepadEvent:GamepadEvent = {
+
+					timestamp: event.window.timestamp,
+					
+					gamepad: _gameController,
+
+					index: event.cdevice.which
+				}
+
+				__input.event.dispatch(gamepadEvent, 1);
 
 				//__gameControllers.set(SDL.joystickInstanceID(SDL.gameControllerGetJoystick(_gamepad)), )
 				
 			case SDL_CONTROLLERDEVICEREMOVED:
 				
-				var gamepadEvent:GamepadEvent = {
-
-					type: GamepadEventType.REMOVED,
-					
-					timestamp: event.window.timestamp,
-					
-					index: event.cdevice.which,
-					
-					data1: 0,
-					
-					data2: 0
-				}
+				// __input.onGamepadDisconnected(event.cdevice.which);
 				
-				__input.onGamepadDisconnected(event.cdevice.which);
-				
-				__input.onGamepadEvent(gamepadEvent);
+				// __input.onGamepadEvent(gamepadEvent);
 
 				// ** 
+
+				var _gamepad:GameControllerDevice = __gameControllers.get(event.caxis.which);
+
+				var gamepadEvent:GamepadEvent = {
+
+					timestamp: event.window.timestamp,
+					
+					gamepad: _gamepad,
+
+					index: _gamepad.index
+				}
+
+				__input.event.dispatch(gamepadEvent, 2);
 				
 			case SDL_CONTROLLERAXISMOTION:
 				
@@ -234,94 +255,79 @@ class Runtime implements drc.core.Runtime {
 				var _normalized_val = ( -0.5 + _val) * 2.0;
 				
 				//trace(event.caxis.which + ' - Axis: ' + event.caxis.axis + ' - Value:' + _normalized_val);
+
+				var _gamepadInputEvent:GamepadInputEvent = {
+
+					timestamp: event.window.timestamp,
+					
+					control: event.caxis.axis,
+					
+					value: _normalized_val
+				}
+
+				//trace(event.caxis.which + ' - Axis: ' + event.caxis.axis + ' - Value:' + _normalized_val);
+
+				__gameControllers.get(event.caxis.which).dispatch(_gamepadInputEvent, 3);
 				
 			case SDL_CONTROLLERBUTTONDOWN:
 				
-				var gamepadEvent:GamepadEvent = {
+				var _gamepadInputEvent:GamepadInputEvent = {
 
-					type: GamepadEventType.PRESSED,
-					
 					timestamp: event.window.timestamp,
 					
-					index: event.cdevice.which,
+					control: event.cbutton.button,
 					
-					data1: 0,
-					
-					data2: 0
+					value: 1
 				}
 				
-				__input.onGamepadButtonDown(event.cbutton.which, event.cbutton.button);
-				
-				__input.onGamepadEvent(gamepadEvent);
-				
-				//trace(event.cbutton.which + " - " + event.cbutton.button);
-
-				// ** 
-
-				//trace("Button press C ID: " + event.cdevice.which);
-
-				//__joysticks[event.cdevice.which].onButtonPress(event.cbutton.button);
+				__gameControllers.get(event.cbutton.which).dispatch(_gamepadInputEvent, 1);
 				
 			case SDL_CONTROLLERBUTTONUP:
 				
-				var gamepadEvent:GamepadEvent = {
+				var gamepadEvent:GamepadInputEvent = {
 
-					type: GamepadEventType.RELEASED,
-					
 					timestamp: event.window.timestamp,
 					
-					index: event.cdevice.which,
+					control: event.cbutton.button,
 					
-					data1: 0,
-					
-					data2: 0
+					value: 0
 				}
 				
-				__input.onGamepadButtonUp(event.cbutton.which, event.cbutton.button);
-				
-				__input.onGamepadEvent(gamepadEvent);
-
-				// ** 
-
-				//__joysticks[event.cdevice.which].onButtonRelease(event.cbutton.button);
+				__gameControllers.get(event.cbutton.which).dispatch(gamepadEvent, 2);
 				
 			case SDL_CONTROLLERDEVICEREMAPPED:
 				
-				_eventType = GamepadEventType.REMAPPED;
+				//_eventType = GamepadEventType.REMAPPED;
 				
 			case SDL_MOUSEMOTION:
 				
-				__input.onMouseMotion(event.button.x, event.button.y);
+				//__input.onMouseMotion(event.button.x, event.button.y);
 				
 			case SDL_MOUSEBUTTONDOWN:
 				
-				__input.onMouseButtonDown(event.button.button, event.button.clicks);
+				__mouse.dispatch(0, 0);
 				
 			case SDL_MOUSEBUTTONUP:
-				
-				__input.onMouseButtonUp(event.button.button);
+
+				__mouse.dispatch(0, 1);
 				
 			case SDL_MOUSEWHEEL:
 				
-				__input.onMouseWheel();
+				//__input.onMouseWheel();
 				
 			case SDL_KEYDOWN:
 
-				//__input.onKeyboardDown(event.key.keysym.sym);
-
-				__input.onKeyboardDown(event.key.keysym.scancode);
+				__keyboard.dispatch(event.key.keysym.scancode, 1);
 				
 			case SDL_KEYUP:
 			
-				//__input.onKeyboardUp(event.key.keysym.sym);
-
-				__input.onKeyboardUp(event.key.keysym.scancode);
+				__keyboard.dispatch(event.key.keysym.scancode, 2);
 
 			case SDL_TEXTEDITING:
 			
 			case SDL_TEXTINPUT:
 
-				__input.onTextInput(event.text.text);
+				//__input.onTextInput(event.text.text);
 			
 			default:
 		}
@@ -491,33 +497,48 @@ class Runtime implements drc.core.Runtime {
 		return __event;
 	}
 
-	private function get_input():Input {
-
-		return __input;
-	}
-
 	private function get_name():String {
 
 		return __name;
 	}
+
+	private function get_keyboard():Keyboard {
+		
+		return __keyboard;
+	}
 }
 
-private class NativeGamepad extends Gamepad {
+private class GameControllerDevice extends Gamepad {
 
 	// ** Privates.
 
 	private var __innerData:sdl.Joystick;
 
-	public function new(index:UInt) {
+	public function new(index:UInt, innerData:sdl.Joystick) {
 
 		super(index);
+
+		__innerData = innerData;
 	}
 
-	override function open(joystick:drc.backend.native.input.Gamepad.GamepadData):Int {
+	override function close() {
 
-		__innerData = joystick;
+		SDL.joystickClose(__innerData);
+	}
 
-		return id;
+	// ** 
+
+	override function get_id():UInt {
+
+		return SDL.joystickInstanceID(__innerData);
+	}
+}
+
+private class BackendKeyboard extends Keyboard {
+
+	public function new() {
+		
+		super();
 	}
 }
 

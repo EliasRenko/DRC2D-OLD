@@ -2,8 +2,8 @@ package drc.part;
 
 import drc.types.ObjectStatus;
 
-class Object
-{
+class Object {
+
 	//** Publics.
 	
 	public var active(get, null):Bool;
@@ -24,13 +24,11 @@ class Object
 	
 	//** Methods.
 	
-	public function init():Void
-	{
+	public function init():Void {
 		
 	}
 	
-	public function release():Void
-	{
+	public function release():Void {
 		
 	}
 
@@ -49,18 +47,18 @@ class Object
 	
 	//** Getters and setters.
 	
-	private function get_active():Bool
-	{
+	private function get_active():Bool {
+
 		return __active;
 	}
 	
-	private function get_index():Int
-	{
+	private function get_index():Int {
+
 		return __index;
 	}
 	
-	private function get_status():ObjectStatus
-	{
+	private function get_status():ObjectStatus {
+		
 		return __status;
 	}
 }

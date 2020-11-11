@@ -76,62 +76,62 @@ class State extends Object {
 
 	public function update():Void {
 
-		if (Common.input.getGamepad(0).pressed(Control.BACK)) {
+		// if (Common.input.getGamepad(0).pressed(Control.BACK)) {
 
-			if (__perpspective) {
+		// 	if (__perpspective) {
 
-				__perpspective = false;
-			}
-			else {
+		// 		__perpspective = false;
+		// 	}
+		// 	else {
 
-				__perpspective = true;
-			}
-		}
+		// 		__perpspective = true;
+		// 	}
+		// }
 
-		if (Common.input.getGamepad(0).check(Control.A)) {
+		// if (Common.input.getGamepad(0).check(Control.A)) {
 
-            //trace(__image.angle);
-        }
+        //     //trace(__image.angle);
+        // }
 
-        if (Common.input.getGamepad(0).check(Control.Y)) {
+        // if (Common.input.getGamepad(0).check(Control.Y)) {
 
-            camera.z += 5;
-        }
+        //     camera.z += 5;
+        // }
         
-        if (Common.input.getGamepad(0).check(Control.X)) {
+        // if (Common.input.getGamepad(0).check(Control.X)) {
 
-            camera.z -= 5;
-		}
+        //     camera.z -= 5;
+		// }
 
-        if (Common.input.getGamepad(0).check(Control.LEFT_SHOULDER)) {
+        // if (Common.input.getGamepad(0).check(Control.LEFT_SHOULDER)) {
 
-            camera.yaw -= 1;
-        }
+        //     camera.yaw -= 1;
+        // }
         
-        if (Common.input.getGamepad(0).check(Control.RIGHT_SHOULDER)) {
+        // if (Common.input.getGamepad(0).check(Control.RIGHT_SHOULDER)) {
 
-            camera.yaw += 1;
-		}
+        //     camera.yaw += 1;
+		// }
 
-        if (Common.input.getGamepad(0).check(Control.DPAD_UP)) {
+        // if (Common.input.getGamepad(0).check(Control.DPAD_UP)) {
 
-            camera.y += 2;
-		}
+        //     camera.y += 2;
+		// }
 
-		if (Common.input.getGamepad(0).check(Control.DPAD_DOWN)) {
+		// if (Common.input.getGamepad(0).check(Control.DPAD_DOWN)) {
 
-            camera.y -= 2;
-		}
+        //     camera.y -= 2;
+		// }
 
-		if (Common.input.getGamepad(0).check(Control.DPAD_LEFT)) {
+		// if (Common.input.getGamepad(0).check(Control.DPAD_LEFT)) {
 
-            camera.x += 2;
-		}
+        //     camera.x += 2;
+		// }
 
-		if (Common.input.getGamepad(0).check(Control.DPAD_RIGHT)) {
+		// if (Common.input.getGamepad(0).check(Control.DPAD_RIGHT)) {
 
-            camera.x -= 2;
-        }
+        //     camera.x -= 2;
+        // }
 
 		entities.forEachActive(__updateEntity);
 	}
@@ -166,12 +166,16 @@ class State extends Object {
 
 	private function get_mouseX():Int {
 
-		return Common.input.mouse.x;
+		//return Common.input.mouse.x;
+
+		return 0;
 	}
 
 	private function get_mouseY():Int {
 
-		return Common.input.mouse.y;
+		//return Common.input.mouse.y;
+
+		return 0;
 	}
 
 	private function get_z():Float {

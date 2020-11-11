@@ -1,6 +1,6 @@
 package drc.core;
 
-import drc.system.Input;
+import drc.input.Keyboard;
 
 interface Runtime {
 
@@ -10,9 +10,9 @@ interface Runtime {
 
 	public var event(get, null):EventDispacher<Float>;
 	
-	public var input(get, null):Input;
-	
 	public var name(get, null):String;
+
+	public var keyboard(get, null):Keyboard;
 	
 	//** Privates.
 	
@@ -37,8 +37,6 @@ interface Runtime {
 	private function get_active():Bool;
 
 	private function get_event():EventDispacher<Float>;
-	
-	private function get_input():Input;
 	
 	private function get_name():String;
 }

@@ -1,6 +1,0 @@
-package;
-
-typedef Event =
-{
-	
-}

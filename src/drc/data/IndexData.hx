@@ -1,7 +1,7 @@
 package drc.data;
 
-class IndexData 
-{
+class IndexData {
+
 	//** Publics.
 	
 	/**
@@ -19,12 +19,12 @@ class IndexData
 	 * 
 	 * @param	data: The data to be uploaded.
 	 */
-	public function new(?data:Array<UInt>) 
-	{
+	public function new(?data:Array<UInt>) {
+
 		//** Check if the data is null.
 		
-		if (data != null)
-		{
+		if (data != null) {
+
 			//** Upload the data.
 			
 			upload(data);
@@ -38,18 +38,18 @@ class IndexData
 	 * 
 	 * @return The new lenght of the list.
 	 */
-	public function add(value:UInt):Int
-	{
+	public function add(value:UInt):Int {
+
 		return innerData.push(value);
 	}
 	
 	/**
 	 * Dispose of the inner data of the list.
 	 */
-	public function dispose():Void
-	{
-		for (index in 0...innerData.length)
-		{
+	public function dispose():Void {
+
+		for (index in 0...innerData.length) {
+			
 			innerData.pop();
 		}
 	}
@@ -59,10 +59,10 @@ class IndexData
 	 * 
 	 * @param	count The amount of data to be uploaded.
 	 */
-	public function insert(count:UInt, ?value:UInt):Void
-	{
-		for (value in 0...count)
-		{
+	public function insert(count:UInt, ?value:UInt):Void {
+
+		for (value in 0...count) {
+
 			innerData.push(1);
 		}
 	}
@@ -72,10 +72,10 @@ class IndexData
 	 * 
 	 * @param	count
 	 */
-	public function pop(count:UInt):Void
-	{
-		for (value in 0...count)
-		{
+	public function pop(count:UInt):Void {
+
+		for (value in 0...count) {
+
 			innerData.pop();
 		}
 	}
@@ -87,8 +87,8 @@ class IndexData
 	 * 
 	 * @return	Float
 	 */
-	public function resolve(index:Int):Float
-	{
+	public function resolve(index:Int):Float {
+
 		return innerData[index];
 	}
 	
@@ -97,15 +97,15 @@ class IndexData
 	 * 
 	 * @param	data The index data to be uploaded.
 	 */
-	public function upload(data:Array<UInt>):Void
-	{
+	public function upload(data:Array<UInt>):Void {
+
 		innerData = data;
 	}
 	
 	//** Getters and setters.
 	
-	private function get_count():Int
-	{
+	private function get_count():Int {
+
 		return innerData.length;
 	}
 }

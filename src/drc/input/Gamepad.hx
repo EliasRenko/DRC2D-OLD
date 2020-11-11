@@ -1,34 +1,42 @@
 package drc.input;
 
-interface Gamepad 
-{
-	//** Publics.
-	
-	public var active(get, null):Bool;
-	
-	public var id(get, null):UInt;
-	
-	public var index(get, null):UInt;
-	
-	public var name(get, null):String;
-	
-	//** Privates.
-	
-	/** @private **/ private var __active:Bool;
-	
-	public function check(control:Int):Bool;
-	
-	public function pressed(control:Int):Bool;
-	
-	public function released(control:Int):Bool;
-	
-	//** Getters and setters.
-	
-	private function get_active():Bool;
-	
-	private function get_id():UInt;
-	
-	private function get_index():UInt;
-	
-	private function get_name():String;
+import drc.core.EventDispacher;
+import drc.input.Device;
+import drc.types.GamepadInputEvent;
+
+
+class Gamepad extends EventDispacher<GamepadInputEvent> {
+
+    // ** Publics.
+
+    public var index(get, null):UInt;
+
+    public var id(get, null):UInt;
+
+    // ** Privates.
+
+    private var __index:UInt;
+
+    public function new(index:UInt) {
+        
+        super();
+
+        __index = index;
+    }
+
+    public function close():Void {
+        
+    }
+
+    // ** Getters and setters.
+
+    private function get_index():UInt {
+        
+        return __index;
+    }
+
+    public function get_id():UInt {
+     
+        return 0;
+    }
 }

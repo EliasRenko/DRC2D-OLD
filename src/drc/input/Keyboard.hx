@@ -1,23 +1,24 @@
 package drc.input;
 
-interface Keyboard {
+import drc.core.EventDispacher;
 
-    // ** Publics.
+class Keyboard extends EventDispacher<UInt>{
 
-    public var active(get, null):Bool;
-    
-    // ** Privates.
-	
-    /** @private **/ private var __active:Bool;
-    
+    public function new() {
+        
+        super();
 
-    public function check(control:Int):Bool;
-	
-	public function pressed(control:Int):Bool;
-	
-    public function released(control:Int):Bool;
-    
-    // ** Getters and setters.
-    
-    private function get_active():Bool;
+        add(__onKeyDown, 1);
+
+        add(__onKeyDown, 2);
+    }
+
+    private function __onKeyDown(key:UInt, type:UInt):Void {
+
+        trace('DOWN!');
+    }
+
+    private function __onKeyUp(key:UInt, type:UInt):Void {
+
+    }
 }
