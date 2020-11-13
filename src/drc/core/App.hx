@@ -7,12 +7,7 @@ import drc.system.Window;
 import drc.types.WindowEventType;
 import drc.utils.Common;
 import drc.utils.Res;
-
-#if cpp
-
-	import drc.backend.native.core.Runtime;
-
-#end
+import drc.core.Runtime;
 
 class App {
 
@@ -46,20 +41,8 @@ class App {
 	/** @private **/ private var __promise:Promise<Dynamic>;
 
 	public function new() {
-
-		#if cpp
 		
-		__runtime = new drc.backend.native.core.Runtime();
-		
-		#elseif js
-
-		__runtime = new drc.backend.web.core.Runtime();
-
-		#else
-		
-		throw 'No backend has been found.';
-		
-		#end
+		__runtime = new Runtime();
 		
 		// ** Init runtime.
 
@@ -104,7 +87,7 @@ class App {
 
 			ready();
 
-			__runtime.event.add(loop, 1);
+			__runtime.event.addEventListener(loop, 1);
 
 			__runtime.requestLoopFrame();
 		});

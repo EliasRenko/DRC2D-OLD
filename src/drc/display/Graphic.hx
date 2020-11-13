@@ -1,6 +1,7 @@
 package drc.display;
 
 import drc.data.VertexData;
+import drc.data.Vertices;
 import drc.part.Object;
 
 class Graphic extends Object {
@@ -53,7 +54,7 @@ class Graphic extends Object {
 	/**
 	 * The vertices of the graphic.
 	 */
-	public var vertices:VertexData = new VertexData();
+	public var vertices:Vertices = new Vertices([]);
 
 	/**
 	 * If the graphic should render.

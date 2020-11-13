@@ -8,9 +8,9 @@ class Mouse extends EventDispacher<UInt> {
         
         super();
 
-        add(__onButtonDown, 0);
+        addEventListener(__onButtonDown, 0);
 
-        add(__onButtonUp, 1);
+        addEventListener(__onButtonUp, 1);
     }
 
     private function __onButtonDown(num:UInt, type:UInt) {

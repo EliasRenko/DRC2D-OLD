@@ -65,7 +65,7 @@ class Window implements drc.system.Window
 
 	public function onEventResized():Void {
 
-		onEvent.dispatch(this, RESIZED);
+		onEvent.dispatchEvent(this, RESIZED);
 	}
 
 	public function resize(width:Int, height:Int):Void {

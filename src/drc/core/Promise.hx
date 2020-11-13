@@ -122,7 +122,7 @@ class Promise<T> {
                 __completeListeners = new EventDispacher();
             }
 
-            __completeListeners.add(listener, 0);
+            __completeListeners.addEventListener(listener, 0);
         }
 
         return this;
@@ -174,7 +174,7 @@ class Promise<T> {
 
         if (__completeListeners == null) return;
 
-        __completeListeners.dispatch(__result, 0);
+        __completeListeners.dispatchEvent(__result, 0);
     }
 
     private function __reject():Void {

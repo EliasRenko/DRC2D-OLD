@@ -11,19 +11,13 @@ typedef Listener<T> = {
 
 class EventDispacher<T> {
 	
-	// ** Publics.
-	
-	public var active:Bool = true;
-
-	public var count(get, null):Int;
-	
 	// ** Privates.
 	
 	/** @private **/ private var __listeners:Array<Listener<T>> = new Array<Listener<T>>();
 	
 	public function new() {}
 	
-	public function add(listener:T -> UInt -> Void, type:UInt = 0, priority:UInt = 0):Void {
+	public function addEventListener(listener:T -> UInt -> Void, type:UInt = 0, priority:UInt = 0):Void {
 
 		var eventListener:Listener<T> = {
 
@@ -47,21 +41,18 @@ class EventDispacher<T> {
 		__listeners.push(eventListener);
 	}
 	
-	public function dispatch(value:T, type:UInt = 0):Void {
+	public function dispatchEvent(value:T, type:UInt = 0):Void {
 
-		if (active) {
+		for (i in 0...__listeners.length) {
 
-			for (i in 0...__listeners.length) {
+			if (__listeners[i].type == type || __listeners[i].type == 0) {
 
-				if (__listeners[i].type == type || __listeners[i].type == 0) {
-
-					__listeners[i].func(value, type);
-				}
+				__listeners[i].func(value, type);
 			}
 		}
 	}
 	
-	public function has(listener:T -> UInt -> Void):Bool {
+	public function hasEventListener(listener:T -> UInt -> Void):Bool {
 
 		for (i in 0...__listeners.length) {
 
@@ -71,15 +62,7 @@ class EventDispacher<T> {
 		return false;
 	}
 	
-	public function remove(listener:T -> UInt -> Void):Void {
-
-		// for (i in 0...__listeners.length) {
-
-		// 	if (Reflect.compareMethods(__listeners[i].func, listener)) {
-
-		// 		__listeners.splice(i, 1);
-		// 	}
-		// }
+	public function removeEventListener(listener:T -> UInt -> Void):Void {
 
 		var i:Int = __listeners.length - 1;
 
@@ -92,12 +75,5 @@ class EventDispacher<T> {
 
 			i --;
 		}
-	}
-
-	// ** Getters and setters.
-
-	private function get_count():Int {
-		
-		return __listeners.length;
 	}
 }

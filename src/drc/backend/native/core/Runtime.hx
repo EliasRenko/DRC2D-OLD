@@ -23,7 +23,7 @@ import sdl.SDL;
 
 #if cpp
 
-class Runtime implements drc.core.Runtime {
+class Runtime {
 
 	// ** Publics.
 
@@ -153,7 +153,7 @@ class Runtime implements drc.core.Runtime {
 		
 		while (active) {
 
-			__event.dispatch(0, 1);
+			__event.dispatchEvent(0, 1);
 		}
 
 		#if cpp
@@ -223,7 +223,7 @@ class Runtime implements drc.core.Runtime {
 					index: event.cdevice.which
 				}
 
-				__input.event.dispatch(gamepadEvent, 1);
+				__input.event.dispatchEvent(gamepadEvent, 1);
 
 				//__gameControllers.set(SDL.joystickInstanceID(SDL.gameControllerGetJoystick(_gamepad)), )
 				
@@ -246,7 +246,7 @@ class Runtime implements drc.core.Runtime {
 					index: _gamepad.index
 				}
 
-				__input.event.dispatch(gamepadEvent, 2);
+				__input.event.dispatchEvent(gamepadEvent, 2);
 				
 			case SDL_CONTROLLERAXISMOTION:
 				
@@ -267,7 +267,7 @@ class Runtime implements drc.core.Runtime {
 
 				//trace(event.caxis.which + ' - Axis: ' + event.caxis.axis + ' - Value:' + _normalized_val);
 
-				__gameControllers.get(event.caxis.which).dispatch(_gamepadInputEvent, 3);
+				__gameControllers.get(event.caxis.which).dispatchEvent(_gamepadInputEvent, 3);
 				
 			case SDL_CONTROLLERBUTTONDOWN:
 				
@@ -280,7 +280,7 @@ class Runtime implements drc.core.Runtime {
 					value: 1
 				}
 				
-				__gameControllers.get(event.cbutton.which).dispatch(_gamepadInputEvent, 1);
+				__gameControllers.get(event.cbutton.which).dispatchEvent(_gamepadInputEvent, 1);
 				
 			case SDL_CONTROLLERBUTTONUP:
 				
@@ -293,7 +293,7 @@ class Runtime implements drc.core.Runtime {
 					value: 0
 				}
 				
-				__gameControllers.get(event.cbutton.which).dispatch(gamepadEvent, 2);
+				__gameControllers.get(event.cbutton.which).dispatchEvent(gamepadEvent, 2);
 				
 			case SDL_CONTROLLERDEVICEREMAPPED:
 				
@@ -305,11 +305,11 @@ class Runtime implements drc.core.Runtime {
 				
 			case SDL_MOUSEBUTTONDOWN:
 				
-				__mouse.dispatch(0, 0);
+				__mouse.dispatchEvent(0, 0);
 				
 			case SDL_MOUSEBUTTONUP:
 
-				__mouse.dispatch(0, 1);
+				__mouse.dispatchEvent(0, 1);
 				
 			case SDL_MOUSEWHEEL:
 				
@@ -317,11 +317,11 @@ class Runtime implements drc.core.Runtime {
 				
 			case SDL_KEYDOWN:
 
-				__keyboard.dispatch(event.key.keysym.scancode, 1);
+				__keyboard.dispatchEvent(event.key.keysym.scancode, 1);
 				
 			case SDL_KEYUP:
 			
-				__keyboard.dispatch(event.key.keysym.scancode, 2);
+				__keyboard.dispatchEvent(event.key.keysym.scancode, 2);
 
 			case SDL_TEXTEDITING:
 			

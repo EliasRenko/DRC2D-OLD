@@ -8,9 +8,9 @@ class Keyboard extends EventDispacher<UInt>{
         
         super();
 
-        add(__onKeyDown, 1);
+        addEventListener(__onKeyDown, 1);
 
-        add(__onKeyDown, 2);
+        addEventListener(__onKeyDown, 2);
     }
 
     private function __onKeyDown(key:UInt, type:UInt):Void {

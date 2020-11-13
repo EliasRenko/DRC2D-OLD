@@ -104,7 +104,10 @@ class Tilemap extends Drawable {
 
 		if (tiles.recycle(tile)) {
 
-			indices.pop(6);
+			for (i in 0...6) {
+		
+				indices.pop();
+			}
 			
 			return true;
 		}
@@ -118,14 +121,20 @@ class Tilemap extends Drawable {
 		
 		tiles.remove(tile);
 		
-		indices.pop(6);
+		for (i in 0...6) {
+		
+			indices.pop();
+		}
 	}
 	
 	public function removeTileAt(index:Int):Void {
 
 		tiles.removeAt(index);
 		
-		indices.pop(6);
+		for (i in 0...6) {
+		
+			indices.pop();
+		}
 	}
 
 	override public function render():Void {
@@ -145,11 +154,11 @@ class Tilemap extends Drawable {
 
 			tile.render();
 
-			for (vertexData in 0...tile.vertices.innerData.length) {
+			for (vertexData in 0...tile.vertices.length) {
 				
 				// ** Push the vertex data in the tilemap.
 				
-				vertices.innerData[__activeVertices] = tile.vertices.innerData[vertexData];
+				vertices[__activeVertices] = tile.vertices[vertexData];
 
 				__activeVertices ++;
 			}
@@ -164,16 +173,16 @@ class Tilemap extends Drawable {
 
 		var position:Int = 4 * (tiles.activeCount - 1);
 		
-		indices.add(position);
+		indices.push(position);
 		
-		indices.add(position + 1);
+		indices.push(position + 1);
 		
-		indices.add(position + 2);
+		indices.push(position + 2);
 		
-		indices.add(position);
+		indices.push(position);
 		
-		indices.add(position + 2);
+		indices.push(position + 2);
 		
-		indices.add(position + 3);
+		indices.push(position + 3);
 	}
 }

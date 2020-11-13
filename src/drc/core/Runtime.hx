@@ -1,42 +1,11 @@
 package drc.core;
 
-import drc.input.Keyboard;
+#if js
 
-interface Runtime {
+typedef Runtime = drc.backend.web.core.Runtime;
 
-	//** Publics.
-	
-	public var active(get, null):Bool;
+#elseif cpp
 
-	public var event(get, null):EventDispacher<Float>;
-	
-	public var name(get, null):String;
+typedef Runtime = drc.backend.native.core.Runtime;
 
-	public var keyboard(get, null):Keyboard;
-	
-	//** Privates.
-	
-	/** @private **/ private var __active:Bool;
-	
-	/** @private **/ private var __name:String;
-	
-	public function init():Void;
-	
-	public function release():Void;
-
-	public function getGamepad(index:UInt):Void;
-	
-	public function pollEvents():Void;
-	
-	public function present():Void;
-
-	public function requestLoopFrame():Void;
-	
-	//** Getters and setters.
-	
-	private function get_active():Bool;
-
-	private function get_event():EventDispacher<Float>;
-	
-	private function get_name():String;
-}
+#end

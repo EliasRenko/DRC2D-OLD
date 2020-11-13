@@ -1,13 +1,13 @@
 package drc.data;
 
 @:forward(length, pop, push)
-abstract Indices(Array<UInt>) from Array<UInt> to Array<UInt> {
+abstract Vertices(Array<Float>) from Array<Float> to Array<Float> {
 
     // ** Publics.
 
     // ** Privates.
 
-    inline public function new(data:Array<UInt> = null) {
+    inline public function new(data:Array<Float> = null) {
 
 		this = data;
     }

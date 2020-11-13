@@ -29,9 +29,9 @@ class Input {
 
         event = new EventDispacher<GamepadEvent>();
 
-        event.add(__onGamepadAdd, 1);
+        event.addEventListener(__onGamepadAdd, 1);
 
-        event.add(__onGamepadRemove, 2);
+        event.addEventListener(__onGamepadRemove, 2);
 
         //event.add(__onGamepadButtonDown, 2);
 
@@ -117,20 +117,20 @@ private class GamepadHandler {
         
         __gamepad = gamepad;
 
-        __gamepad.add(__onButtonDown, 1);
+        __gamepad.addEventListener(__onButtonDown, 1);
 
-        __gamepad.add(__onButtonUp, 2);
+        __gamepad.addEventListener(__onButtonUp, 2);
 
-        __gamepad.add(__onAxisMotion, 3);
+        __gamepad.addEventListener(__onAxisMotion, 3);
     }
 
     public function close():Void {
         
-        __gamepad.remove(__onButtonDown);
+        __gamepad.removeEventListener(__onButtonDown);
 
-        __gamepad.remove(__onButtonUp);
+        __gamepad.removeEventListener(__onButtonUp);
 
-        __gamepad.remove(__onAxisMotion);
+        __gamepad.removeEventListener(__onAxisMotion);
 
         __gamepad.close();
     }

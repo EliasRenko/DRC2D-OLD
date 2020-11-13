@@ -1,5 +1,6 @@
 package drc.display;
 
+import drc.data.Indices;
 import drc.objects.State;
 import drc.display.Graphic;
 import drc.data.IndexData;
@@ -26,8 +27,8 @@ typedef TextureParameters = {
 	wrapY:Int
 }
 
-class Drawable extends Graphic
-{
+class Drawable extends Graphic {
+
 	//** Publics.
 	
 	public var blendFactors:BlendFactors;
@@ -35,7 +36,7 @@ class Drawable extends Graphic
 	/**
 	 * The indices of the graphic.
 	 */
-	public var indices:IndexData = new IndexData();
+	public var indices:Indices = new Indices([]);
 	
 	/**
 	 * The profile of the graphic.
@@ -131,21 +132,21 @@ class Drawable extends Graphic
 
 	public function setUV(x:Float, y:Float, width:Float, height:Float):Void {	
 
-		vertices.innerData[shadings["u"].positions[0]] = x;
+		vertices[shadings["u"].positions[0]] = x;
 		
-		vertices.innerData[shadings["u"].positions[1]] = x;
+		vertices[shadings["u"].positions[1]] = x;
 		
-		vertices.innerData[shadings["u"].positions[2]] = width;
+		vertices[shadings["u"].positions[2]] = width;
 		
-		vertices.innerData[shadings["u"].positions[3]] = width;
+		vertices[shadings["u"].positions[3]] = width;
 		
-		vertices.innerData[shadings["v"].positions[0]] = y;
+		vertices[shadings["v"].positions[0]] = y;
 		
-		vertices.innerData[shadings["v"].positions[1]] = height;
+		vertices[shadings["v"].positions[1]] = height;
 		
-		vertices.innerData[shadings["v"].positions[2]] = height;
+		vertices[shadings["v"].positions[2]] = height;
 		
-		vertices.innerData[shadings["v"].positions[3]] = y;
+		vertices[shadings["v"].positions[3]] = y;
 	}
 
 	override function set_x(value:Float):Float {

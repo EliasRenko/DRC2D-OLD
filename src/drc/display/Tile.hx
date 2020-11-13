@@ -77,31 +77,31 @@ class Tile extends Graphic {
             var centerX:Float = originX * scaleX;
             var centerY:Float = originY * scaleY;
             
-            vertices.innerData[parentTilemap.shadings["x"].positions[0]] = (__x + offsetX) - (cosT * centerX) - (sinT * centerY);
+            vertices[parentTilemap.shadings["x"].positions[0]] = (__x + offsetX) - (cosT * centerX) - (sinT * centerY);
             
-            vertices.innerData[parentTilemap.shadings["x"].positions[1]] = (__x + offsetX) - (cosT * centerX) + (sinT * (scaledHeight - centerY)); 
+            vertices[parentTilemap.shadings["x"].positions[1]] = (__x + offsetX) - (cosT * centerX) + (sinT * (scaledHeight - centerY)); 
             
-            vertices.innerData[parentTilemap.shadings["x"].positions[2]] = (__x + offsetX) + (cosT * (scaledWidth - centerX)) + (sinT * (scaledHeight - centerY));
+            vertices[parentTilemap.shadings["x"].positions[2]] = (__x + offsetX) + (cosT * (scaledWidth - centerX)) + (sinT * (scaledHeight - centerY));
             
-            vertices.innerData[parentTilemap.shadings["x"].positions[3]] =  (__x + offsetX) + (cosT * (scaledWidth - centerX)) - (sinT * centerY);
+            vertices[parentTilemap.shadings["x"].positions[3]] =  (__x + offsetX) + (cosT * (scaledWidth - centerX)) - (sinT * centerY);
             
-            vertices.innerData[parentTilemap.shadings["y"].positions[0]] = (__y + offsetY) + (sinT * centerX) - (cosT * centerY);
+            vertices[parentTilemap.shadings["y"].positions[0]] = (__y + offsetY) + (sinT * centerX) - (cosT * centerY);
             
-            vertices.innerData[parentTilemap.shadings["y"].positions[1]] = (__y + offsetY) + (sinT * centerX) + (cosT * (scaledHeight - centerY));
+            vertices[parentTilemap.shadings["y"].positions[1]] = (__y + offsetY) + (sinT * centerX) + (cosT * (scaledHeight - centerY));
             
-            vertices.innerData[parentTilemap.shadings["y"].positions[2]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) + (cosT * (scaledHeight - centerY));
+            vertices[parentTilemap.shadings["y"].positions[2]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) + (cosT * (scaledHeight - centerY));
             
-            vertices.innerData[parentTilemap.shadings["y"].positions[3]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) - (cosT * centerY);
+            vertices[parentTilemap.shadings["y"].positions[3]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) - (cosT * centerY);
             
             //** ---
             
-            vertices.innerData[parentTilemap.shadings["z"].positions[0]] = __z;
+            vertices[parentTilemap.shadings["z"].positions[0]] = __z;
 
-            vertices.innerData[parentTilemap.shadings["z"].positions[1]] = __z;
+            vertices[parentTilemap.shadings["z"].positions[1]] = __z;
 
-            vertices.innerData[parentTilemap.shadings["z"].positions[2]] = __z;
+            vertices[parentTilemap.shadings["z"].positions[2]] = __z;
 
-            vertices.innerData[parentTilemap.shadings["z"].positions[3]] = __z;
+            vertices[parentTilemap.shadings["z"].positions[3]] = __z;
 
             __shouldTransform = false;
         }
@@ -120,7 +120,7 @@ class Tile extends Graphic {
 		
 		for (i in 0...4) {
 
-			vertices.innerData[parentTilemap.shadings[name].positions[i]] = value;
+			vertices[parentTilemap.shadings[name].positions[i]] = value;
 		}
 	}
 
@@ -159,17 +159,17 @@ class Tile extends Graphic {
             rect = parentTilemap.tileset.regions[64];
         }
 
-        vertices.innerData[parentTilemap.shadings["u"].positions[0]] = rect.values[0] / parentTilemap.textures[0].width;
-		vertices.innerData[parentTilemap.shadings["v"].positions[0]] = rect.values[1] / parentTilemap.textures[0].height; //y
+        vertices[parentTilemap.shadings["u"].positions[0]] = rect.values[0] / parentTilemap.textures[0].width;
+		vertices[parentTilemap.shadings["v"].positions[0]] = rect.values[1] / parentTilemap.textures[0].height; //y
 		
-		vertices.innerData[parentTilemap.shadings["u"].positions[1]] = rect.values[0] / parentTilemap.textures[0].width;	//down
-		vertices.innerData[parentTilemap.shadings["v"].positions[1]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height;
+		vertices[parentTilemap.shadings["u"].positions[1]] = rect.values[0] / parentTilemap.textures[0].width;	//down
+		vertices[parentTilemap.shadings["v"].positions[1]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height;
 		
-		vertices.innerData[parentTilemap.shadings["u"].positions[2]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //Width
-		vertices.innerData[parentTilemap.shadings["v"].positions[2]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height; //Height
+		vertices[parentTilemap.shadings["u"].positions[2]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //Width
+		vertices[parentTilemap.shadings["v"].positions[2]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height; //Height
 		
-		vertices.innerData[parentTilemap.shadings["u"].positions[3]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //up
-		vertices.innerData[parentTilemap.shadings["v"].positions[3]] = rect.values[1] / parentTilemap.textures[0].height;
+		vertices[parentTilemap.shadings["u"].positions[3]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //up
+		vertices[parentTilemap.shadings["v"].positions[3]] = rect.values[1] / parentTilemap.textures[0].height;
 
         width = rect.values[2];
 		

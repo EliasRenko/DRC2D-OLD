@@ -7,7 +7,7 @@ import drc.core.EventDispacher;
 import drc.utils.Common;
 import drc.input.Keyboard;
 
-class Runtime implements drc.core.Runtime {
+class Runtime {
 
     // ** Publics.
 
@@ -72,7 +72,7 @@ class Runtime implements drc.core.Runtime {
 
         js.Browser.document.addEventListener('keydown', function(keyboardEvent:js.html.KeyboardEvent) {
 
-            __keyboard.dispatch(keyboardEvent.keyCode, 1);
+            __keyboard.dispatchEvent(keyboardEvent.keyCode, 1);
         });
 
         js.Browser.document.addEventListener('keyup', function(keyboardEvent:js.html.KeyboardEvent) {
@@ -130,7 +130,7 @@ class Runtime implements drc.core.Runtime {
 
         // **
 
-        __event.dispatch(0, 1);
+        __event.dispatchEvent(0, 1);
 
         js.Browser.window.requestAnimationFrame(__loop);
     }

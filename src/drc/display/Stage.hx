@@ -39,12 +39,12 @@ class Stage extends Drawable {
 
 		textures[0].create(640, 480);
 		
-		vertices.upload(
+		vertices =
 		[0, 0, 0, 0, 1, 
 		0, 960, 0, 0, -1,  
-		1280, 0, 0, 2, 1]);
+		1280, 0, 0, 2, 1];
 		
-		indices.upload([0, 1, 2, 0, 2, 3]);
+		indices = [0, 1, 2, 0, 2, 3];
 		
 		setUV(0, 1, 2, -1);
 
@@ -89,17 +89,17 @@ class Stage extends Drawable {
 
 	override function setUV(x:Float, y:Float, width:Float, height:Float) {
 
-		vertices.innerData[shadings["u"].positions[0]] = x;
+		vertices[shadings["u"].positions[0]] = x;
 		
-		vertices.innerData[shadings["u"].positions[1]] = x;
+		vertices[shadings["u"].positions[1]] = x;
 		
-		vertices.innerData[shadings["u"].positions[2]] = width;
+		vertices[shadings["u"].positions[2]] = width;
 		
-		vertices.innerData[shadings["v"].positions[0]] = y;
+		vertices[shadings["v"].positions[0]] = y;
 		
-		vertices.innerData[shadings["v"].positions[1]] = height;
+		vertices[shadings["v"].positions[1]] = height;
 		
-		vertices.innerData[shadings["v"].positions[2]] = y;
+		vertices[shadings["v"].positions[2]] = y;
 	}
 
 	public function draw(image:Drawable, matrix:Matrix):Void {
@@ -119,11 +119,11 @@ class Stage extends Drawable {
 
 		__context.generateVertexBuffer();
 		
-		__context.loadVertexBuffer(drawable.vertices.innerData);
+		__context.loadVertexBuffer(drawable.vertices);
 		
 		__context.generateIndexBuffer();
 		
-		__context.loadIndexBuffer(drawable.indices.innerData);
+		__context.loadIndexBuffer(drawable.indices);
 		
 		var matrixLocation = WebGL.getUniformLocation(drawable.profile.program.innerData, "matrix");
 
@@ -198,11 +198,11 @@ class Stage extends Drawable {
 	
 	override function set_height(value:Float):Float {
 
-		vertices.innerData[shadings["y"].positions[0]] = 0 - (originY * 2);
+		vertices[shadings["y"].positions[0]] = 0 - (originY * 2);
 		
-		vertices.innerData[shadings["y"].positions[1]] = 2 * (value - originY);
+		vertices[shadings["y"].positions[1]] = 2 * (value - originY);
 		
-		vertices.innerData[shadings["y"].positions[2]] = 0 - (originY * 2);
+		vertices[shadings["y"].positions[2]] = 0 - (originY * 2);
 		
 		return super.set_height(value);
 	}
@@ -241,11 +241,11 @@ class Stage extends Drawable {
 	
 	override function set_width(value:Float):Float {
 
-		vertices.innerData[shadings["x"].positions[0]] = 0 - (originX * 2);
+		vertices[shadings["x"].positions[0]] = 0 - (originX * 2);
 		
-		vertices.innerData[shadings["x"].positions[1]] = 0 - (originX * 2);
+		vertices[shadings["x"].positions[1]] = 0 - (originX * 2);
 		
-		vertices.innerData[shadings["x"].positions[2]] = 2 * (value - originX);
+		vertices[shadings["x"].positions[2]] = 2 * (value - originX);
 		
 		return super.set_width(value);
 	}

@@ -57,7 +57,7 @@ class Image extends Drawable {
 		
 		// ** Upload index data.
 
-		indices.upload([0, 1, 2, 0, 2, 3]);
+		indices = [0, 1, 2, 0, 2, 3];
 		
 		// **
 
@@ -81,7 +81,7 @@ class Image extends Drawable {
 		
 		for (i in 0...4) 
 		{
-			vertices.innerData[shadings[name].positions[i]] = value;
+			vertices[shadings[name].positions[i]] = value;
 		}
 	}
 
@@ -99,21 +99,21 @@ class Image extends Drawable {
 	
 	override function setUV(x:Float, y:Float, width:Float, height:Float):Void
 	{	
-		vertices.innerData[shadings["u"].positions[0]] = x;
+		vertices[shadings["u"].positions[0]] = x;
 		
-		vertices.innerData[shadings["u"].positions[1]] = x;
+		vertices[shadings["u"].positions[1]] = x;
 		
-		vertices.innerData[shadings["u"].positions[2]] = width;
+		vertices[shadings["u"].positions[2]] = width;
 		
-		vertices.innerData[shadings["u"].positions[3]] = width;
+		vertices[shadings["u"].positions[3]] = width;
 		
-		vertices.innerData[shadings["v"].positions[0]] = y;
+		vertices[shadings["v"].positions[0]] = y;
 		
-		vertices.innerData[shadings["v"].positions[1]] = height;
+		vertices[shadings["v"].positions[1]] = height;
 		
-		vertices.innerData[shadings["v"].positions[2]] = height;
+		vertices[shadings["v"].positions[2]] = height;
 		
-		vertices.innerData[shadings["v"].positions[3]] = y;
+		vertices[shadings["v"].positions[3]] = y;
 	}
 
 	private function __appendMatrix():Void {
@@ -147,13 +147,13 @@ class Image extends Drawable {
 
 	override function set_height(value:Float):Float 
 	{
-		vertices.innerData[shadings["y"].positions[0]] = 0 - originY;
+		vertices[shadings["y"].positions[0]] = 0 - originY;
 		
-		vertices.innerData[shadings["y"].positions[1]] = value - originY;
+		vertices[shadings["y"].positions[1]] = value - originY;
 		
-		vertices.innerData[shadings["y"].positions[2]] = value - originY;
+		vertices[shadings["y"].positions[2]] = value - originY;
 		
-		vertices.innerData[shadings["y"].positions[3]] = 0 - originY;
+		vertices[shadings["y"].positions[3]] = 0 - originY;
 		
 		return super.set_height(value);
 	}
@@ -196,13 +196,13 @@ class Image extends Drawable {
 	
 	override function set_width(value:Float):Float 
 	{
-		vertices.innerData[shadings["x"].positions[0]] = 0 - originX;
+		vertices[shadings["x"].positions[0]] = 0 - originX;
 		
-		vertices.innerData[shadings["x"].positions[1]] = 0 - originX;
+		vertices[shadings["x"].positions[1]] = 0 - originX;
 		
-		vertices.innerData[shadings["x"].positions[2]] = value - originX;
+		vertices[shadings["x"].positions[2]] = value - originX;
 		
-		vertices.innerData[shadings["x"].positions[3]] = value - originX;
+		vertices[shadings["x"].positions[3]] = value - originX;
 		
 		return super.set_width(value);
 	}
