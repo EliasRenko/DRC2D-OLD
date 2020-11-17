@@ -5,7 +5,7 @@ import drc.input.Device;
 import drc.input.Mouse;
 import haxe.ds.Vector;
 
-class Mouse extends Device implements drc.input.Mouse {
+class Mouse extends Device {
 
 	// ** Publics.
 

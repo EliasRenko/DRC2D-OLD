@@ -61,9 +61,9 @@ class Texture {
         return null;
     }
 
-    public function generate(width:Int, height:Int):Void {
+    public function generate(width:Int, height:Int, bpp:Int):Void {
 
-        __bytesPerPixel = 3;
+        __bytesPerPixel = bpp;
 
         __width = width;
 
@@ -84,11 +84,10 @@ class Texture {
 
             var pos = __bytesPerPixel * i;
 
-            _bytes[pos] = 250;
+            for(j in 0...__bytesPerPixel) {
 
-            _bytes[pos + 1] = 250;
-
-            _bytes[pos + 2] = 250;
+                _bytes[j] = 250;
+            }
 
             //_bytes.set(pos, 250);
             //_bytes.set(pos + 1, 250);
@@ -165,12 +164,17 @@ class Texture {
 
                 var _pos = (_w + (_h * __width)) * bytesPerPixel;
 
-                bytes[_pos] = pixels[_j];
-                bytes[_pos + 1] = pixels[_j + 1];
-                bytes[_pos + 2] = pixels[_j + 2];
+                for(k in 0...channels) {
 
-                if (channels > 3) bytes[_pos + 3] = pixels[_j + 3];
-                else bytes[_pos + 3] = 255;
+                    bytes[_pos + k] = pixels[_j + k];
+                }
+
+                // bytes[_pos] = pixels[_j];
+                // bytes[_pos + 1] = pixels[_j + 1];
+                // bytes[_pos + 2] = pixels[_j + 2];
+
+                // if (channels > 3) bytes[_pos + 3] = pixels[_j + 3];
+                // else bytes[_pos + 3] = 255;
 
 
                 _j += channels;
@@ -183,7 +187,7 @@ class Texture {
             _w = x;
         }
 
-        upload(bytes, 4, __width, __height);
+        upload(bytes, bytesPerPixel, __width, __height);
     }
 
     public function copyPixels2(sourceTexture:drc.data.Texture, x:Int, y:Int, width:UInt, height:UInt, x2:Int, y2:Int):Void {

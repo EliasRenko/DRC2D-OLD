@@ -159,23 +159,23 @@ class Tile extends Graphic {
             rect = parentTilemap.tileset.regions[64];
         }
 
-        vertices[parentTilemap.shadings["u"].positions[0]] = rect.values[0] / parentTilemap.textures[0].width;
-		vertices[parentTilemap.shadings["v"].positions[0]] = rect.values[1] / parentTilemap.textures[0].height; //y
+        vertices[parentTilemap.shadings["u"].positions[0]] = rect[0] / parentTilemap.textures[0].width;
+		vertices[parentTilemap.shadings["v"].positions[0]] = rect[1] / parentTilemap.textures[0].height; //y
 		
-		vertices[parentTilemap.shadings["u"].positions[1]] = rect.values[0] / parentTilemap.textures[0].width;	//down
-		vertices[parentTilemap.shadings["v"].positions[1]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height;
+		vertices[parentTilemap.shadings["u"].positions[1]] = rect[0] / parentTilemap.textures[0].width;	//down
+		vertices[parentTilemap.shadings["v"].positions[1]] = (rect[1] + rect[3]) / parentTilemap.textures[0].height;
 		
-		vertices[parentTilemap.shadings["u"].positions[2]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //Width
-		vertices[parentTilemap.shadings["v"].positions[2]] = (rect.values[1] + rect.values[3]) / parentTilemap.textures[0].height; //Height
+		vertices[parentTilemap.shadings["u"].positions[2]] = (rect[0] + rect[2]) / parentTilemap.textures[0].width; //Width
+		vertices[parentTilemap.shadings["v"].positions[2]] = (rect[1] + rect[3]) / parentTilemap.textures[0].height; //Height
 		
-		vertices[parentTilemap.shadings["u"].positions[3]] = (rect.values[0] + rect.values[2]) / parentTilemap.textures[0].width; //up
-		vertices[parentTilemap.shadings["v"].positions[3]] = rect.values[1] / parentTilemap.textures[0].height;
+		vertices[parentTilemap.shadings["u"].positions[3]] = (rect[0] + rect[2]) / parentTilemap.textures[0].width; //up
+		vertices[parentTilemap.shadings["v"].positions[3]] = rect[1] / parentTilemap.textures[0].height;
 
-        width = rect.values[2];
+        width = rect[2];
 		
 		//** Set the height of the tile.
 		
-		height = rect.values[3];
+		height = rect[3];
 
         return __id;
     }
@@ -189,7 +189,7 @@ class Tile extends Graphic {
         
     private function set_parentTilemap(tilemap:Tilemap):Tilemap {
 
-        var active:Bool = __active;
+        var active:Bool = active;
         
         if (__parentTilemap != null) {
 

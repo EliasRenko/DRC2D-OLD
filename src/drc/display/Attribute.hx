@@ -3,8 +3,8 @@ package drc.display;
 import drc.display.AttributeFormat;
 import drc.display.Vertex;
 
-class Attribute 
-{
+class Attribute {
+
 	//** Publics.
 	
 	/**
@@ -34,8 +34,8 @@ class Attribute
 
 	/** @private **/ public var __pointers:Array<Vertex>;
 	
-	public function new(name:String, format:AttributeFormat, offset:Int, pointers:Array<Vertex>) 
-	{
+	public function new(name:String, format:AttributeFormat, offset:Int, pointers:Array<Vertex>) {
+
 		__name = name;
 		
 		__format = format;
@@ -45,25 +45,25 @@ class Attribute
 		__pointers = pointers;
 	}
 	
-	public function assignLocation(location:Int):Void
-	{
+	public function assignLocation(location:Int):Void {
+
 		__location = location;
 	}
 	
 	//** Getters and setters.
 	
-	private function get_name():String
-	{
+	private function get_name():String {
+
 		return __name;
 	}
 	
-	private function get_format():AttributeFormat
-	{
+	private function get_format():AttributeFormat {
+
 		return __format;
 	}
 	
-	private function get_offset():Int
-	{
+	private function get_offset():Int {
+		
 		return __location;
 	}
 }

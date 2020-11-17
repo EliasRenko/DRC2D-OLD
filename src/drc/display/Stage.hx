@@ -53,6 +53,8 @@ class Stage extends Drawable {
 		__indicesToRender = 3;
 
 		matrix = matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
+
+		WebGL.lineWidth(1);
 	}
 
 	public function resize(width:Int, height:Int) {
@@ -167,24 +169,13 @@ class Stage extends Drawable {
 
 		__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
 
-		if (drawable.textures[0].powerOfTwo) {
-
-			//WebGL.generateMipmap(WebGL.TEXTURE_2D);
-		}
-		else {
-
-			//trace('NON PO2');
-
-			//__context.setSamplerState(drawable.textureParams);
-		}
-
 		//__context.setSamplerState(drawable.textureParams);
 
 		//WebGL.generateMipmap(WebGL.TEXTURE_2D);
 
 		__context.generateIndexBuffer();
 
-		__context.drawElements(0, drawable.__indicesToRender);
+		__context.drawElements(drawable.mode, 0, drawable.__indicesToRender);
 
 		//WebGL.bindTexture(WebGL.TEXTURE_2D, null);
 	}

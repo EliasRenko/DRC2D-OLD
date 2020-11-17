@@ -1,14 +1,12 @@
 package drc.types;
 
-typedef MouseEvent =
-{
-	var type:GamepadEventType;
+typedef MouseEvent = {
 	
 	var timestamp:Float;
 	
 	var index:UInt;
 	
-	var ?data1:Int;
+	var x:Int;
 	
-	var ?data2:Int;
+	var y:Int;
 }

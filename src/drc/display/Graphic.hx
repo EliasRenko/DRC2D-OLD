@@ -1,6 +1,5 @@
 package drc.display;
 
-import drc.data.VertexData;
 import drc.data.Vertices;
 import drc.part.Object;
 

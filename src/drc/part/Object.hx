@@ -14,7 +14,7 @@ class Object {
 	
 	//** Privates.
 	
-	/** @private **/ private var __active:Bool = false;
+	/** @private **/ //private var __active:Bool = false;
 	
 	/** @private **/ private var __index:Int = -1;
 
@@ -49,7 +49,7 @@ class Object {
 	
 	private function get_active():Bool {
 
-		return __active;
+		return __index >= 0;
 	}
 	
 	private function get_index():Int {

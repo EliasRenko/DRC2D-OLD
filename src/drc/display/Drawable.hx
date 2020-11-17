@@ -3,7 +3,6 @@ package drc.display;
 import drc.data.Indices;
 import drc.objects.State;
 import drc.display.Graphic;
-import drc.data.IndexData;
 import drc.data.Profile;
 import drc.data.Texture;
 import drc.math.Matrix;
@@ -30,6 +29,8 @@ typedef TextureParameters = {
 class Drawable extends Graphic {
 
 	//** Publics.
+
+	public var mode:Int = 0x0004;
 	
 	public var blendFactors:BlendFactors;
 

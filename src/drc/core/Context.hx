@@ -51,9 +51,9 @@ class Context
 		GL.drawArrays(GL.TRIANGLES, offset, count);
 	}
 	
-	public function drawElements(offset:Int, count:Int):Void
+	public function drawElements(mode:Int, offset:Int, count:Int):Void
 	{
-		GL.drawElements(GL.TRIANGLES, count, GL.UNSIGNED_INT, offset);
+		GL.drawElements(mode, count, GL.UNSIGNED_INT, offset);
 	}
 
 	public function bindFrameBuffer():Void {

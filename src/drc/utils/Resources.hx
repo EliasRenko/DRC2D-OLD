@@ -1,5 +1,6 @@
 package drc.utils;
 
+import haxe.io.Path;
 import drc.core.GL;
 import drc.core.Promise;
 import drc.data.Profile;
@@ -23,7 +24,7 @@ typedef BackendAssets = drc.backend.native.utils.Resources;
 
 #end
 
-class Res {
+class Resources {
 
     // ** Privates.
 
@@ -33,6 +34,18 @@ class Res {
 
     }
 
+    public function getFont(name:String):String {
+        
+        if (__resources.exists(name)) {
+
+            var _fontResource:__FontResource = cast(__resources.get(name), __FontResource);
+
+            return _fontResource.data;
+        }
+
+        return 'Missing font!';
+    }
+
     public function getDirectory():String {
         
         return BackendAssets.getDirectory();
@@ -40,44 +53,42 @@ class Res {
 
     public function getText(name:String):String {
 
-        var _resource:__Resource = __resources.get(name);
+        if (__resources.exists(name)) {
 
-        if (_resource == null) {
+            var _textureResource:__TextResource = cast(__resources.get(name), __TextResource);
 
-            return null;
+            return _textureResource.data;
         }
 
-        var _textResource:__TextResource = cast(_resource, __TextResource);
-
-        return _textResource.data;
+        return 'Missing text!';
     }
 
     public function getTexture(name:String):Texture {
 
-        var _resource:__Resource = __resources.get(name);
+        if (__resources.exists(name)) {
 
-        if (_resource == null) {
+            var _textureResource:__TextureResource = cast(__resources.get(name), __TextureResource);
 
-            return null;
+            return _textureResource.data;
         }
 
-        var _textureResource:__TextureResource = cast(_resource, __TextureResource);
+        var _textureResource:__TextureResource = cast(__resources.get('res/graphics/grid_mt.png'), __TextureResource);
 
         return _textureResource.data;
     }
 
     public function getProfile(name:String):Profile {
 
-        var _resource:__Resource = __resources.get(name);
+        if (__resources.exists(name)) {
 
-        if (_resource == null) {
+            var _textureResource:__ProfileResource = cast(__resources.get(name), __ProfileResource);
 
-            return null;
+            return _textureResource.data;
         }
 
-        var _profileResource:__ProfileResource = cast(_resource, __ProfileResource);
+        var _textureResource:__ProfileResource = cast(__resources.get('res/profiles/default.json'), __ProfileResource);
 
-        return _profileResource.data;
+        return _textureResource.data;
     }
 
     public function loadBytes(path:String, cache:Bool = true):Promise<UInt8Array> {
@@ -99,6 +110,38 @@ class Res {
                 }
                 else {
     
+                    reject();
+                }
+            });
+        });
+    }
+
+    public function loadFont(path:String, cache:Bool = true):Promise<String> {
+        
+        return new Promise(function(resolve, reject) {
+            
+            BackendAssets.loadText(path, function(status, response) {
+
+                if (status == 200 || status == 0) { 
+
+                    var _name:String = Path.withoutDirectory(path);
+
+                    var _promise:Promise<Texture> = loadTexture('res/fonts/' + Path.withoutExtension(_name) + '.png');
+
+                    _promise.onComplete(function(result:Texture, type:Int) {
+
+                        if (cache) {
+
+                            __resources.set(path, new __FontResource(response));
+                        }
+    
+                        resolve(response);
+                    });
+                }
+                else {
+    
+                    trace(status);
+
                     reject();
                 }
             });
@@ -417,6 +460,18 @@ private class __Resource {
 
     public function new() {
 
+    }
+}
+
+private class __FontResource extends __Resource {
+
+    public var data:String;
+
+    public function new(data:String) {
+
+        super();
+
+        this.data = data;
     }
 }
 

@@ -293,7 +293,6 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
 
     // ** Getters and setters.
 
-    @:dox(hide)
     @:noCompletion
     @:arrayAccess
     public function get(index:Int):Float {
@@ -309,7 +308,6 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
         #end
     }
     
-    @:dox(hide)
     @:noCompletion
     @:arrayAccess
     public function set(index:Int, value:Float):Float {

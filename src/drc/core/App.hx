@@ -6,7 +6,7 @@ import drc.part.ObjectList;
 import drc.system.Window;
 import drc.types.WindowEventType;
 import drc.utils.Common;
-import drc.utils.Res;
+import drc.utils.Resources;
 import drc.core.Runtime;
 
 class App {
@@ -32,7 +32,7 @@ class App {
 
 	/** @private **/ private var __context:Context;
 
-	/** @private **/ private var __resources:Res;
+	/** @private **/ private var __resources:Resources;
 
 	/** @private **/ private var __runtime:Runtime;
 
@@ -54,9 +54,9 @@ class App {
 		
 		//__stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
 
-		__resources = new Res();
+		__resources = new Resources();
 
-		Common.res = __resources;
+		Common.resources = __resources;
 
 		//Common.stage = stage;
 
@@ -67,11 +67,23 @@ class App {
 
 	public function preload():Void {
 
-		var _preloads:Array<Promise<Dynamic>> = 
-		[
+		var _preloads:Array<Promise<Dynamic>> = [
+
 			__resources.loadProfile('res/profiles/texture.json'),
+
+			__resources.loadProfile('res/profiles/debug.json'),
+
 			__resources.loadProfile('res/profiles/default.json'),
-			__resources.loadTexture('res/graphics/grid_bw.png')
+
+			//__resources.loadProfile("res/profiles/font.json"),
+
+			__resources.loadTexture('res/graphics/grid_bw.png'),
+
+			__resources.loadTexture('res/graphics/grid_mt.png'),
+
+			__resources.loadTexture("res/graphics/gui.png"),
+
+			__resources.loadFont("res/fonts/font.json")
 		];
 
 		__promise = Promise.all(_preloads);
@@ -81,9 +93,13 @@ class App {
 
 		__promise.onComplete(function(result:Array<String>, type:Int) {
 			
-			__stage = new Stage(Common.res.getProfile('res/profiles/texture.json'));
+			__stage = new Stage(Common.resources.getProfile('res/profiles/texture.json'));
 
 			Common.stage = stage;
+
+			// ** 
+
+
 
 			ready();
 

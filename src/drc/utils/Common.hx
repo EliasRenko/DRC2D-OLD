@@ -5,7 +5,7 @@ import drc.core.Context;
 import drc.system.Input;
 import drc.system.Window;
 import drc.display.Stage;
-import drc.utils.Res;
+import drc.utils.Resources;
 
 class Common {
 
@@ -19,5 +19,5 @@ class Common {
 
 	public static var window:Window;
 
-	public static var res:Res;
+	public static var resources:Resources;
 }

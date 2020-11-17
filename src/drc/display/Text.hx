@@ -9,7 +9,7 @@ class Text extends Graphic {
 	
 	public var align(get, set):TextAlign;
 	
-	public var parent(get, set):Charmap;
+	public var parent(get, set):Charmap2;
 	
 	public var fieldWidth(get, set):Float;
 
@@ -63,7 +63,7 @@ class Text extends Graphic {
 	
 	/** @private */ private var __text:String = "";
 	
-	/** @private */ private var __parent:Charmap;
+	/** @private */ private var __parent:Charmap2;
 	
 	/** @private */ private var __lineBreak:Array<UInt> = new Array<UInt>();
 	
@@ -77,7 +77,7 @@ class Text extends Graphic {
 
 	/** @private **/ private var __heading:UInt = 0;
 
-	public function new(parent:Charmap, value:String, heading:UInt, x:Float = 0, y:Float = 0) {
+	public function new(parent:Charmap2, value:String, heading:UInt, x:Float = 0, y:Float = 0) {
 
 		super(x, y);
 
@@ -177,7 +177,7 @@ class Text extends Graphic {
 
 	public function addToParent():Void 
 	{
-		__active = true;
+		//__active = true;
 
 		for (i in 0...__characters.length)
 		{
@@ -292,7 +292,7 @@ class Text extends Graphic {
 			
 			//trace(tile.id);
 
-			tile.offsetY = lineY + (parent.tileset.regions[tile.id].values[5]);
+			tile.offsetY = lineY + (parent.tileset.regions[tile.id][5]);
 			//tile.offsetY = __y + lineY;
 			
 			var next:UInt = text.charCodeAt(i + 1);
@@ -479,10 +479,7 @@ class Text extends Graphic {
 
 				//char.scaleY = __scaleY;
 
-				if (__active) {
-
-					parent.addTile(char);
-				}
+				parent.addTile(char);
 
 				__characters.push(char);
 			}
@@ -619,12 +616,12 @@ class Text extends Graphic {
 		return __parent.variants[__heading];
 	}
 
-	private function get_parent():Charmap
+	private function get_parent():Charmap2
 	{
 		return __parent;
 	}
 	
-	private function set_parent(parent:Charmap):Charmap
+	private function set_parent(parent:Charmap2):Charmap2
 	{
 		if (__parent != null)
 		{
@@ -724,7 +721,7 @@ private class Character extends Tile {
 
 	public var char:String;
 
-	public function new(parent:Charmap, id:Int) {
+	public function new(parent:Charmap2, id:Int) {
 
 		super(parent, id);
 	}

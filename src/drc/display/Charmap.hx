@@ -2,7 +2,7 @@ package drc.display;
 
 import haxe.io.UInt8Array;
 import haxe.io.Bytes;
-import drc.backend.native.data.Texture;
+import drc.data.Texture;
 import stb.TrueType;
 import haxe.io.Path;
 import drc.data.Profile;

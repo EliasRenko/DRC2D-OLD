@@ -318,6 +318,284 @@ class PNG {
                         } else
                             throw h.colbits+" indexed bits per pixel not supported";
             
+                case ColGrey(alpha):
+			if( h.colbits != 8 )
+				throw "Unsupported color mode";
+			var width = h.width;
+			var stride = (alpha ? 2 : 1) * width + 1;
+			if( data.length < h.height * stride ) throw "Not enough data";
+
+			// transparent palette extension
+			var alphvaIdx:Int = -1;
+			if (!alpha)
+				for( t in d )
+					switch( t ) {
+					case CUnknown("tRNS", data):
+						if (data.length >= 2) alphvaIdx = data.get(1); // Since library supports only 8-bit greyscale, not bothered with conversions.
+						break;
+					default:
+					}
+
+
+			#if flash10
+			var bytes = data.getData();
+			var start = h.height * stride;
+			bytes.length = start + h.width * h.height * 4;
+			if( bytes.length < 1024 ) bytes.length = 1024;
+			flash.Memory.select(bytes);
+			var realData = data, realRgba = bgra;
+			var data = format.tools.MemoryBytes.make(0);
+			var bgra = format.tools.MemoryBytes.make(start);
+			#end
+
+			for( y in 0...h.height ) {
+				var f = data.get(r++);
+				switch( f ) {
+				case 0:
+					if( alpha )
+						for( x in 0...width ) {
+							var v = data.get(r++);
+							bgra.set(w++,v);
+							bgra.set(w++,v);
+							bgra.set(w++,v);
+							bgra.set(w++,data.get(r++));
+						}
+					else
+						for( x in 0...width ) {
+							var v = data.get(r++);
+							bgra.set(w++,v);
+							bgra.set(w++,v);
+							bgra.set(w++,v);
+							bgra.set(w++,v == alphvaIdx ? 0 : 0xFF);
+						}
+				case 1:
+					var cv = 0, ca = 0;
+					if( alpha )
+						for( x in 0...width ) {
+							cv += data.get(r++);
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							ca += data.get(r++);
+							bgra.set(w++,ca);
+						}
+					else
+						for( x in 0...width ) {
+							cv += data.get(r++);
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							bgra.set(w++,cv == alphvaIdx ? 0 : 0xFF);
+						}
+				case 2:
+					var stride = y == 0 ? 0 : width * 4 * flipY;
+					if( alpha )
+						for( x in 0...width ) {
+							var v = data.get(r++) + bgra.get(w - stride);
+							bgra.set(w++, v);
+							bgra.set(w++, v);
+							bgra.set(w++, v);
+							bgra.set(w++, data.get(r++) + bgra.get(w - stride));
+						}
+					else
+						for( x in 0...width ) {
+							var v = data.get(r++) + bgra.get(w - stride);
+							bgra.set(w++, v);
+							bgra.set(w++, v);
+							bgra.set(w++, v);
+							bgra.set(w++, v == alphvaIdx ? 0 : 0xFF);
+						}
+				case 3:
+					var cv = 0, ca = 0;
+					var stride = y == 0 ? 0 : width * 4 * flipY;
+					if( alpha )
+						for( x in 0...width ) {
+							cv = (data.get(r++) + ((cv + bgra.get(w - stride)) >> 1)) & 0xFF;
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							ca = (data.get(r++) + ((ca + bgra.get(w - stride)) >> 1)) & 0xFF;
+							bgra.set(w++,ca);
+						}
+					else
+						for( x in 0...width ) {
+							cv = (data.get(r++) + ((cv + bgra.get(w - stride)) >> 1)) & 0xFF;
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							bgra.set(w++,cv);
+							bgra.set(w++, cv == alphvaIdx ? 0 : 0xFF);
+						}
+				case 4:
+					var stride = width * 4 * flipY;
+					var cv = 0, ca = 0;
+					if( alpha )
+						for( x in 0...width ) {
+							cv = (filter(bgra, x, y, stride, cv, w) + data.get(r++)) & 0xFF;
+							bgra.set(w++, cv);
+							bgra.set(w++, cv);
+							bgra.set(w++, cv);
+							ca = (filter(bgra, x, y, stride, ca, w) + data.get(r++)) & 0xFF;
+							bgra.set(w++, ca);
+						}
+					else
+						for( x in 0...width ) {
+							cv = (filter(bgra, x, y, stride, cv, w) + data.get(r++)) & 0xFF;
+							bgra.set(w++, cv);
+							bgra.set(w++, cv);
+							bgra.set(w++, cv);
+							bgra.set(w++, cv == alphvaIdx ? 0 : 0xFF);
+						}
+				default:
+					throw "Invalid filter "+f;
+				}
+				w += lineDelta;
+			}
+
+			#if flash10
+			var b = realRgba.getData();
+			b.position = 0;
+			b.writeBytes(realData.getData(), start, h.width * h.height * 4);
+            #end
+            
+
+                case ColGrey(alpha):
+                    if( h.colbits != 8 )
+                        throw "Unsupported color mode";
+                    var width = h.width;
+                    var stride = (alpha ? 2 : 1) * width + 1;
+                    if( data.length < h.height * stride ) throw "Not enough data";
+        
+                    // transparent palette extension
+                    var alphvaIdx:Int = -1;
+                    if (!alpha)
+                        for( t in d )
+                            switch( t ) {
+                            case CUnknown("tRNS", data):
+                                if (data.length >= 2) alphvaIdx = data.get(1); // Since library supports only 8-bit greyscale, not bothered with conversions.
+                                break;
+                            default:
+                            }
+        
+        
+                    #if flash10
+                    var bytes = data.getData();
+                    var start = h.height * stride;
+                    bytes.length = start + h.width * h.height * 4;
+                    if( bytes.length < 1024 ) bytes.length = 1024;
+                    flash.Memory.select(bytes);
+                    var realData = data, realRgba = bgra;
+                    var data = format.tools.MemoryBytes.make(0);
+                    var bgra = format.tools.MemoryBytes.make(start);
+                    #end
+        
+                    for( y in 0...h.height ) {
+                        var f = data.get(r++);
+                        switch( f ) {
+                        case 0:
+                            if( alpha )
+                                for( x in 0...width ) {
+                                    var v = data.get(r++);
+                                    bgra.set(w++,v);
+                                    bgra.set(w++,v);
+                                    bgra.set(w++,v);
+                                    bgra.set(w++,data.get(r++));
+                                }
+                            else
+                                for( x in 0...width ) {
+                                    var v = data.get(r++);
+                                    bgra.set(w++,v);
+                                    bgra.set(w++,v);
+                                    bgra.set(w++,v);
+                                    bgra.set(w++,v == alphvaIdx ? 0 : 0xFF);
+                                }
+                        case 1:
+                            var cv = 0, ca = 0;
+                            if( alpha )
+                                for( x in 0...width ) {
+                                    cv += data.get(r++);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    ca += data.get(r++);
+                                    bgra.set(w++,ca);
+                                }
+                            else
+                                for( x in 0...width ) {
+                                    cv += data.get(r++);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv == alphvaIdx ? 0 : 0xFF);
+                                }
+                        case 2:
+                            var stride = y == 0 ? 0 : width * 4 * flipY;
+                            if( alpha )
+                                for( x in 0...width ) {
+                                    var v = data.get(r++) + bgra.get(w - stride);
+                                    bgra.set(w++, v);
+                                    bgra.set(w++, v);
+                                    bgra.set(w++, v);
+                                    bgra.set(w++, data.get(r++) + bgra.get(w - stride));
+                                }
+                            else
+                                for( x in 0...width ) {
+                                    var v = data.get(r++) + bgra.get(w - stride);
+                                    bgra.set(w++, v);
+                                    bgra.set(w++, v);
+                                    bgra.set(w++, v);
+                                    bgra.set(w++, v == alphvaIdx ? 0 : 0xFF);
+                                }
+                        case 3:
+                            var cv = 0, ca = 0;
+                            var stride = y == 0 ? 0 : width * 4 * flipY;
+                            if( alpha )
+                                for( x in 0...width ) {
+                                    cv = (data.get(r++) + ((cv + bgra.get(w - stride)) >> 1)) & 0xFF;
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    ca = (data.get(r++) + ((ca + bgra.get(w - stride)) >> 1)) & 0xFF;
+                                    bgra.set(w++,ca);
+                                }
+                            else
+                                for( x in 0...width ) {
+                                    cv = (data.get(r++) + ((cv + bgra.get(w - stride)) >> 1)) & 0xFF;
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++,cv);
+                                    bgra.set(w++, cv == alphvaIdx ? 0 : 0xFF);
+                                }
+                        case 4:
+                            var stride = width * 4 * flipY;
+                            var cv = 0, ca = 0;
+                            if( alpha )
+                                for( x in 0...width ) {
+                                    cv = (filter(bgra, x, y, stride, cv, w) + data.get(r++)) & 0xFF;
+                                    bgra.set(w++, cv);
+                                    bgra.set(w++, cv);
+                                    bgra.set(w++, cv);
+                                    ca = (filter(bgra, x, y, stride, ca, w) + data.get(r++)) & 0xFF;
+                                    bgra.set(w++, ca);
+                                }
+                            else
+                                for( x in 0...width ) {
+                                    cv = (filter(bgra, x, y, stride, cv, w) + data.get(r++)) & 0xFF;
+                                    bgra.set(w++, cv);
+                                    bgra.set(w++, cv);
+                                    bgra.set(w++, cv);
+                                    bgra.set(w++, cv == alphvaIdx ? 0 : 0xFF);
+                                }
+                        default:
+                            throw "Invalid filter "+f;
+                        }
+                        w += lineDelta;
+                    }
+        
+                    #if flash10
+                    var b = realRgba.getData();
+                    b.position = 0;
+                    b.writeBytes(realData.getData(), start, h.width * h.height * 4);
+                    #end
 
                 case ColTrue(alpha):
 

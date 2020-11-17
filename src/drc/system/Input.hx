@@ -1,5 +1,6 @@
 package drc.system;
 
+import drc.input.Mouse;
 import drc.input.Keyboard;
 import drc.core.Runtime;
 import drc.types.GamepadEvent;
@@ -17,15 +18,21 @@ class Input {
 
     public var keyboard(get, null):Keyboard;
 
+    public var mouse(get, null):Mouse;
+
     // ** Privates.
 
     private var __gamepads:Gamepads;
 
     private var __keyboard:Keyboard;
 
+    private var __mouse:Mouse;
+
     public function new(runtime:Runtime) {
 
         __keyboard = runtime.keyboard;
+
+        __mouse = runtime.mouse;
 
         event = new EventDispacher<GamepadEvent>();
 
@@ -42,6 +49,7 @@ class Input {
 
     public function postUpdate():Void {
         
+        __mouse.leftClick = false;
     }
 
     private function __onGamepadAdd(event:GamepadEvent, type:UInt):Void {
@@ -64,6 +72,11 @@ class Input {
     private function get_keyboard():Keyboard {
         
         return __keyboard;
+    }
+
+    private function get_mouse():Mouse {
+        
+        return __mouse;
     }
 }
 

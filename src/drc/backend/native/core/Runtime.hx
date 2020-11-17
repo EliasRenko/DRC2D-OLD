@@ -35,6 +35,8 @@ class Runtime {
 
 	public var keyboard(get, null):Keyboard;
 
+	public var mouse(get, null):Mouse;
+
 	// ** Privates.
 
 	/** @private **/ private var __active:Bool;
@@ -49,7 +51,7 @@ class Runtime {
 
 	private var __input:Input;
 
-	private var __mouse:Mouse;
+	private var __mouse:BackendMouse;
 
 	private var __keyboard:BackendKeyboard;
 
@@ -131,13 +133,13 @@ class Runtime {
 		
 		// ** GameControllers.
 
+		__mouse = new BackendMouse();
+
+		__keyboard = new BackendKeyboard();
+
 		__input = new Input(this);
 
 		Common.input = __input;
-
-		__mouse = new Mouse();
-
-		__keyboard = new BackendKeyboard();
 
 		__active = true;
 	}
@@ -154,6 +156,8 @@ class Runtime {
 		while (active) {
 
 			__event.dispatchEvent(0, 1);
+
+			__input.postUpdate();
 		}
 
 		#if cpp
@@ -302,14 +306,16 @@ class Runtime {
 			case SDL_MOUSEMOTION:
 				
 				//__input.onMouseMotion(event.button.x, event.button.y);
+
+				@:privateAccess __mouse.__onMotion(event.button.x, event.button.y);
 				
 			case SDL_MOUSEBUTTONDOWN:
 				
-				__mouse.dispatchEvent(0, 0);
+				@:privateAccess __mouse.__onButtonDown(0, 1);
 				
 			case SDL_MOUSEBUTTONUP:
 
-				__mouse.dispatchEvent(0, 1);
+				@:privateAccess __mouse.__onButtonDown(0, 2);
 				
 			case SDL_MOUSEWHEEL:
 				
@@ -506,6 +512,11 @@ class Runtime {
 		
 		return __keyboard;
 	}
+
+	private function get_mouse():Mouse {
+		
+		return __mouse;
+	}
 }
 
 private class GameControllerDevice extends Gamepad {
@@ -535,6 +546,14 @@ private class GameControllerDevice extends Gamepad {
 }
 
 private class BackendKeyboard extends Keyboard {
+
+	public function new() {
+		
+		super();
+	}
+}
+
+private class BackendMouse extends Mouse {
 
 	public function new() {
 		

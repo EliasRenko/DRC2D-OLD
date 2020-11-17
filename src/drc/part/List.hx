@@ -50,7 +50,7 @@ class List<T:Object> {
 		
 		//** If the object is already active...
 		
-		if (@:privateAccess object.__active) {
+		if (object.active) {
 
 			//trace("Already active");
 			
@@ -76,8 +76,6 @@ class List<T:Object> {
 		
 		//** Set object as active.
 		
-		@:privateAccess object.__active = true; //** Define metadata: privateAccess.
-		
 		//** Push a new object with a new active index into the active members array.
 		
 		@:privateAccess object.__index = members.push(object) - 1; //** Define metadata: privateAccess.
@@ -98,7 +96,7 @@ class List<T:Object> {
 
 		//** If the object is already active...
 		
-		if (@:privateAccess object.__active) {
+		if (@:privateAccess object.active) {
 
 			trace("Already active");
 			
@@ -129,7 +127,7 @@ class List<T:Object> {
 		
 		//** Set object as active.
 		
-		@:privateAccess object.__active = true; //** Define metadata: privateAccess.
+		//@:privateAccess object.__active = true; //** Define metadata: privateAccess.
 		
 		//** Set the active index of the object.
 		

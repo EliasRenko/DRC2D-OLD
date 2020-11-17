@@ -33,7 +33,7 @@ class RecycleList<T:Object> extends List<T> {
 
 		//** If object is active...
 		
-		if (@:privateAccess object.__active) { //** Define metadata: privateAccess.
+		if (object.active) { //** Define metadata: privateAccess.
 
 			return null;
 		}
@@ -104,9 +104,9 @@ class RecycleList<T:Object> extends List<T> {
 	
 	public function recycle(object:T):Bool {
 
-		if (@:privateAccess object.__active) { //** Define metadata: privateAccess.
+		if (object.active) { //** Define metadata: privateAccess.
 
-			@:privateAccess object.__active = false; //** Define metadata: privateAccess.
+			@:privateAccess object.__index = -1; //** Define metadata: privateAccess.
 			
 			@:privateAccess object.__passiveIndex = __passiveMembers.push(object) - 1; //** Define metadata: privateAccess.
 			

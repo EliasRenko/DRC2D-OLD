@@ -55,8 +55,6 @@ class Tilemap extends Drawable {
 	public function addTile(tile:Tile):Tile {
 
 		if (tiles.add(tile) == null) {
-			
-			//trace('NULL');
 
 			return null;
 		} 

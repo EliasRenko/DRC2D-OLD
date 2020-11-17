@@ -1,5 +1,6 @@
 package drc.objects;
 
+import drc.input.Mouse;
 import drc.core.App;
 import drc.types.WindowEventType;
 import drc.system.Window;
@@ -43,6 +44,7 @@ class State extends Object {
 
 	override public function init():Void {
 
+		Common.input.mouse.addEventListener(__onMouseMovement, 3);
 	}
 
 	override public function release():Void {
@@ -162,20 +164,23 @@ class State extends Object {
 		entity.update();
 	}
 
+	private function __onMouseMovement(mouse:Mouse, type:UInt) {
+
+		//mouseX = mouse.x;
+
+		//mouseY = mouse.y;
+	}
+
 	// ** Getters and setters.
 
 	private function get_mouseX():Int {
 
-		//return Common.input.mouse.x;
-
-		return 0;
+		return Common.input.mouse.x;
 	}
 
 	private function get_mouseY():Int {
 
-		//return Common.input.mouse.y;
-
-		return 0;
+		return Common.input.mouse.y;
 	}
 
 	private function get_z():Float {
