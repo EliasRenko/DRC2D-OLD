@@ -14,6 +14,8 @@ class Charmap2 extends Tilemap {
     
     public var size(get, null):Float;
 
+    public var ascend:Float;
+
 	// ** Privates.
 
 	private var __ascender:Float;
@@ -29,6 +31,12 @@ class Charmap2 extends Tilemap {
         var _rootData:Dynamic = Json.parse(font);
 
         var _textureName:String = _rootData.name;
+
+        __ascender = _rootData.ascender;
+
+        __descender = _rootData.descender;
+
+        ascend = __ascender;
 
         if (Reflect.hasField(_rootData, "regions")) {
             

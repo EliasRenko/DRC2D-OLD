@@ -49,7 +49,7 @@ class Texture {
         }
 
         
-        //GL.pixelStorei(GL.UNPACK_ALIGNMENT, 1);
+        GL.pixelStorei(GL.UNPACK_ALIGNMENT, 1);
 
         upload(data, bytesPerPixel, width, height);
 

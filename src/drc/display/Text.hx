@@ -77,11 +77,9 @@ class Text extends Graphic {
 
 	/** @private **/ private var __heading:UInt = 0;
 
-	public function new(parent:Charmap2, value:String, heading:UInt, x:Float = 0, y:Float = 0) {
+	public function new(parent:Charmap2, value:String, x:Float = 0, y:Float = 0) {
 
 		super(x, y);
-
-		__heading = heading;
 
 		__scaleX = 1;
 
@@ -218,8 +216,8 @@ class Text extends Graphic {
 		
 		var lineX:Float = 0;
 		
-		switch (__align) 
-		{
+		switch (__align) {
+
 			case LEFT:	
 			
 				lineX = __lineStart[__lines];
@@ -292,7 +290,10 @@ class Text extends Graphic {
 			
 			//trace(tile.id);
 
-			tile.offsetY = lineY + (parent.tileset.regions[tile.id][5]);
+			tile.offsetY += lineY;
+
+			//tile.offsetY = lineY + (parent.tileset.regions[tile.id][5]);
+
 			//tile.offsetY = __y + lineY;
 			
 			var next:UInt = text.charCodeAt(i + 1);
@@ -474,6 +475,10 @@ class Text extends Graphic {
 				char = new Character(parent, id);
 				
 				char.char = __text.charAt(i);
+
+				//char.offsetY = (__parent.ascend - char.height) * scale;
+
+				char.offsetY += __parent.tileset.regions[id][5];
 
 				//char.scaleX = __scaleX;
 
