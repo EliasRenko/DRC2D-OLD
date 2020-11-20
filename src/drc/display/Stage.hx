@@ -169,7 +169,7 @@ class Stage extends Drawable {
 
 		__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
 
-		//__context.setSamplerState(drawable.textureParams);
+		__context.setSamplerState(drawable.textureParams);
 
 		//WebGL.generateMipmap(WebGL.TEXTURE_2D);
 

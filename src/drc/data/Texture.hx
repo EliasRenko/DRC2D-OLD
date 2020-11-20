@@ -49,7 +49,7 @@ class Texture {
         }
 
         
-        GL.pixelStorei(GL.UNPACK_ALIGNMENT, 1);
+        //GL.pixelStorei(GL.UNPACK_ALIGNMENT, 1);
 
         upload(data, bytesPerPixel, width, height);
 
@@ -61,7 +61,7 @@ class Texture {
         return null;
     }
 
-    public function generate(width:Int, height:Int, bpp:Int):Void {
+    public function generate(width:Int, height:Int, bpp:Int, value:Int = 0):Void {
 
         __bytesPerPixel = bpp;
 
@@ -86,8 +86,12 @@ class Texture {
 
             for(j in 0...__bytesPerPixel) {
 
-                _bytes[j] = 250;
+                _bytes[pos + j] = value;
             }
+
+            if (__transparent) _bytes[pos + 3] = 0;
+
+            //if (__transparent) _bytes[j] = 255;
 
             //_bytes.set(pos, 250);
             //_bytes.set(pos + 1, 250);
@@ -173,8 +177,8 @@ class Texture {
                 // bytes[_pos + 1] = pixels[_j + 1];
                 // bytes[_pos + 2] = pixels[_j + 2];
 
-                // if (channels > 3) bytes[_pos + 3] = pixels[_j + 3];
-                // else bytes[_pos + 3] = 255;
+                //if (channels > 3) bytes[_pos + 3] = pixels[_j + 3];
+                //else bytes[_pos + 3] = 255;
 
 
                 _j += channels;

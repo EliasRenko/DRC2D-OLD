@@ -1,6 +1,6 @@
 package drc.display;
 
-typedef Shading =
-{
+typedef Shading = {
+	
 	var positions:Array<Int>;
 }

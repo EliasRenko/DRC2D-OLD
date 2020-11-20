@@ -32,7 +32,7 @@ class Profile {
 
 	public var uniforms:Array<Uniform> = new Array<Uniform>();
 	
-	//** Privates.
+	// ** Privates.
 	
 	/** @private **/ private var __name:String;
 	
@@ -51,7 +51,7 @@ class Profile {
 		uniforms.push(uniform);
 	}
 	
-	//** Getters and setters.
+	// ** Getters and setters.
 	
 	private function get_name():String {
 

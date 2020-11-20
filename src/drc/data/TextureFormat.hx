@@ -1,7 +1,7 @@
 package drc.data;
 
-@:enum abstract TextureFormat(Null<Int>) from Int to Int
-{
+@:enum abstract TextureFormat(Null<Int>) from Int to Int {
+
 	var NONE = -1;
 
     var RED = 0x1903;
@@ -20,10 +20,10 @@ package drc.data;
 	
 	var LUMINANCE_ALPHA = 0x190A;
 
-	@:from private static function fromString(value:String):TextureFormat
-	{
-		return switch (value)
-		{
+	@:from private static function fromString(value:String):TextureFormat {
+
+		return switch (value) {
+
 			case "none": NONE;
 
 			case "red": RED;
@@ -46,10 +46,10 @@ package drc.data;
 		}
 	}
 	
-	@:to private function toString():String
-	{
-		return switch (cast this: TextureFormat)
-		{
+	@:to private function toString():String {
+
+		return switch (cast this: TextureFormat) {
+			
 			case TextureFormat.NONE: "none";
 
 			case TextureFormat.RED: "red";

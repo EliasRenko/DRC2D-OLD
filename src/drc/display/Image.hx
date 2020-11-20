@@ -72,33 +72,33 @@ class Image extends Drawable {
 
 		#if debug // ------
 		
-		if (!shadings.exists(name))
-		{
+		if (!shadings.exists(name)) {
+
 			throw "Attribute: " + name + " does not exist.";
 		}
 		
 		#end // ------
 		
-		for (i in 0...4) 
-		{
+		for (i in 0...4) {
+
 			vertices[shadings[name].positions[i]] = value;
 		}
 	}
 
-	public function centerOrigin():Void
-	{
+	public function centerOrigin():Void {
+
 		originX = __width / 2;
 		
 		originY = __height / 2;
 	}
 		
-	public function createTexture(width:Int, height:Int, color:Int = 0xFFFFFF):Void
-	{
+	public function createTexture(width:Int, height:Int, color:Int = 0xFFFFFF):Void {
+
 		//textures[0].uploadBitmapData(new BitmapData(width, height, false, color));
 	}
 	
-	override function setUV(x:Float, y:Float, width:Float, height:Float):Void
-	{	
+	override function setUV(x:Float, y:Float, width:Float, height:Float):Void {
+
 		vertices[shadings["u"].positions[0]] = x;
 		
 		vertices[shadings["u"].positions[1]] = x;
@@ -116,11 +116,7 @@ class Image extends Drawable {
 		vertices[shadings["v"].positions[3]] = y;
 	}
 
-	private function __appendMatrix():Void {
-
-	}
-
-	override function render() {
+	override function render():Void {
 
 		if (__shouldTransform) {
 
@@ -138,15 +134,15 @@ class Image extends Drawable {
 
 	//** Getters and setters.
 	
-	override function set_angle(value:Float):Float 
-	{
+	override function set_angle(value:Float):Float {
+
 		__shouldTransform = true;
 
 		return super.set_angle(value);
 	}
 
-	override function set_height(value:Float):Float 
-	{
+	override function set_height(value:Float):Float {
+
 		vertices[shadings["y"].positions[0]] = 0 - originY;
 		
 		vertices[shadings["y"].positions[1]] = value - originY;
@@ -158,8 +154,8 @@ class Image extends Drawable {
 		return super.set_height(value);
 	}
 		
-	override function set_scaleX(value:Float):Float 
-	{
+	override function set_scaleX(value:Float):Float {
+
 		super.set_scaleX(value);
 		
 		__shouldTransform = true;
@@ -167,8 +163,8 @@ class Image extends Drawable {
 		return __scaleX;
 	}
 		
-	override function set_scaleY(value:Float):Float 
-	{
+	override function set_scaleY(value:Float):Float {
+
 		super.set_scaleY(value);
 		
 		__shouldTransform = true;
@@ -176,8 +172,8 @@ class Image extends Drawable {
 		return __scaleY;
 	}
 
-	override function set_originX(value:Float):Float 
-	{
+	override function set_originX(value:Float):Float {
+
 		super.set_originX(value);
 		
 		width = __width;
@@ -185,8 +181,8 @@ class Image extends Drawable {
 		return __originX;
 	}
 		
-	override function set_originY(value:Float):Float 
-	{
+	override function set_originY(value:Float):Float {
+
 		super.set_originY(value);
 		
 		height = __height;
@@ -194,8 +190,8 @@ class Image extends Drawable {
 		return __originY;
 	}
 	
-	override function set_width(value:Float):Float 
-	{
+	override function set_width(value:Float):Float {
+
 		vertices[shadings["x"].positions[0]] = 0 - originX;
 		
 		vertices[shadings["x"].positions[1]] = 0 - originX;
@@ -207,15 +203,15 @@ class Image extends Drawable {
 		return super.set_width(value);
 	}
 
-	override function set_x(value:Float):Float 
-	{
+	override function set_x(value:Float):Float {
+
 		__shouldTransform = true;
 
 		return __x = value;
 	}
 		
-	override function set_y(value:Float):Float 
-	{
+	override function set_y(value:Float):Float {
+
 		__shouldTransform = true;
 
 		return __y = value;

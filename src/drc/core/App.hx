@@ -75,6 +75,8 @@ class App {
 
 			__resources.loadProfile('res/profiles/default.json'),
 
+			__resources.loadProfile('res/profiles/gui.json'),
+
 			//__resources.loadProfile("res/profiles/font.json"),
 
 			__resources.loadTexture('res/graphics/grid_bw.png'),
@@ -83,7 +85,9 @@ class App {
 
 			__resources.loadTexture("res/graphics/gui.png"),
 
-			__resources.loadFont("res/fonts/font.json")
+			__resources.loadFont("res/fonts/font.json"),
+
+			__resources.loadText("res/graphics/gui.json")
 		];
 
 		__promise = Promise.all(_preloads);

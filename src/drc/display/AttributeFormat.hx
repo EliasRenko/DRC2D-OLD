@@ -1,7 +1,7 @@
 package drc.display;
 
-@:enum abstract AttributeFormat(Null<Int>) from Int to Int
-{
+@:enum abstract AttributeFormat(Null<Int>) from Int to Int {
+	
 	var FLOAT = 1;
 	
 	var VEC2 = 2;

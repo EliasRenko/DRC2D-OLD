@@ -91,11 +91,11 @@ class Context
 			return;
 		}
 		
-		GL.blendFunc(GL.ONE, GL.ONE_MINUS_SRC_ALPHA);
+		//GL.blendFunc(GL.ONE, GL.ONE_MINUS_SRC_ALPHA);
 
 		//GL.blendFunc(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA);
 
-		//GL.blendFunc(source, dest);
+		GL.blendFunc(source, dest);
 
 		//GL.blendFuncSeparate(GL.SRC_ALPHA, GL.ONE_MINUS_SRC_ALPHA, GL.ONE, GL.ONE_MINUS_SRC_ALPHA);
 	}
@@ -106,9 +106,9 @@ class Context
 		
 		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
 
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.LINEAR);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST);
 
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.LINEAR);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST);
 
 		//GL.texParameteri(GL.TEXTURE_2D, GL.GENERATE_MIPMAP, GL.FALSE);
 	}

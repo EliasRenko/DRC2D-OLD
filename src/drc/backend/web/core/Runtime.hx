@@ -6,6 +6,7 @@ import drc.backend.web.core.GL;
 import drc.core.EventDispacher;
 import drc.utils.Common;
 import drc.input.Keyboard;
+import drc.input.Mouse;
 
 class Runtime {
 
@@ -21,6 +22,10 @@ class Runtime {
 
     public var keyboard(get, null):Keyboard;
 
+    public var mouse(get, null):Mouse;
+
+    //private var __mouse:BackendMouse;
+
     // ** Privates.
 
     /** @private **/ private var __active:Bool;
@@ -34,6 +39,8 @@ class Runtime {
     /** @private **/ private var __event:EventDispacher<Float>;
 
     /** @private **/ private var __keyboard:BackendKeyboard;
+
+    /** @private **/ private var __mouse:BackendMouse;
 
     public function new() {
 
@@ -49,6 +56,12 @@ class Runtime {
         __initVideo();
 
         __keyboard = new BackendKeyboard();
+
+        __mouse = new BackendMouse();
+
+        __input = new Input(this);
+
+		Common.input = __input;
 
         if (js.Browser.navigator.getGamepads != null) {
 
@@ -164,10 +177,23 @@ class Runtime {
     private function get_keyboard():Keyboard {
 		
 		return __keyboard;
+    }
+    
+    private function get_mouse():Mouse {
+		
+		return __mouse;
 	}
 }
 
 private class BackendKeyboard extends Keyboard {
+
+    public function new() {
+        
+        super();
+    }
+}
+
+private class BackendMouse extends Mouse {
 
     public function new() {
         

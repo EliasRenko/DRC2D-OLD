@@ -35,7 +35,7 @@ class Text extends Graphic {
 	/**
 	 * The string value of the text.
 	 */
-	public var text(get, set):String; //** Define metadata isVar.
+	public var text(get, set):String;
 	
 	public var scale(get, set):Float;
 
@@ -51,27 +51,27 @@ class Text extends Graphic {
 	
 	// ** Privates.
 	
-	/** @private */ private var __align:UInt = 0;
+	/** @private **/ private var __align:UInt = 0;
 	
-	/** @private */ private var __fieldWidth:Float = 300;
+	/** @private **/ private var __fieldWidth:Float = 300;
 
-	/** @private */ private var __font:String;
+	/** @private **/ private var __font:String;
 	
-	/** @private */ private var __lines:Int = 0;
+	/** @private **/ private var __lines:Int = 0;
 	
-	/** @private */ public var __characters:Array<Character> = new Array<Character>();
+	/** @private **/ public var __characters:Array<Character> = new Array<Character>();
 	
-	/** @private */ private var __text:String = "";
+	/** @private **/ private var __text:String = "";
 	
-	/** @private */ private var __parent:Charmap;
+	/** @private **/ private var __parent:Charmap;
 	
-	/** @private */ private var __lineBreak:Array<UInt> = new Array<UInt>();
+	/** @private **/ private var __lineBreak:Array<UInt> = new Array<UInt>();
 	
-	/** @private */ private var __lineStart:Array<Float> = new Array<Float>();
+	/** @private **/ private var __lineStart:Array<Float> = new Array<Float>();
 
-	/** @private */ private var __lineSize:Array<Float> = new Array<Float>();
+	/** @private **/ private var __lineSize:Array<Float> = new Array<Float>();
 	
-	/** @private */ private var __transition:UInt = 4;
+	/** @private **/ private var __transition:UInt = 4;
 
 	/** @private **/ private var __wordwrap:Bool = false;
 
@@ -127,13 +127,13 @@ class Text extends Graphic {
 	
 	// ** Getters and setters.
 	
-	private function get_align():UInt
-	{
+	private function get_align():UInt {
+
 		return __align;
 	}
 	
-	private function set_align(value:UInt):UInt
-	{
+	private function set_align(value:UInt):UInt {
+
 		__align = value;
 
 		setPosition();
@@ -141,13 +141,13 @@ class Text extends Graphic {
 		return value;
 	}
 	
-	private function get_fieldWidth():Float
-	{
+	private function get_fieldWidth():Float {
+
 		return __fieldWidth;
 	}
 	
-	private function set_fieldWidth(value:Float):Float
-	{
+	private function set_fieldWidth(value:Float):Float {
+
 		__fieldWidth = value;
 		
 		set_text(__text);
@@ -155,26 +155,26 @@ class Text extends Graphic {
 		return value;
 	}
 	
-	private function get_lines():Int
-	{
+	private function get_lines():Int {
+
 		return __lines;
 	}
 	
-	private function get_text():String
-	{
+	private function get_text():String {
+
 		return __text;
 	}
 	
-	override function setAttribute(name:String, value:Float):Void
-	{
+	override function setAttribute(name:String, value:Float):Void {
+
 		for (i in 0...__characters.length)
 		{
 			__characters[i].setAttribute(name, value);
 		}
 	}
 
-	public function addToParent():Void 
-	{
+	public function addToParent():Void {
+
 		//__active = true;
 
 		for (i in 0...__characters.length)
@@ -193,8 +193,8 @@ class Text extends Graphic {
 		}
 	}
 	
-	private function setPosition():Void
-	{
+	private function setPosition():Void {
+
 		#if debug // ------
 		
 		if (__align > 2)
@@ -621,15 +621,15 @@ class Text extends Graphic {
 		return __parent.variants[__heading];
 	}
 
-	private function get_parent():Charmap
-	{
+	private function get_parent():Charmap {
+
 		return __parent;
 	}
 	
-	private function set_parent(parent:Charmap):Charmap
-	{
-		if (__parent != null)
-		{
+	private function set_parent(parent:Charmap):Charmap {
+
+		if (__parent != null) {
+
 			clear();
 			
 			tracking = parent.defaultKerning;
@@ -660,10 +660,10 @@ class Text extends Graphic {
 		return __scaleX;
 	}
 
-	override private function set_visible(value:Bool):Bool
-	{
-		for (i in 0...__characters.length)
-		{
+	override private function set_visible(value:Bool):Bool {
+
+		for (i in 0...__characters.length) {
+
 			__characters[i].visible = value;
 		}
 		
@@ -689,30 +689,30 @@ class Text extends Graphic {
 		return value;
 	}
 	
-	override private function set_x(value:Float):Float
-	{
-		for (i in 0...__characters.length) 
-		{
+	override private function set_x(value:Float):Float {
+
+		for (i in 0...__characters.length) {
+
 			__characters[i].x = value;
 		}
 
 		return __x = value;
 	}
 	
-	override private function set_y(value:Float):Float
-	{
-		for (i in 0...__characters.length) 
-		{
+	override private function set_y(value:Float):Float {
+
+		for (i in 0...__characters.length) {
+
 			__characters[i].y = value;
 		}
 		
 		return __y = value;
 	}
 	
-	override private function set_z(value:Float):Float
-	{
-		for (i in 0...__characters.length) 
-		{
+	override private function set_z(value:Float):Float {
+
+		for (i in 0...__characters.length) {
+
 			__characters[i].z = value;
 		}
 		
