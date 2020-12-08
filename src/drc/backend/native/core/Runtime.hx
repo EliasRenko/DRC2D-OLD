@@ -315,7 +315,7 @@ class Runtime {
 				
 			case SDL_MOUSEBUTTONUP:
 
-				@:privateAccess __mouse.__onButtonDown(0, 2);
+				@:privateAccess __mouse.__onButtonUp(0, 2);
 				
 			case SDL_MOUSEWHEEL:
 				
@@ -323,17 +323,23 @@ class Runtime {
 				
 			case SDL_KEYDOWN:
 
-				__keyboard.dispatchEvent(event.key.keysym.scancode, 1);
+				__keyboard.onKeyDown(event.key.keysym.scancode);
+
+				//__keyboard.dispatchEvent(event.key.keysym.scancode, 1);
 				
 			case SDL_KEYUP:
 			
-				__keyboard.dispatchEvent(event.key.keysym.scancode, 2);
+				__keyboard.onKeyUp(event.key.keysym.scancode);
+
+				//__keyboard.dispatchEvent(event.key.keysym.scancode, 2);
 
 			case SDL_TEXTEDITING:
 			
 			case SDL_TEXTINPUT:
 
 				//__input.onTextInput(event.text.text);
+
+				__keyboard.onTextInput(event.text.text);
 			
 			default:
 		}
@@ -550,6 +556,35 @@ private class BackendKeyboard extends Keyboard {
 	public function new() {
 		
 		super();
+	}
+
+	override function onKeyDown(keycode:Int):Void {
+
+		super.onKeyDown(keycode);
+	}
+
+	override function onKeyUp(keycode:Int):Void {
+
+		super.onKeyUp(keycode);
+	}
+
+	override function startTextInput():Void {
+
+		SDL.startTextInput();
+
+		super.startTextInput();
+	}
+
+	override function stopTextInput():Void {
+
+		SDL.stopTextInput();
+
+		super.stopTextInput();
+	}
+
+	override function onTextInput(text:String):Void {
+		
+		super.onTextInput(text);
 	}
 }
 

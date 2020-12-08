@@ -40,6 +40,18 @@ class EventDispacher<T> {
 		
 		__listeners.push(eventListener);
 	}
+
+	public function clearEventListeners():Void {
+
+		var i:Int = __listeners.length - 1;
+
+		while (i > -1) {
+
+			__listeners.pop();
+
+			i --;
+		}
+	}
 	
 	public function dispatchEvent(value:T, type:UInt = 0):Void {
 

@@ -16,6 +16,8 @@ class Charmap extends Tilemap {
 
     public var ascend:Float;
 
+    public var descender:Float;
+
 	// ** Privates.
 
 	private var __ascender:Float;
@@ -36,7 +38,9 @@ class Charmap extends Tilemap {
 
         __descender = _rootData.descender;
 
-        ascend = __ascender;
+        ascend = __ascender + __descender;
+
+        descender = __descender;
 
         if (Reflect.hasField(_rootData, "regions")) {
             

@@ -282,7 +282,7 @@ class Text extends Graphic {
 			
 			tile.x = __x;
 			
-			tile.y += __y;
+			tile.y = __y;
 			
 			tile.z = __z;
 			
@@ -470,15 +470,13 @@ class Text extends Graphic {
 			
 			var char:Character;
 			
-			if (i > __characters.length - 1)
-			{
+			if (i > __characters.length - 1) {
+				
 				char = new Character(parent, id);
 				
 				char.char = __text.charAt(i);
 
 				//char.offsetY = (__parent.ascend - char.height) * scale;
-
-				char.offsetY += __parent.tileset.regions[id][5];
 
 				//char.scaleX = __scaleX;
 
@@ -494,6 +492,8 @@ class Text extends Graphic {
 				
 				char.id = id;
 			}
+
+			char.offsetY = __parent.tileset.regions[id][5];
 
 			char.scaleX = __scaleX;
 
@@ -517,7 +517,7 @@ class Text extends Graphic {
 				
 				char.width = spacing;
 				
-				char.height = 16;
+				char.height = 0;
 				
 				//tile.setAttribute("r", 0.2);
 				//tile.setAttribute("g", 0.2); // DEBUG!!
@@ -672,6 +672,8 @@ class Text extends Graphic {
 
 	override function get_width():Float {
 		
+		//return __width;
+
 		return __fieldWidth;
 	}
 
