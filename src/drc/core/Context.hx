@@ -9,6 +9,7 @@ import drc.display.Drawable.TextureParameters;
 import drc.data.Texture;
 import drc.display.Uniform;
 import drc.core.GL;
+import drc.display.UniformParam;
 
 class Context 
 {
@@ -102,9 +103,9 @@ class Context
 
 	public function setSamplerState(params:TextureParameters):Void {
 
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.CLAMP_TO_EDGE);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.REPEAT);
 		
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.CLAMP_TO_EDGE);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.REPEAT);
 
 		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST);
 
@@ -231,17 +232,43 @@ class Context
 		GL.vertexAttribPointer(index, size, GL.FLOAT, normalized, stride, offset);
 	}
 
-	public function setUniform(uniform:Uniform, value:Dynamic):Void {
+	public function setUniform(uniform:UniformParam<Dynamic>):Void {
 		
-		switch (uniform.format) {
+		var values = uniform.getPackedValue();
+
+		switch (uniform.type) {
 
 			case FLOAT1:
 
-				GL.uniform1f(uniform.location, value);
+				GL.uniform1f(uniform.index, values[0]);
 
-			case MAT4:
+			case FLOAT2:
 
-				GL.uniformMatrix4fv(uniform.location, false, value);
+				GL.uniform2f(uniform.index, values[0], values[1]);
+
+			case FLOAT3:
+
+				GL.uniform3f(uniform.index, values[0], values[1], values[2]);
+
+			case FLOAT4:
+
+				GL.uniform4f(uniform.index, values[0], values[1], values[2], values[3]);
+
+			case INT1:
+
+				GL.uniform1i(uniform.index, values[0]);
+
+			case INT2:
+
+				GL.uniform2i(uniform.index, values[0], values[1]);
+
+			case INT3:
+
+				GL.uniform3i(uniform.index, values[0], values[1], values[2]);
+
+			case INT4:
+
+				GL.uniform4i(uniform.index, values[0], values[1], values[2], values[3]);
 
 			default:
 		}

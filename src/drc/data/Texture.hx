@@ -136,7 +136,17 @@ class Texture {
 
         glTexture = Common.context.generateTexture();
 
-        Common.context.setSamplerState(null);
+        //Common.context.setSamplerState(null);
+
+        Common.context.setSamplerState({
+            
+            magnification: GL.NEAREST,
+
+			minification: GL.NEAREST,
+
+			wrapX: GL.REPEAT,
+
+			wrapY: GL.REPEAT});
 
         Common.context.loadTexture(__width, __height, __bytesPerPixel, null);
     }
@@ -336,7 +346,15 @@ class Texture {
 
         glTexture = Common.context.generateTexture();
 
-        Common.context.setSamplerState(null);
+        Common.context.setSamplerState({
+            
+            magnification: 0x2600,
+
+			minification: 0x2600,
+
+			wrapX: 0x2901,
+
+			wrapY: 0x2901});
 
         Common.context.loadTexture(__width, __height, __bytesPerPixel, bytes);
     }

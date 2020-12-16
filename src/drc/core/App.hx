@@ -79,6 +79,8 @@ class App {
 
 			__resources.loadProfile("res/profiles/font.json"),
 
+			__resources.loadProfile("res/profiles/checker.json"),
+
 			__resources.loadTexture('res/graphics/grid_bw.png'),
 
 			__resources.loadTexture('res/graphics/grid_mt.png'),

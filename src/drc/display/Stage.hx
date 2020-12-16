@@ -52,7 +52,9 @@ class Stage extends Drawable {
 		
 		__indicesToRender = 3;
 
-		matrix = matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
+		//var m = uniforms.get('matrix').value;
+
+		matrix = Matrix.createOrthoMatrix(0, 640, 480, 0, 1000, -1000);
 
 		WebGL.lineWidth(1);
 	}
@@ -65,7 +67,7 @@ class Stage extends Drawable {
 
 		textures[0].create(width, height);
 
-		matrix = matrix.createOrthoMatrix(0, width, height, 0, 1000, -1000);
+		matrix = Matrix.createOrthoMatrix(0, width, height, 0, 1000, -1000);
 	}
 
 	public function setToDraw():Void {
@@ -126,7 +128,7 @@ class Stage extends Drawable {
 		__context.generateIndexBuffer();
 		
 		__context.loadIndexBuffer(drawable.indices);
-		
+
 		var matrixLocation = WebGL.getUniformLocation(drawable.profile.program.innerData, "matrix");
 
 		#if js
@@ -138,6 +140,11 @@ class Stage extends Drawable {
 		WebGL.uniformMatrix4fv(matrixLocation, false, matrix);
 
 		#end
+
+		for (uniform in drawable.uniforms) {
+
+			__context.setUniform(uniform);
+		}
 
 		__context.generateVertexBuffer();
 		
@@ -165,11 +172,11 @@ class Stage extends Drawable {
 			var loc = WebGL.getUniformLocation(drawable.profile.program.innerData, "diffuse");
 
 			WebGL.uniform1i(loc, 0);
+
+			__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
+
+			//__context.setSamplerState(drawable.textureParams);
 		}
-
-		__context.setBlendFactors(drawable.blendFactors.source, drawable.blendFactors.destination);
-
-		__context.setSamplerState(drawable.textureParams);
 
 		//WebGL.generateMipmap(WebGL.TEXTURE_2D);
 

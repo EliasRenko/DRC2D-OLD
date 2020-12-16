@@ -53,7 +53,7 @@ class Camera {
 
         _view.append(__matrix);
 
-        _view.append(__matrix.createOrthoMatrix(0, Common.window.width, Common.window.height, 0, 1000, -1000));
+        _view.append(Matrix.createOrthoMatrix(0, Common.window.width, Common.window.height, 0, 1000, -1000));
 
         return _view;
     }
@@ -80,7 +80,7 @@ class Camera {
         
         //projection.perspective(fov, aspect, __width, __height, 0.1, 10000);
 
-        _view.append(__matrix.createPerspectiveMatrix(fov, aspect, 640, 480, 0.1, 1000));
+        _view.append(Matrix.createPerspectiveMatrix(fov, aspect, 640, 480, 0.1, 1000));
 
         return _view;
     }

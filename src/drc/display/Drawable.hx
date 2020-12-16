@@ -7,6 +7,7 @@ import drc.data.Profile;
 import drc.data.Texture;
 import drc.math.Matrix;
 import drc.display.Shading;
+import drc.display.UniformParam;
 
 typedef BlendFactors = {
 	
@@ -57,9 +58,14 @@ class Drawable extends Graphic {
 	public var matrix:Matrix = new Matrix();
 
 	/**
-	 * The shadings ofthe graphic.
+	 * The shadings of the graphic.
 	 */
 	public var shadings:Map<String, Shading> = new Map<String, Shading>();
+
+	/**
+	 * The shadings of the graphic.
+	 */
+	public var uniforms:Map<String, UniformParam<Dynamic>> = new Map<String, UniformParam<Dynamic>>();
 
 	// ** Privates.
 	
@@ -122,6 +128,11 @@ class Drawable extends Graphic {
 				shadings.set(_name, shading);
 			}
 		}
+
+		for (uniform in profile.uniforms) {
+
+			__setUniform(uniform);
+		}
 	}
 
 	public function remove():Void {
@@ -149,6 +160,52 @@ class Drawable extends Graphic {
 		
 		vertices[shadings["v"].positions[3]] = y;
 	}
+
+	private function __setUniform(uniform:Uniform):Void {
+
+		switch (uniform.format) {
+
+			case FLOAT1:
+
+				uniforms.set(uniform.name, new UniformParam<Float>([1.0], uniform.location, uniform.format));
+
+			case FLOAT2:
+
+				uniforms.set(uniform.name, new UniformParam<Float>([1.0, 1.0], uniform.location, uniform.format));
+
+			case FLOAT3:
+
+				uniforms.set(uniform.name, new UniformParam<Float>([1.0, 1.0, 1.0], uniform.location, uniform.format));
+
+			case FLOAT4:
+
+				uniforms.set(uniform.name, new UniformParam<Float>([1.0, 1.0, 1.0, 1.0], uniform.location, uniform.format));
+
+			case INT1:
+
+				uniforms.set(uniform.name, new UniformParam<Int>([1], uniform.location, uniform.format));
+
+			case INT2:
+
+				uniforms.set(uniform.name, new UniformParam<Int>([1, 1], uniform.location, uniform.format));
+
+			case INT3:
+
+				uniforms.set(uniform.name, new UniformParam<Int>([1, 1, 1], uniform.location, uniform.format));
+
+			case INT4:
+
+				uniforms.set(uniform.name, new UniformParam<Int>([1, 1, 1, 1], uniform.location, uniform.format));
+
+			case MAT4:
+
+				//uniforms.set(uniform.name, new UniformParam<Matrix>(new Matrix(), uniform.location, uniform.format));
+
+			default: 'Invalid uniform format.';
+		}
+	}
+
+	// ** Getters and setters.
 
 	override function set_x(value:Float):Float {
 

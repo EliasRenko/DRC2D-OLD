@@ -412,6 +412,8 @@ class Text extends Graphic {
 	{
 		if (value == '' || value == null) {
 
+			__fieldWidth = 0;
+
 			clear();
 
 			return __text = '';

@@ -150,9 +150,13 @@ class State extends Object {
 
 			if (__perpspective) {
 
+				//drawable.uniforms.get('matrix').value = camera.render2(drawable.uniforms.get('matrix').value);
+
 				__parent.stage.draw(drawable, camera.render2(drawable.matrix));
 			}
 			else {
+
+				//drawable.uniforms.get('matrix').value = camera.render(drawable.uniforms.get('matrix').value);
 
 				__parent.stage.draw(drawable, camera.render(drawable.matrix));
 			}

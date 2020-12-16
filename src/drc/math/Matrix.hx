@@ -254,9 +254,9 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
         return i;
     }
 
-    public function createOrthoMatrix(x0:Float, x1:Float,  y0:Float, y1:Float, zNear:Float, zFar:Float, ?flipped:Bool = false):Float32Array {
+    public static function createOrthoMatrix(x0:Float, x1:Float,  y0:Float, y1:Float, zNear:Float, zFar:Float, ?flipped:Bool = false):Float32Array {
 
-        var i = this;
+        var i = new Float32Array(16);
 
         if(i == null) i = new Float32Array(16);
 
@@ -273,9 +273,9 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
         return i;
     }
 
-    public function createPerspectiveMatrix(fieldOfView:Float, aspect:Float, width:Float, height:Float, zNear:Float, zFar:Float):Matrix {
+    public static function createPerspectiveMatrix(fieldOfView:Float, aspect:Float, width:Float, height:Float, zNear:Float, zFar:Float):Matrix {
 
-        var i = this;
+        var i = new Float32Array(16);
 
         if(i == null) i = new Float32Array(16);
 

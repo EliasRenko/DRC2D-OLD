@@ -181,6 +181,11 @@ class Runtime {
 			
 			__handleWindowEvent(event);
 			
+			if (event.type == SDL_DROPFILE) {
+
+				var dropped_filedir = event.drop.file;
+			}
+
 			if (event.type == SDL_QUIT) {
 
 				release();
