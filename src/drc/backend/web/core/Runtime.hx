@@ -1,5 +1,7 @@
 package drc.backend.web.core;
 
+import js.Browser;
+import js.html.DOMRect;
 import js.html.webgl.RenderingContext;
 import drc.system.Input;
 import drc.backend.web.core.GL;
@@ -42,6 +44,10 @@ class Runtime {
 
     /** @private **/ private var __mouse:BackendMouse;
 
+    /** @private **/ private var __boundingRect:DOMRect;
+
+    private var view:js.html.Window;
+
     public function new() {
 
         __active = true;
@@ -83,9 +89,21 @@ class Runtime {
             
         });
 
+        __window.innerData.addEventListener('mousedown', function(event:js.html.MouseEvent) {
+
+
+        });
+
+        __window.innerData.addEventListener('mousemove', function(event) {
+
+            __mouse.x = Std.int(event.clientX - __boundingRect.left);
+
+            __mouse.y = Std.int(event.clientY - __boundingRect.top);
+        });
+
         js.Browser.document.addEventListener('keydown', function(keyboardEvent:js.html.KeyboardEvent) {
 
-            __keyboard.dispatchEvent(keyboardEvent.keyCode, 1);
+            //__keyboard.dispatchEvent(keyboardEvent.keyCode, 1);
         });
 
         js.Browser.document.addEventListener('keyup', function(keyboardEvent:js.html.KeyboardEvent) {
@@ -107,13 +125,21 @@ class Runtime {
 
         __window.innerData = js.Browser.document.createCanvasElement();
 
-        __window.innerData.width = 640;
+        __window.innerData.id = "glCanvas";
 
-        __window.innerData.height = 480;
+        __window.innerData.width = 1280;
+
+        __window.innerData.height = 1280;
 
         Common.window = __window;
 
-        js.Browser.document.body.appendChild(__window.innerData);
+        //js.Browser.document.body.appendChild(__window.innerData);
+
+        //var element = js.Browser.document.getElementById("canvas-container");
+
+        //element.appendChild(__window.innerData);
+
+        __boundingRect = __window.innerData.getBoundingClientRect();
 
         var _gl:RenderingContext = null;
 
@@ -128,6 +154,24 @@ class Runtime {
 
         GL.gl = _gl;
         
+    }
+
+    public function attachWindow(name:String):Void {
+
+        var element = js.Browser.document.getElementById("canvas-container");
+
+        if (element != null) {
+         
+            element.appendChild(__window.innerData);
+
+            __window.resize(element.offsetWidth, element.offsetHeight);
+
+            //__window.resize(32, 32);
+
+            return;
+        }
+
+        js.Browser.document.body.appendChild(__window.innerData);
     }
 
     public function requestLoopFrame():Void {

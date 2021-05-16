@@ -8,8 +8,8 @@ import drc.debug.Log;
 
 #if cpp
 
-class Window implements drc.system.Window
-{
+class Window implements drc.system.Window {
+	
 	/** Publics. **/
 	
 	public var fullscreen(get, set):Bool;

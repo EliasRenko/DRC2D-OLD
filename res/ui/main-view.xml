@@ -1,0 +1,72 @@
+<vbox width="100%">
+    <menubar width="100%">
+        <menu text="File">
+            <menu-item text="New" />
+            <menu-item text="Open..." />
+            <menu-item text="Save" />
+            <menu-item text="Save As..." />
+            <menu-separator />
+            <menu text="Recent">
+                <menu-item text="Dummy Item 1" />
+                <menu-item text="Dummy Item 2" />
+                <menu-item text="Dummy Item 3" />
+            </menu>
+            <menu-separator />
+            <menu-item text="Exit" />
+        </menu>
+        <menu text="Edit">
+            <menu-item text="Undo" />
+            <menu-item text="Redo" />
+            <menu-separator />
+            <menu-item text="Cut" />
+            <menu-item text="Copy" />
+            <menu-item text="Paste" />
+        </menu>
+        <menu text="View">
+        </menu>
+        <menu text="Help">
+            <menu-item text="Help" />
+            <menu-item text="About..." />
+        </menu>
+    </menubar>
+    <hbox id="hbox1" style="border: 1px solid #ababab; padding: 0px" width="100%" height="256">
+        <splitter width="100%" height="100%">
+            <box width="100%" height="100%">
+                <property-grid id="pg" width="100%" height="100%" onchange="trace(event.target.id + ' = ' + event.target.value)">
+                    <property-group text="Primary Group">
+                        <property id="stringProp" label="String Property" value="Value 1" />
+                        <property id="boolProp" label="Bool Property" type="boolean" value="true" />
+                        <property id="intProp" label="Int Property" type="int" value="101" />
+                        <property id="listProp" label="List Property" type="list" value="Item 1">
+                            <data>
+                                <item text="Item 1" />
+                                <item text="Item 2" />
+                                <item text="Item 3" />
+                                <item text="Item 4" />
+                                <item text="Item 5" />
+                                <item text="Item 6" />
+                            </data>
+                        </property>    
+                    </property-group>
+                </property-grid>
+            </box>
+            <box width="34%" height="25" style="max-width: 256px; background-color: green;border:1px solid green;background-opacity: .5" verticalAlign="center" />
+            <vbox width="100%" height="100%" style= "max-width: 124px; background-color: red;border:1px solid red;background-opacity: .5" verticalAlign="center">
+                <label text="Layers" style="font-bold:true;"/>
+                <listview id="listview-layers" width="100%" height="100%" selectedIndex="0">
+                    <data>
+                        <item text="Item 1"/>
+                        <item text="Item 2"/>
+                        <item text="Item 3"/>
+                        <item text="Item 4"/>
+                        <item text="Item 5"/>
+                        <item text="Item 6"/>
+                        <item text="Item 7"/>
+                        <item text="Item 8"/>
+                        <item text="Item 9"/>
+                    </data>
+                </listview>
+            </vbox>
+        </splitter>
+    </hbox>
+</vbox>

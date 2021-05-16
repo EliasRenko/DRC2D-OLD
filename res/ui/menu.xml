@@ -1,0 +1,5 @@
+<menu>
+    <menu-item id="add-image" text="Add Image" />
+    <menu-item id="add-tilemap" text="Add Tilemap" />
+    <menu-separator />
+</menu>

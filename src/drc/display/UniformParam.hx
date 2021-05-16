@@ -3,10 +3,11 @@ package drc.display;
 import drc.display.UniformFormat;
 import haxe.ds.Either;
 import drc.utils.OneOf;
+import drc.core.GL;
 
 class UniformParam<T> {
 
-    public var index(default, null):Int;
+    public var index(default, null):GLUniformLocation;
 
     public var type(default, null):UniformFormat;
     
@@ -16,18 +17,9 @@ class UniformParam<T> {
 
     private var __value:Array<T>;
 
-    public function new(values:Array<T>, index:Int, type:UniformFormat) {
+    public function new(values:Array<T>, index:GLUniformLocation, type:UniformFormat) {
 
         __value = values;
-
-        this.index = index;
-
-        this.type = type;
-    }
-
-    public function foo(value:Array<T>, index:Int, type:UniformFormat) {
-
-        this.value = value;
 
         this.index = index;
 

@@ -1,5 +1,7 @@
 package drc.backend.native.utils;
 
+import haxe.io.Path;
+import sys.FileSystem;
 import haxe.io.BytesInput;
 import haxe.io.BufferInput;
 import haxe.io.Input;
@@ -43,7 +45,7 @@ class Resources {
 
         var _mode:String = 'rb';
 
-        var _file:RWops = SDL.RWFromFile(SDL.getBasePath() + path, _mode);
+        var _file:RWops = SDL.RWFromFile(__getDirectory(path), _mode);
 
         var size:Int = 0;
 		
@@ -75,7 +77,7 @@ class Resources {
 
     public static function loadText(path:String, func:(Int, Dynamic)->Void):Void {
 
-        var _bytes = File.getBytes(SDL.getBasePath() + path);
+        var _bytes = File.getBytes(__getDirectory(path));
         
         func(200, _bytes.toString());
     }
@@ -84,7 +86,9 @@ class Resources {
         
         //var input:FileInput = File.read(SDL.getBasePath() + path, true);
 
-        var _rawBytes = File.getBytes(SDL.getBasePath() + path);
+        //var base:String = "";
+
+        var _rawBytes = File.getBytes(__getDirectory(path));
 
         var i:Input = new BytesInput(_rawBytes);
 
@@ -105,7 +109,7 @@ class Resources {
         
         var _mode:String = 'rb';
 
-        var _file:RWops = SDL.RWFromFile(SDL.getBasePath() + path, _mode);
+        var _file:RWops = SDL.RWFromFile(__getDirectory(path), _mode);
 
         var size:Int = 0;
 		
@@ -137,8 +141,15 @@ class Resources {
 
     public static function loadProfile(path:String, func:(Int, Dynamic)->Void):Void {
 
-        var _bytes = File.getBytes(SDL.getBasePath() + path);
+        var _bytes = File.getBytes(__getDirectory(path));
         
         func(200, _bytes.toString());
+    }
+
+    public static function __getDirectory(path:String):String {
+        
+        if (Path.isAbsolute(path)) return path;
+
+        return SDL.getBasePath() + path;
     }
 }

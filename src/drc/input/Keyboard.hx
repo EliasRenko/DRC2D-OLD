@@ -1,9 +1,11 @@
 package drc.input;
 
+import haxe.ds.Vector;
 import drc.core.EventDispacher;
 import drc.types.KeyboardEvent;
+import drc.input.Device;
 
-class Keyboard extends EventDispacher<KeyboardEvent>{
+class Keyboard extends Device<KeyboardEvent> {
 
     public function new() {
         
@@ -12,6 +14,12 @@ class Keyboard extends EventDispacher<KeyboardEvent>{
         //addEventListener(__onKeyDown, 1);
 
         //addEventListener(__onKeyDown, 2);
+
+        __checkControls = new Vector(256);
+
+        __pressControls = new Array();
+
+        __releaseControls = new Array();
     }
 
     public function startTextInput():Void {
@@ -24,11 +32,25 @@ class Keyboard extends EventDispacher<KeyboardEvent>{
 
     public function onKeyDown(keycode:Int):Void {
         
+        __checkControls[keycode] = true;
+		
+		__checkCount ++;
+		
+		__pressControls[__pressCount ++] = keycode;
+
         dispatchEvent({key: keycode}, 1);
+
+        trace(keycode);
     }
 
     public function onKeyUp(keycode:Int):Void {
      
+        __checkControls[keycode] = false;
+		
+		__checkCount --;
+		
+		__releaseControls[__releaseCount ++] = keycode;
+
         dispatchEvent({key: keycode}, 2);
     }
 

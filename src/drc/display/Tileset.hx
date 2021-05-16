@@ -31,8 +31,8 @@ class Tileset {
         names.set(name, index);
     }
 
-    public function upload(regions:Array<Region>):Void
-    {
+    public function upload(regions:Array<Region>):Void {
+        
         this.regions = regions;
     }
 }

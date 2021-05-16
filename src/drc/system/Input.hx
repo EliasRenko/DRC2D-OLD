@@ -50,6 +50,12 @@ class Input {
     public function postUpdate():Void {
         
         __mouse.leftClick = false;
+
+        __mouse.middleClick = false;
+
+        __mouse.rightClick = false;
+
+        __keyboard.postUpdate();
     }
 
     private function __onGamepadAdd(event:GamepadEvent, type:UInt):Void {

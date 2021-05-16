@@ -144,9 +144,9 @@ class Texture {
 
 			minification: GL.NEAREST,
 
-			wrapX: GL.REPEAT,
+			wrapX: GL.CLAMP_TO_EDGE,
 
-			wrapY: GL.REPEAT});
+			wrapY: GL.CLAMP_TO_EDGE});
 
         Common.context.loadTexture(__width, __height, __bytesPerPixel, null);
     }
@@ -348,13 +348,13 @@ class Texture {
 
         Common.context.setSamplerState({
             
-            magnification: 0x2600,
+            magnification: GL.NEAREST,
 
-			minification: 0x2600,
+			minification: GL.NEAREST,
 
-			wrapX: 0x2901,
+			wrapX: GL.CLAMP_TO_EDGE,
 
-			wrapY: 0x2901});
+			wrapY: GL.CLAMP_TO_EDGE});
 
         Common.context.loadTexture(__width, __height, __bytesPerPixel, bytes);
     }

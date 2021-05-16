@@ -1,5 +1,6 @@
 package drc.backend.native.core;
 
+import sdl.GLContext;
 import drc.backend.native.input.Gamepad;
 import drc.system.Input;
 import drc.input.Gamepad;
@@ -316,7 +317,7 @@ class Runtime {
 				
 			case SDL_MOUSEBUTTONDOWN:
 				
-				@:privateAccess __mouse.__onButtonDown(0, 1);
+				@:privateAccess __mouse.__onButtonDown(event.button.button, 1);
 				
 			case SDL_MOUSEBUTTONUP:
 
@@ -476,14 +477,20 @@ class Runtime {
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		
-		SDL.GL_SetSwapInterval(true);
+		var gl:GLContext = SDL.GL_CreateContext(__window.innerData);
 		
-		var gl = SDL.GL_CreateContext(__window.innerData);
-		
+		//var res = gl.isnull();
+
+		//trace("GL context: " + gl != null);
+
+	
+
 		if (gl.isnull()) {
 
-			throw 'SDL failed to create a GL context: `${SDL.getError()}`';
+			//throw 'SDL failed to create a GL context: `${SDL.getError()}`';
 		}
+
+		SDL.GL_SetSwapInterval(true);
 		
 		//trace(SDL.GL);
 		

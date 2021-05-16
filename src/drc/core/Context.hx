@@ -103,13 +103,13 @@ class Context
 
 	public function setSamplerState(params:TextureParameters):Void {
 
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, GL.REPEAT);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_S, params.wrapX);
 		
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, GL.REPEAT);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_WRAP_T, params.wrapY);
 
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, GL.NEAREST);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MAG_FILTER, params.magnification);
 
-		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, GL.NEAREST);
+		GL.texParameterf(GL.TEXTURE_2D, GL.TEXTURE_MIN_FILTER, params.minification);
 
 		//GL.texParameteri(GL.TEXTURE_2D, GL.GENERATE_MIPMAP, GL.FALSE);
 	}

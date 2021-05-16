@@ -63,11 +63,13 @@ class Graphic extends Object {
 	/**
 	 * The x position of the graphic in space.
 	 */
+	@:access
 	public var x(get, set):Float;
 
 	/**
 	 * The y position of the graphic in space.
 	 */
+	@:access
 	public var y(get, set):Float;
 
 	/**

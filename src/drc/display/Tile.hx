@@ -22,9 +22,11 @@ class Tile extends Graphic {
 
         super(x, y);
 
+        // ** TODO: FIX __parentTilemap = parent; & this.id = id;
+
         if (parent != null) {
 
-            parentTilemap = parent;
+            __parentTilemap = parent;
         }
        
         if (id == null) {

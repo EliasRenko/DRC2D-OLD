@@ -42,6 +42,8 @@ class App {
 
 	public function new() {
 		
+		Common.app = this;
+
 		__runtime = new Runtime();
 		
 		// ** Init runtime.
@@ -51,16 +53,10 @@ class App {
 		__context = new Context();
 		
 		Common.context = __context;
-		
-		//__stage = new Stage(Resources.getProfile("res/profiles/texture.json"));
 
 		__resources = new Resources();
 
 		Common.resources = __resources;
-
-		//Common.stage = stage;
-
-		//Common.window.onEvent.add(__onWindowEvent, WindowEventType.RESIZED);
 
 		preload();
 	}
@@ -87,6 +83,8 @@ class App {
 
 			__resources.loadTexture("res/graphics/gui.png"),
 
+			__resources.loadTexture("res/graphics/checker.png"),
+
 			__resources.loadFont("res/fonts/font.json"),
 
 			__resources.loadText("res/graphics/gui.json"),
@@ -106,8 +104,6 @@ class App {
 			Common.stage = stage;
 
 			// ** 
-
-
 
 			ready();
 
@@ -135,7 +131,7 @@ class App {
 		
 		__context.setRenderToBackbuffer();
 		
-		__context.clear(0, 1, 0, 1);
+		__context.clear(0, 0, 0, 1);
 		
 		stage.present();
 		
@@ -157,7 +153,7 @@ class App {
 		
 		__context.setRenderToBackbuffer();
 		
-		__context.clear(0, 1, 0, 1);
+		__context.clear(0, 0, 0, 1);
 		
 		stage.present();
 		
@@ -269,14 +265,23 @@ class App {
 
 	public static function main() {
 
+		#if cpp
+
 		var _appRef = Type.resolveClass("Main");
 
 		var _app:App = Type.createInstance(_appRef, []);
 
-		if (_app == null) throw 'Main instance is null.';
+		if (_app == null) {
+
+			trace('Main is null!');
+
+			throw 'Main instance is null.';
+		} 
 
 		// ** Run the app.
 
 		_app.run();
+
+		#end
 	}
 }

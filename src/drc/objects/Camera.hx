@@ -80,7 +80,7 @@ class Camera {
         
         //projection.perspective(fov, aspect, __width, __height, 0.1, 10000);
 
-        _view.append(Matrix.createPerspectiveMatrix(fov, aspect, 640, 480, 0.1, 1000));
+        _view.append(Matrix.createPerspectiveMatrix(fov, aspect, 640, 480, 10, 1000));
 
         return _view;
     }

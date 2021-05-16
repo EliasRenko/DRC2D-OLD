@@ -34,6 +34,16 @@ class Resources {
 
     }
 
+    public function exists(name:String):Bool {
+        
+        if (__resources.exists(name)) {
+
+            return true;
+        }
+
+        return false;
+    }
+
     public function getFont(name:String):String {
         
         if (__resources.exists(name)) {

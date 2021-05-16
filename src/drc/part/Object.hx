@@ -32,6 +32,11 @@ class Object {
 		
 	}
 
+	public function getProperties():Array<String> {
+		
+		return Reflect.fields(this);
+	}
+
 	public function setProperty(name:String, value:Dynamic):Bool {
 
 		//var _fields:Array<String> = Reflect.fields(this);

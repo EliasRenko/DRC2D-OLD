@@ -132,8 +132,78 @@ class State extends Object {
 
 		// if (Common.input.getGamepad(0).check(Control.DPAD_RIGHT)) {
 
-        //     camera.x -= 2;
+        //     camera.x += 2;
         // }
+
+		if (Common.input.keyboard.check(26)) {
+
+			// ** UP
+
+			camera.y += 2;
+		}
+
+		if (Common.input.keyboard.check(22)) {
+
+			// ** DOWN
+
+			camera.y -= 2;
+		}
+
+		if (Common.input.keyboard.check(4)) {
+
+			// ** LEFT
+
+			camera.x += 2;
+		}
+
+		if (Common.input.keyboard.check(7)) {
+
+			// ** RIGHT
+
+			camera.x -= 2;
+		}
+
+		if (Common.input.keyboard.released(53)) {
+
+			// ** USE
+
+			if (__perpspective) {
+
+			 	__perpspective = false;
+			}
+			else {
+	
+				__perpspective = true;
+			}
+		}
+
+		if (Common.input.keyboard.check(80)) {
+
+			// ** ARROW LEFT
+
+			camera.yaw -= 3;
+		}
+
+		if (Common.input.keyboard.check(79)) {
+
+			// ** ARROW RIGHT
+
+			camera.yaw += 3;
+		}
+
+		if (Common.input.keyboard.check(82)) {
+
+			// ** ARROW TOP
+
+			camera.z -= 4;
+		}
+
+		if (Common.input.keyboard.check(81)) {
+
+			// ** ARROW BOTTOM
+
+			camera.z += 4;
+		}
 
 		entities.forEachActive(__updateEntity);
 	}

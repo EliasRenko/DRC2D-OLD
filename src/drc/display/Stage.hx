@@ -115,9 +115,9 @@ class Stage extends Drawable {
 
 	private function __drawTriangles(drawable:Drawable, matrix:Matrix):Void {
 		
-		//WebGL.enable(WebGL.DEPTH_TEST);
+		WebGL.enable(WebGL.DEPTH_TEST);
 
-		//WebGL.depthFunc(WebGL.LESS);
+		WebGL.depthFunc(WebGL.LESS);
 
 		WebGL.useProgram(drawable.profile.program.innerData);
 

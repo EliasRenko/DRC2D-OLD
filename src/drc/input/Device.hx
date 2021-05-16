@@ -1,8 +1,9 @@
 package drc.input;
 
+import drc.core.EventDispacher;
 import haxe.ds.Vector;
 
-class Device {
+class Device<T> extends EventDispacher<T>{
 
 	//** Privates.
 	

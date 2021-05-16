@@ -68,7 +68,9 @@ class Window implements drc.system.Window {
 
 	public function resize(width:Int, height:Int):Void {
 
-		//SDL.setWindowSize(innerData, width, height);
+		innerData.width = width;
+
+		innerData.height = height;
 	}
 
 	//** Getters and setters.

@@ -280,7 +280,8 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
         if(i == null) i = new Float32Array(16);
 
         var yScale:Float = 1.0/Math.tan(fieldOfView/2.0);
-		var xScale:Float = yScale / aspect; 
+		var xScale:Float = yScale / aspect;
+        
 
 
             i[ 0] = xScale;        i[ 1] = 0;            i[ 2] = 0;                 i[ 3] = 0;
@@ -289,6 +290,16 @@ abstract Matrix(Float32Array) from Float32Array to Float32Array {
             i[12] = 0;       i[13] = 0;            i[14] = zNear*zFar/(zNear-zFar);  i[15] = 1;
 
         return i;
+
+        /* var xScale:Float = yScale / aspect; 
+
+
+            i[ 0] = xScale;        i[ 1] = 0;            i[ 2] = 0;                 i[ 3] = 0;
+            i[ 4] = 0;             i[ 5] = -(yScale);       i[ 6] = 0;                 i[ 7] = 0;
+            i[ 8] = 0;             i[ 9] = 0;            i[10] = (zFar/(zFar-zNear)); i[11] = 1;
+            i[12] = 0;       i[13] = 0;            i[14] = zNear*zFar/(zNear-zFar);  i[15] = 1;
+
+        return i; */
     }   
 
     // ** Getters and setters.

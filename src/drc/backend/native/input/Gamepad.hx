@@ -2,6 +2,7 @@ package drc.backend.native.input;
 
 import haxe.ds.Vector;
 import drc.input.Device;
+import drc.types.GamepadInputEvent;
 //import sdl.Joystick;
 //import sdl.SDL;
 //import sdl.Haptic;
@@ -20,7 +21,7 @@ typedef GamepadData = sdl.Joystick;
 
 #if cpp
 
-class Gamepad extends Device {
+class Gamepad extends Device<GamepadInputEvent> {
 	
 	//** Publics.
 	
@@ -41,6 +42,8 @@ class Gamepad extends Device {
 	/** @private **/ private var __sdlJoystick:GamepadData;
 	
 	public function new(index:UInt) {
+
+		super();
 
 		__index = index;
 		
