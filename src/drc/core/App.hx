@@ -88,8 +88,6 @@ class App {
 			__resources.loadFont("res/fonts/font.json"),
 
 			__resources.loadText("res/graphics/gui.json"),
-
-			__resources.loadText("res/ui/canvas1.json")
 		];
 
 		__promise = Promise.all(_preloads);
@@ -106,6 +104,8 @@ class App {
 			// ** 
 
 			ready();
+
+			__runtime.window.addEventListener(__onWindowEvent, 0);
 
 			__runtime.event.addEventListener(loop, 1);
 
@@ -263,7 +263,7 @@ class App {
 
 	// **
 
-	public static function main() {
+	/* public static function main() {
 
 		#if cpp
 
@@ -278,10 +278,12 @@ class App {
 			throw 'Main instance is null.';
 		} 
 
+		trace('Main is Running!');
+
 		// ** Run the app.
 
 		_app.run();
 
 		#end
-	}
+	} */
 }

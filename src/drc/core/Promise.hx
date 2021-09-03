@@ -76,6 +76,7 @@ class Promise<T> {
 
             var _reject = function():Void {
 
+                throw "Promise rejected!";
             }
 
             for (i in 0...promises.length) {

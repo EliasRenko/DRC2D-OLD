@@ -4,17 +4,13 @@ import drc.types.WindowEvent;
 import drc.core.EventDispacher;
 import drc.types.WindowEventType;
 
-interface Window {
+class Window extends EventDispacher<Window> {
 
 	/** Publics. **/
 	
 	public var fullscreen(get, set):Bool;
 
 	public var height(get, null):Int;
-	
-	public var onEventHandler:WindowEvent -> Void;
-
-	public var onEvent:EventDispacher<Window>;
 
 	public var x(get, null):Int;
 
@@ -22,19 +18,44 @@ interface Window {
 
 	public var width(get, null):Int;
 
-	/**  **/
+	public function new() {
+		
+		super();
+	}
 
-	public function showDialog(title:String, message:String):Void;
+	public function showDialog(title:String, message:String):Void {};
 	
-	public function resize(width:Int, height:Int):Void;
+	public function resize(width:Int, height:Int):Void {}
 
 	//** Getters and setters.
 	
-	private function get_height():Int;
+	private function get_fullscreen():Bool {
+
+		return false;
+	}
+
+	private function set_fullscreen(value:Bool):Bool {
+
+		return false;
+	}
+
+	private function get_height():Int {
+
+		return 0;
+	}
 	
-	private function get_x():Int;
+	private function get_x():Int {
 
-	private function get_y():Int;
+		return 0;
+	}
 
-	private function get_width():Int;
+	private function get_y():Int {
+
+		return 0;
+	}
+
+	private function get_width():Int { 
+
+		return 0;
+	}
 }

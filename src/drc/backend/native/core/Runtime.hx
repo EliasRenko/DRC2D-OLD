@@ -6,13 +6,14 @@ import drc.system.Input;
 import drc.input.Gamepad;
 import drc.input.Mouse;
 import drc.input.Keyboard;
-import drc.backend.native.system.Window;
+//import drc.backend.native.system.Window;
 import drc.core.EventDispacher;
 import drc.core.EventDispacher;
 import drc.core.Runtime;
 import drc.debug.Log;
 import drc.types.GamepadEvent;
 import drc.types.GamepadEventType;
+import drc.system.Window;
 import drc.types.WindowEventType;
 import drc.types.GamepadInputEvent;
 import drc.utils.Common;
@@ -38,6 +39,8 @@ class Runtime {
 
 	public var mouse(get, null):Mouse;
 
+	public var window(get, null):Window;
+
 	// ** Privates.
 
 	/** @private **/ private var __active:Bool;
@@ -46,15 +49,15 @@ class Runtime {
 
 	/** @private **/ private var __name:String = 'Native';
 
-	/** @private **/ private var __window:Window;
+	/** @private **/ private var __window:BackendWindow;
 
 	/** @private **/ private var __event:EventDispacher<Float>;
 
-	private var __input:Input;
+	/** @private **/ private var __input:Input;
 
-	private var __mouse:BackendMouse;
+	/** @private **/ private var __mouse:BackendMouse;
 
-	private var __keyboard:BackendKeyboard;
+	/** @private **/ private var __keyboard:BackendKeyboard;
 
 	public function new() {
 
@@ -455,9 +458,9 @@ class Runtime {
 
 		var _flags:SDLWindowFlags = SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE;
 		
-		__window = new Window();
+		__window = new BackendWindow(SDL.createWindow('Director2D', 64, 64, 640, 480, _flags));
 		
-		__window.innerData = SDL.createWindow('Director2D', 64, 64, 640, 480, _flags);
+		//__window.innerData = SDL.createWindow('Director2D', 64, 64, 640, 480, _flags);
 		
 		Common.window = __window;
 		
@@ -534,6 +537,121 @@ class Runtime {
 	private function get_mouse():Mouse {
 		
 		return __mouse;
+	}
+
+	private function get_window():Window {
+		
+		return __window;
+	}
+}
+
+private class BackendWindow extends Window {
+
+	// ** Publics.
+
+	public var innerData:sdl.Window;
+
+	/** Privates. **/
+
+	private var __fullscreen:Bool = false;
+
+	public function new(innerData:sdl.Window;) {
+		
+		super();
+
+		this.innerData = innerData;
+	}
+
+	public function onEventShown(data1:Int, data2:Int) {
+
+		dispatchEvent(this, SHOWN);
+	}
+
+	override function showDialog(title:String, message:String):Void {
+		
+		SDL.showSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title, message, innerData);
+	}
+
+	public function onEventExposed():Void {
+
+		dispatchEvent(this, EXPOSED);
+	}
+
+	public function onEventHidden():Void {
+		
+		dispatchEvent(this, HIDDEN);
+	}
+
+	public function onEventMoved(x:Int, y:Int):Void {
+		
+		dispatchEvent(this, MOVED);
+	}
+
+	public function onEventResized():Void {
+
+		dispatchEvent(this, RESIZED);
+	}
+
+	override function resize(width:Int, height:Int):Void {
+
+		SDL.setWindowSize(innerData, width, height);
+	}
+
+	//** Getters and setters.
+	
+	override function get_fullscreen():Bool {
+		
+		return __fullscreen;
+	}
+
+	override function set_fullscreen(value:Bool):Bool {
+
+		if (value) {
+
+			SDL.setWindowFullscreen(innerData, SDL_WINDOW_FULLSCREEN);
+		}
+		else {
+
+			SDL.setWindowFullscreen(innerData, 0);
+		}
+
+		return __fullscreen = value;
+	}
+
+	override function get_height():Int {
+
+		var size:SDLSize = {w:0, h:0};
+		
+		SDL.getWindowSize(innerData, size);
+		
+		return size.h;
+	}
+
+	override function get_x():Int {
+
+		var position:SDLPoint = {x:0, y:0};
+
+		SDL.getWindowPosition(innerData, position);
+
+		return position.x;
+	}
+
+	override function get_y():Int {
+
+		var position:SDLPoint = {x:0, y:0};
+
+		SDL.getWindowPosition(innerData, position);
+
+		return position.y;
+	}
+	
+	override function get_width():Int {
+
+		var size:SDLSize = {w:0, h:0};
+		
+		SDL.getWindowSize(innerData, size);
+		
+		return size.w;
 	}
 }
 

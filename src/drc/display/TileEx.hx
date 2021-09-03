@@ -18,7 +18,9 @@ class TileEx extends Graphic {
 
     /** @private **/ private var __parentTilemap:TilemapEx;
 
-    public function new(parent:TilemapEx, id:Null<UInt>, ?x:Int = 0, ?y:Int = 0) {
+    /** @private **/ private var mesh:Array<Float>;
+
+    public function new(parent:TilemapEx, id:Null<UInt>, ?vertices:Array<Float>, ?x:Int = 0, ?y:Int = 0) {
 
         super(x, y);
 
@@ -33,8 +35,20 @@ class TileEx extends Graphic {
 
             return;
         }
+        else {
 
-        this.id = id;
+            this.id = id;
+
+            if (vertices != null) {
+
+                mesh = 
+                [0, 0, 
+                __width, 0,
+                __width, __height,
+                0, __height
+                ];
+            }
+        }
     }
 
     public function add():Void {
