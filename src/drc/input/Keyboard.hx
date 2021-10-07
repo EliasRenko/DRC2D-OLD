@@ -11,10 +11,6 @@ class Keyboard extends Device<KeyboardEvent> {
         
         super();
 
-        //addEventListener(__onKeyDown, 1);
-
-        //addEventListener(__onKeyDown, 2);
-
         __checkControls = new Vector(256);
 
         __pressControls = new Array();

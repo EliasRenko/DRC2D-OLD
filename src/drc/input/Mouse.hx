@@ -14,13 +14,15 @@ class Mouse extends EventDispacher<Mouse> {
 
     public var rightClick:Bool = false;
 
+    public var leftClickUp:Bool = false;
+
+    public var middleClickUp:Bool = false;
+
+    public var rightClickUp:Bool = false;
+
     public function new() {
         
         super();
-
-        //addEventListener(__onButtonDown, 0);
-
-        //addEventListener(__onButtonUp, 1);
     }
 
     private function __onButtonDown(num:Int, type:Int) {
@@ -46,6 +48,21 @@ class Mouse extends EventDispacher<Mouse> {
 
     private function __onButtonUp(num:UInt, type:UInt) {
         
+        switch (num) {
+
+            case 1:
+                
+                leftClickUp = true;
+
+            case 2:
+
+                middleClickUp = true;
+
+            case 3:
+
+                rightClickUp = true;
+        }
+
         dispatchEvent(this, 2);
     }
 

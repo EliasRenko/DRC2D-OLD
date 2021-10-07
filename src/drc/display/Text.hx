@@ -24,8 +24,6 @@ class Text extends Graphic {
 	 * The number of lines the text has.
 	 */
 	public var lines(get, null):Int;
-
-	public var size(get, null):UInt;
 	
 	/**
 	 * The space between words.

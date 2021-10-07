@@ -324,7 +324,7 @@ class Runtime {
 				
 			case SDL_MOUSEBUTTONUP:
 
-				@:privateAccess __mouse.__onButtonUp(0, 2);
+				@:privateAccess __mouse.__onButtonUp(event.button.button, 2);
 				
 			case SDL_MOUSEWHEEL:
 				
@@ -481,12 +481,6 @@ class Runtime {
 		SDL.GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
 		
 		var gl:GLContext = SDL.GL_CreateContext(__window.innerData);
-		
-		//var res = gl.isnull();
-
-		//trace("GL context: " + gl != null);
-
-	
 
 		if (gl.isnull()) {
 
@@ -494,8 +488,6 @@ class Runtime {
 		}
 
 		SDL.GL_SetSwapInterval(true);
-		
-		//trace(SDL.GL);
 		
 		SDL.GL_MakeCurrent(__window.innerData, gl);
 		
@@ -555,7 +547,7 @@ private class BackendWindow extends Window {
 
 	private var __fullscreen:Bool = false;
 
-	public function new(innerData:sdl.Window;) {
+	public function new(innerData:sdl.Window) {
 		
 		super();
 

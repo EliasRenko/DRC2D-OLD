@@ -87,6 +87,8 @@ class App {
 
 			__resources.loadFont("res/fonts/font.json"),
 
+			__resources.loadFont("res/fonts/nokiafc22.json"),
+
 			__resources.loadText("res/graphics/gui.json"),
 		];
 
