@@ -23,31 +23,7 @@ class Image extends Drawable {
 
 		// ** If textures are null...
 
-		if (textures == null) {
-
-		}
-		else {
-
-			if (textures.length == profile.textureCount) {
-
-				this.textures = textures;
-			}
-			else {
-
-				for (i in 0...textures.length) {
-
-					this.textures[i] = textures[i];
-				}
-			}
-
-			// ** Set the width of the texture.
-
-			width = textures[0].width;
-			
-			// ** Set the height of the texture.
-
-			height = textures[0].height;
-		}
+		setTextures(textures);
 
 		//this.textures[0].generate(256, 256);
 			
@@ -95,6 +71,42 @@ class Image extends Drawable {
 	public function createTexture(width:Int, height:Int, color:Int = 0xFFFFFF):Void {
 
 		//textures[0].uploadBitmapData(new BitmapData(width, height, false, color));
+
+		var texture = new Texture();
+
+		texture.generate(width, height, 1, color);
+
+		setTextures([texture]);
+	}
+
+	public function setTextures(textures:Array<Texture>) {
+		
+		if (textures.length == 0) {
+
+			return;
+		}
+		else {
+
+			if (textures.length == profile.textureCount) {
+
+				this.textures = textures;
+			}
+			else {
+
+				for (i in 0...textures.length) {
+
+					this.textures[i] = textures[i];
+				}
+			}
+
+			// ** Set the width of the texture.
+
+			width = textures[0].width;
+			
+			// ** Set the height of the texture.
+
+			height = textures[0].height;
+		}
 	}
 	
 	override function setUV(x:Float, y:Float, width:Float, height:Float):Void {

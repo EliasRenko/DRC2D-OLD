@@ -37,8 +37,6 @@ class Promise<T> {
         if (shoudlRun) {
             
             run();
-
-            return;
         }
     }
 
@@ -159,8 +157,8 @@ class Promise<T> {
         }
     }
 
-    public function progress():Void {
-        
+    public function onProgress():Void {
+
     }
 
     private function __resolve(result:T):Void {
@@ -175,12 +173,12 @@ class Promise<T> {
 
         if (__completeListeners == null) return;
 
-        __completeListeners.dispatchEvent(__result, 0);
+        __completeListeners.dispatchEvent(__result, COMPLETE);
     }
 
     private function __reject():Void {
 
-        trace('Rejected!');
+        __completeListeners.dispatchEvent(null, REJECTED);
     }
 
     // ** Getters and setters.

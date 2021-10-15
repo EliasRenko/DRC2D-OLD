@@ -49,11 +49,7 @@ class Input {
 
     public function postUpdate():Void {
         
-        __mouse.leftClick = false;
-
-        __mouse.middleClick = false;
-
-        __mouse.rightClick = false;
+        __mouse.postUpdate();
 
         __keyboard.postUpdate();
     }

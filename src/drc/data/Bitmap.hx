@@ -5,9 +5,8 @@ import drc.math.Rectangle;
 import drc.core.Buffers;
 import stb.Image;
 import drc.utils.Common;
-import drc.core.GL;
 
-class Texture {
+class Bitmap {
 
     // ** Publics.
 
@@ -24,8 +23,6 @@ class Texture {
     public var transparent(get, null):Bool;
 
     public var width(get, null):Int;
-
-    public var glTexture:GLTexture;
 
     // ** Privates.
 
@@ -132,22 +129,6 @@ class Texture {
 
             __transparent = true;
         }
-
-        glTexture = Common.context.generateTexture();
-
-        //Common.context.setSamplerState(null);
-
-        Common.context.setSamplerState({
-            
-            magnification: GL.NEAREST,
-
-			minification: GL.NEAREST,
-
-			wrapX: GL.CLAMP_TO_EDGE,
-
-			wrapY: GL.CLAMP_TO_EDGE});
-
-        Common.context.loadTexture(__width, __height, __bytesPerPixel, null);
     }
 
     public function copyPixels(sourceTexture:drc.data.Texture, x:Int, y:Int, width:UInt, height:UInt):Void {
@@ -214,8 +195,6 @@ class Texture {
         var _w:UInt = x;
 
         var _h:UInt = y;
-
-
 
         for (j in 0...height) {
 
@@ -342,20 +321,6 @@ class Texture {
 
             __transparent = true;
         }
-
-        glTexture = Common.context.generateTexture();
-
-        Common.context.setSamplerState({
-            
-            magnification: GL.NEAREST,
-
-			minification: GL.NEAREST,
-
-			wrapX: GL.CLAMP_TO_EDGE,
-
-			wrapY: GL.CLAMP_TO_EDGE});
-
-        Common.context.loadTexture(__width, __height, __bytesPerPixel, bytes);
     }
 
     /** Getters and setters. **/

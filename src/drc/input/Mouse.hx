@@ -1,8 +1,9 @@
 package drc.input;
 
+import haxe.ds.Vector;
 import drc.core.EventDispacher;
 
-class Mouse extends EventDispacher<Mouse> {
+class Mouse extends Device<Mouse> {
 
     public var x:Int = 0;
 
@@ -23,46 +24,33 @@ class Mouse extends EventDispacher<Mouse> {
     public function new() {
         
         super();
+
+        __checkControls = new Vector(256);
+
+        __pressControls = new Array();
+
+        __releaseControls = new Array();
     }
 
     private function __onButtonDown(num:Int, type:Int) {
         
-        switch (num) {
-
-            case 1:
-                
-                leftClick = true;
-
-            case 2:
-
-                middleClick = true;
-
-            case 3:
-
-                rightClick = true;
-        }
-
+        __checkControls[num] = true;
+		
+		__checkCount ++;
+		
+		__pressControls[__pressCount ++] = num;
 
         dispatchEvent(this, 1);
     }
 
     private function __onButtonUp(num:UInt, type:UInt) {
         
-        switch (num) {
-
-            case 1:
-                
-                leftClickUp = true;
-
-            case 2:
-
-                middleClickUp = true;
-
-            case 3:
-
-                rightClickUp = true;
-        }
-
+        __checkControls[num] = false;
+		
+		__checkCount --;
+		
+		__releaseControls[__releaseCount ++] = num;
+        
         dispatchEvent(this, 2);
     }
 

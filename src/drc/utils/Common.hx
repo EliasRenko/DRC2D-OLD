@@ -20,4 +20,18 @@ class Common {
 	public static var window:Window;
 
 	public static var resources:Resources;
+
+	public static function clamp(value:Float, max:Float, min:Float) {
+		
+		return Math.max(min, Math.min(max, value));
+	}
+
+	public static function roundWithPrecision(value:Float, ?precision = 2):Float {
+
+		value = Math.round(value);
+
+		value *= Math.pow(10, precision);
+
+		return Math.round(value) / Math.pow(10, precision);
+	}
 }
