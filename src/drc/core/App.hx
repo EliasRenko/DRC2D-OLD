@@ -97,7 +97,7 @@ class App {
 
 	public function run():Void {
 
-		__promise.onComplete(function(result:Array<String>, type:Int) {
+		__promise.onComplete(function(promise:Promise<Dynamic>, type:Int) {
 			
 			__stage = new Stage(Common.resources.getProfile('res/profiles/texture.json'));
 

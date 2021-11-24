@@ -1,14 +1,5 @@
 package drc.core;
 
-typedef Listener<T> = {
-	
-	var func:T -> Int -> Void;
-	
-	var type:UInt;
-
-	var priority:UInt;
-}
-
 class EventDispacher<T> {
 	
 	// ** Privates.
@@ -88,4 +79,13 @@ class EventDispacher<T> {
 			i --;
 		}
 	}
+}
+
+typedef Listener<T> = {
+	
+	var func:T -> Int -> Void;
+	
+	var type:UInt;
+
+	var priority:UInt;
 }

@@ -79,21 +79,21 @@ class Tile extends Graphic {
             var centerX:Float = originX * scaleX;
             var centerY:Float = originY * scaleY;
             
-            vertices[parentTilemap.shadings["x"].positions[0]] = (__x + offsetX) - (cosT * centerX) - (sinT * centerY);
+            vertices[parentTilemap.shadings["x"].positions[0]] = (__x + __offsetX) - (cosT * centerX) - (sinT * centerY);
             
-            vertices[parentTilemap.shadings["x"].positions[1]] = (__x + offsetX) - (cosT * centerX) + (sinT * (scaledHeight - centerY)); 
+            vertices[parentTilemap.shadings["x"].positions[1]] = (__x + __offsetX) - (cosT * centerX) + (sinT * (scaledHeight - centerY)); 
             
-            vertices[parentTilemap.shadings["x"].positions[2]] = (__x + offsetX) + (cosT * (scaledWidth - centerX)) + (sinT * (scaledHeight - centerY));
+            vertices[parentTilemap.shadings["x"].positions[2]] = (__x + __offsetX) + (cosT * (scaledWidth - centerX)) + (sinT * (scaledHeight - centerY));
             
-            vertices[parentTilemap.shadings["x"].positions[3]] =  (__x + offsetX) + (cosT * (scaledWidth - centerX)) - (sinT * centerY);
+            vertices[parentTilemap.shadings["x"].positions[3]] =  (__x + __offsetX) + (cosT * (scaledWidth - centerX)) - (sinT * centerY);
             
-            vertices[parentTilemap.shadings["y"].positions[0]] = (__y + offsetY) + (sinT * centerX) - (cosT * centerY);
+            vertices[parentTilemap.shadings["y"].positions[0]] = (__y + __offsetY) + (sinT * centerX) - (cosT * centerY);
             
-            vertices[parentTilemap.shadings["y"].positions[1]] = (__y + offsetY) + (sinT * centerX) + (cosT * (scaledHeight - centerY));
+            vertices[parentTilemap.shadings["y"].positions[1]] = (__y + __offsetY) + (sinT * centerX) + (cosT * (scaledHeight - centerY));
             
-            vertices[parentTilemap.shadings["y"].positions[2]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) + (cosT * (scaledHeight - centerY));
+            vertices[parentTilemap.shadings["y"].positions[2]] = (__y + __offsetY) - (sinT * (scaledWidth - centerX)) + (cosT * (scaledHeight - centerY));
             
-            vertices[parentTilemap.shadings["y"].positions[3]] = (__y + offsetY) - (sinT * (scaledWidth - centerX)) - (cosT * centerY);
+            vertices[parentTilemap.shadings["y"].positions[3]] = (__y + __offsetY) - (sinT * (scaledWidth - centerX)) - (cosT * centerY);
             
             //** ---
             

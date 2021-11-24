@@ -23,12 +23,12 @@ class Graphic extends Object {
 	/**
 	 * The x offset of the graphic.
 	 */
-	public var offsetX:Float = 0;
+	public var offsetX(get, set):Float;
 
 	/**
 	 * The y offset of the graphic.
 	 */
-	public var offsetY:Float = 0;
+	public var offsetY(get, set):Float;
 
 	/**
 	 * The x origin of the graphic.

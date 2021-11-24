@@ -1,8 +1,9 @@
 package drc.core;
 
 import haxe.Timer;
+import drc.types.PromiseEventType;
 
-class Promise<T> {
+class Promise<T> extends EventDispacher<Promise<T>> {
 
     // ** Publics.
 
@@ -11,6 +12,8 @@ class Promise<T> {
     public var state(get, null):PromiseState;
 
     public var result(get, null):T;
+
+    public var progress(get, null):Float;
 
     public var time(get, null):Float;
 
@@ -24,13 +27,17 @@ class Promise<T> {
 
     /** @private **/ private var __result:T;
 
+    /** @private **/ private var __progress:Float = 0;
+
     /** @private **/ private var __queuedPromise:Promise<T>;
 
-    /** @private **/ private var __funcToRun:((T)->Void, ()->Void)->Void;
+    /** @private **/ private var __funcToRun:((T)->Void, ()->Void, (Float)->Void)->Void;
 
     /** @private **/ private var __time:Float = 0;
 
-    public function new(func:((T)->Void, ()->Void)->Void, shoudlRun:Bool = true) {
+    public function new(func:((T)->Void, ()->Void, (Float)->Void)->Void, shoudlRun:Bool = true) {
+
+        super();
 
         __funcToRun = func;
 
@@ -48,7 +55,7 @@ class Promise<T> {
 
             __state = PENDING;
 
-            __funcToRun(__resolve, __reject);
+            __funcToRun(__resolve, __reject, __advance);
         }
     }
 
@@ -58,13 +65,13 @@ class Promise<T> {
 
         var _results:Array<U> = [];
 
-        return new Promise<Array<U>>(function(resolve, reject) {
+        return new Promise<Array<U>>(function(resolve, reject, advance) {
         
-            var _resolve = function(index:Int, result:U):Void {
+            var _resolve = function(index:Int, promise:Promise<U>):Void {
 
                 _count ++;
 
-                _results[index] = result;
+                _results[index] = promise.result;
 
                 if (_count == promises.length) {
 
@@ -88,9 +95,9 @@ class Promise<T> {
                     continue;
                 }
 
-                promises[i].onComplete(function(result:U, type:UInt) {
+                promises[i].onComplete(function(promise:Promise<U>, type:UInt) {
 
-                    _resolve(i, result);
+                    _resolve(i, promise);
                 });
 
                 // ** On error.
@@ -101,13 +108,13 @@ class Promise<T> {
         });
     }
 
-    public function onComplete(listener:(T, UInt)->Void):Promise<T> {
+    public function onComplete(listener:(Promise<T>, UInt)->Void):Promise<T> {
 
         if (listener == null) return this;
 
         if (__state == COMPLETE) {
 
-            listener(__result, 0);
+            listener(this, 0);
 
             if (__queuedPromise != null) {
 
@@ -121,17 +128,29 @@ class Promise<T> {
                 __completeListeners = new EventDispacher();
             }
 
-            __completeListeners.addEventListener(listener, 0);
+            addEventListener(listener, PromiseEventType.COMPLETE);
         }
 
         return this;
     }
 
-    public function onReject():Void {
+    public function onReject(listener:(Promise<T>, UInt)->Void):Promise<T> {
 
+        if (listener == null) return this;
+
+        return this;
     }
 
-    public function then<U>(func:((T)->Void, ()->Void)->Void):Promise<T> {
+    public function onProgress(listener:(Promise<T>, UInt)->Void):Promise<T> {
+
+        if (listener == null) return this;
+
+        addEventListener(listener, PromiseEventType.PROGRESS);
+
+        return this;
+    }
+
+    public function then<U>(func:((T)->Void, ()->Void, (Float)->Void)->Void):Promise<T> {
 
         // func:((T)->Void, ()->Void)->Void
 
@@ -157,28 +176,38 @@ class Promise<T> {
         }
     }
 
-    public function onProgress():Void {
-
-    }
-
+    @:noCompletion
     private function __resolve(result:T):Void {
 
         __time = Timer.stamp() - __time;
 
         __state = COMPLETE;
 
-        //__isComplete = true;
+        __isComplete = true;
 
         __result = result;
 
-        if (__completeListeners == null) return;
-
-        __completeListeners.dispatchEvent(__result, COMPLETE);
+        dispatchEvent(this, PromiseEventType.COMPLETE);
     }
 
+    @:noCompletion
     private function __reject():Void {
 
-        __completeListeners.dispatchEvent(null, REJECTED);
+        __time = Timer.stamp() - __time;
+
+        __state = COMPLETE;
+
+        __isComplete = true;
+
+        dispatchEvent(this, PromiseEventType.FAILED);
+    }
+
+    @:noCompletion
+    private function __advance(value:Float):Void {
+
+        __progress = value;
+        
+        dispatchEvent(this, PromiseEventType.PROGRESS);
     }
 
     // ** Getters and setters.
@@ -201,6 +230,11 @@ class Promise<T> {
     private function get_time():Float {
 
         return __time;
+    }
+
+    private function get_progress():Float {
+        
+        return __progress;
     }
 }
 

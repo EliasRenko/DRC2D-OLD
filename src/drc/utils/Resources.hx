@@ -34,6 +34,13 @@ class Resources {
 
     }
 
+    public function addTexture(name:String, data:Texture):Void {
+        
+        if (exists(name)) return;
+
+        __resources.set(name, new __TextureResource(data));
+    }
+
     public function exists(name:String):Bool {
         
         if (__resources.exists(name)) {
@@ -103,7 +110,7 @@ class Resources {
 
     public function loadBytes(path:String, cache:Bool = true):Promise<UInt8Array> {
 
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject, advance) {
 
             BackendAssets.loadBytes(path, function(status, response) {
 
@@ -128,7 +135,7 @@ class Resources {
 
     public function loadFont(path:String, cache:Bool = true):Promise<String> {
         
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject, advance) {
             
             BackendAssets.loadText(path, function(status, response) {
 
@@ -138,7 +145,7 @@ class Resources {
 
                     var _promise:Promise<Texture> = loadTexture('res/fonts/' + Path.withoutExtension(_name) + '.png');
 
-                    _promise.onComplete(function(result:Texture, type:Int) {
+                    _promise.onComplete(function(promise:Promise<Texture>, type:Int) {
 
                         if (cache) {
 
@@ -160,7 +167,7 @@ class Resources {
 
     public function loadText(path:String, cache:Bool = true):Promise<String> {
 
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject, advance) {
             
             BackendAssets.loadText(path, function(status, response) {
 
@@ -185,7 +192,7 @@ class Resources {
 
     public function loadTexture(path:String, cache:Bool = true):Promise<Texture> {
 
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject, advance) {
 
             BackendAssets.loadTexture(path, function(status, response) {
 
@@ -208,7 +215,7 @@ class Resources {
 
     public function loadProfile(path:String, cache:Bool = true):Promise<Profile> {
 
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject, advance) {
             
             BackendAssets.loadText(path, function(status, response) {
 
@@ -238,7 +245,7 @@ class Resources {
 
                     var _promise:Promise<Array<String>> = Promise.all(_promises);
 
-                    _promise.onComplete(function(result:Array<String>, type:Int) {
+                    _promise.onComplete(function(promise:Promise<Array<String>>, type:Int) { //result:Array<String>
 
                         var _profile:Profile = new Profile(_rootData.name);
 
@@ -365,12 +372,12 @@ class Resources {
 
                         // ** ---
 
-                        if (result[0] == null) {
+                        if (promise.result[0] == null) {
 
                         }
                         else {
 
-                            _vertexShaderSource = result[0];
+                            _vertexShaderSource = promise.result[0];
                         }
 
                         var _vertexShader:GLShader = GL.createShader(GL.VERTEX_SHADER);
@@ -379,12 +386,12 @@ class Resources {
                         
                         GL.compileShader(_vertexShader);
 
-                        if (result[0] == null) {
+                        if (promise.result[1] == null) {
 
                         }
                         else {
 
-                            _fragmentShaderSource = result[1];
+                            _fragmentShaderSource = promise.result[1];
                         }
                         
                         var _fragmentShader:GLShader = GL.createShader(GL.FRAGMENT_SHADER);

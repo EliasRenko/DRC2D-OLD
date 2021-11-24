@@ -22,7 +22,7 @@ class Thread<T> extends Promise<T> {
 
     public var primary : sys.thread.Thread;
 
-    public function new(func:((T)->Void, ()->Void)->Void, threaded:Bool = false, shoudlRun:Bool = true) {
+    public function new(func:((T)->Void, ()->Void, (Float)->Void)->Void, threaded:Bool = false, shoudlRun:Bool = true) {
         
         super(func, shoudlRun);
 
@@ -46,7 +46,7 @@ class Thread<T> extends Promise<T> {
 
             var thread = sys.thread.Thread.create(() -> {
 
-                __funcToRun(__resolve, __reject);
+                __funcToRun(__resolve, __reject, __advance);
             });
 
             //__funcToRun(__resolve, __reject);
