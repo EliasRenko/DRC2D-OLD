@@ -109,7 +109,7 @@ class LinkedList<T> {
 				return _current;
 			}
 
-			_current = __first.next;
+			_current = _current.next;
 		}
 
 		return null;
@@ -124,6 +124,8 @@ class LinkedList<T> {
 private class __GenericListNode<T> implements IListObject<T> {
 
 	// ** Publics.
+
+	public var index:Int;
 
 	public var item:T;
 
